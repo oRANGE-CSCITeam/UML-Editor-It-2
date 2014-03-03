@@ -17,9 +17,6 @@ public class Gui extends JPanel
 	public Gui(Manager manager, JFrame frame) {
 		this.frame = frame;
 		this.manager = manager;
-		
-		JButton button = new JButton("Button");
-		button.addActionListener(this);
 	}
 
 	@Override
