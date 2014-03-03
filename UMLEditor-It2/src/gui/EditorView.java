@@ -15,7 +15,7 @@ import models.Relationship;
  * 
  * @author oRANGE
  */
-public class EditorPane extends JPanel {
+public class EditorView extends JPanel {
 
     /**
 	 * 
@@ -30,7 +30,7 @@ public class EditorPane extends JPanel {
     ArrayList<Relationship> relationList = new ArrayList();
     
 
-    public EditorPane() {
+    public EditorView() {
         //If the add class button toggled "on" this will be true and a new classObject can be added
         canAddClassObject = false;
         //This is to determine which of the classObjectes is being dragged in the List

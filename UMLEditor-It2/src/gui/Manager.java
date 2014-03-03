@@ -1,11 +1,22 @@
+/**
+ * The Manager class is in charge of managing the objects lists.
+ */
+
 package gui;
 
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
+
+import models.ClassObject;
+import models.Relationship;
 
 public class Manager {
 	private static Manager sharedManager;
 	private Gui gui;
 	private JFrame frame;
+	private ArrayList<ClassObject> classObjectList;
+	private ArrayList<Relationship> relationList;
 	
 	public Manager() {
    	    //Set the look and feel (for Macs too).
@@ -22,6 +33,10 @@ public class Manager {
         
 	}
 	
+	/**
+	 * This method makes sure only one instance of the Manager is created.
+	 * @return
+	 */
 	public static Manager sharedInstance() {
 		if(sharedManager == null) {
 			sharedManager = new Manager();
