@@ -3,8 +3,12 @@ package gui;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+
 import javax.swing.JPanel;
+
 import models.ClassObject;
 import models.Relationship;
 
@@ -15,22 +19,19 @@ import models.Relationship;
  * 
  * @author oRANGE
  */
-public class EditorView extends JPanel {
-
-    /**
-	 * 
-	 */
+public class EditorView extends JPanel implements MouseListener, MouseMotionListener{
 	
 	private boolean canAddClassObject, tryRelationship, isDragging, showPopUp, makeRelationship;
     private int isDraggingWho, selectedClassObject;
     private int xOffSet, yOffSet;
     
-    ArrayList<Integer> relationCandidates =  new ArrayList();
-    ArrayList<ClassObject> classObjectList = new ArrayList();
-    ArrayList<Relationship> relationList = new ArrayList();
+    private Manager manager;
     
+    ArrayList<Integer> relationCandidates =  new ArrayList();
 
-    public EditorView() {
+    public EditorView(Manager manager) {
+    	this.manager = manager;
+    	addMouseListener(this);
         //If the add class button toggled "on" this will be true and a new classObject can be added
         canAddClassObject = false;
         //This is to determine which of the classObjectes is being dragged in the List
@@ -41,73 +42,15 @@ public class EditorView extends JPanel {
         
         selectedClassObject = -1;
         showPopUp = false;
-        
-        //This will determine which is class object is being clicked on to be dragged
-        addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent me) {
-
-                if(selectedClassObject >= 0 && classObjectList.size() > 0){
-                    classObjectList.get(selectedClassObject).setIsSelected(false);
-                    selectedClassObject = -1;
-                    repaint();
-                }
-                
-                for (int i = 0; i < classObjectList.size(); i++) {
-                    if ((me.getX() > classObjectList.get(i).getxPos())
-                            && (me.getY() > classObjectList.get(i).getyPos())
-                            && (me.getX() < (classObjectList.get(i).getWidth() + classObjectList.get(i).getxPos()))
-                            && (me.getY() < (classObjectList.get(i).getHeight()) + classObjectList.get(i).getyPos())) {
-                        if(me.isPopupTrigger()) {
-                            togglePopUp();
-                            isDraggingWho = i;
-                            selectedClassObject = i;
-                            classObjectList.get(selectedClassObject).setIsSelected(true);
-                            repaint();
-                        } else {
-                            isDraggingWho = i;
-                            isDragging = true;
-                            selectedClassObject = i;
-                            classObjectList.get(selectedClassObject).setIsSelected(true);
-                            xOffSet = me.getX() - classObjectList.get(i).getxPos();
-                            yOffSet = me.getY() - classObjectList.get(i).getyPos();
-                            repaint();
-                        }
-                    }
-                }
-                if(!classObjectList.isEmpty()) {
-                    if(tryRelationship && relationCandidates.isEmpty() && selectedClassObject > -1) {
-                        relationCandidates.add(selectedClassObject);
-                    } else if(tryRelationship && relationCandidates.size() == 1 && selectedClassObject > -1) {
-                        classObjectList.get(relationCandidates.get(0)).setIsSelected(false);
-                        relationCandidates.add(selectedClassObject);
-                        makeRelationship = true;
-                    }
-                }
-            }
-        });
-        
-        //This is to reset the class object being dragged to none
-        addMouseListener(new MouseAdapter() {
-            public void mouseReleased(MouseEvent evt) {
-                if(isDraggingWho >= 0 && isDragging == true) {
-                    isDraggingWho = -1;
-                    isDragging = false;
-                }
-            }
-        });
-
-        //This will dragg the determine class object box
-        addMouseMotionListener(new MouseAdapter() {
-            public void mouseDragged(MouseEvent evt) {
-                if (classObjectList.size() > 0 && isDraggingWho >= 0 && isDragging == true) {
-                    moveClassObject(classObjectList.get(isDraggingWho), evt.getX() - xOffSet, evt.getY() - yOffSet);
-                    repaint(); 
-                }
-            }
-        });
     }
 
-    //This takes the classObject and coordinates to be moved to
+    /**
+     * This method will update the position of a classObject being moved to a new location
+     * and will repaint the updated location
+     * @param classObject
+     * @param x
+     * @param y
+     */
     private void moveClassObject(ClassObject classObject, int x, int y) {
         // Current classObject state, stored as final variables 
         // to avoid repeat invocations of the same methods.
@@ -134,22 +77,19 @@ public class EditorView extends JPanel {
         }
     }
 
-    //This method paints all components in the EditorPane
+    /**
+     * This method repaints the EditorView as needed
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         // Draw Text
         g.drawString("Click to insert Class Objects", 10, 20);
 
         //Draw All Relationship Lines
-        for(int i = 0; i < relationList.size(); i++) {
-            relationList.get(i).update();
-            relationList.get(i).drawLines(g);
-        }
+        manager.getClassObjectView.display(g);
         
         //Draw All Class Objects
-        for (int i = 0; i < classObjectList.size(); i++) {
-            classObjectList.get(i).display(g);
-        }
+        manager.getRelationshipView.display(g);
         
     }
 
@@ -191,20 +131,8 @@ public class EditorView extends JPanel {
         }
     }
 
-    public ArrayList<Relationship> getRelationList() {
-        return relationList;
-    }
-
-    public void setRelationList(ArrayList<Relationship> relationList) {
-        this.relationList = relationList;
-    }
-
     public boolean isCanAddClassObject() {
         return canAddClassObject;
-    }
-
-    public ArrayList<ClassObject> getClassObjectList() {
-        return classObjectList;
     }
 
     public boolean isIsDragging() {
@@ -223,7 +151,6 @@ public class EditorView extends JPanel {
         this.selectedClassObject = selectedClassObject;
     }
 
-
     public boolean isTryRelationship() {
         return tryRelationship;
     }
@@ -239,6 +166,90 @@ public class EditorView extends JPanel {
     public void setMakeRelationship(boolean makeRelationship) {
         this.makeRelationship = makeRelationship;
     }
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent me) {
+        
+		if(selectedClassObject >= 0 && classObjectList.size() > 0){
+            classObjectList.get(selectedClassObject).setIsSelected(false);
+            selectedClassObject = -1;
+            repaint();
+        }
+        
+        for (int i = 0; i < classObjectList.size(); i++) {
+            if ((me.getX() > classObjectList.get(i).getxPos())
+                    && (me.getY() > classObjectList.get(i).getyPos())
+                    && (me.getX() < (classObjectList.get(i).getWidth() + classObjectList.get(i).getxPos()))
+                    && (me.getY() < (classObjectList.get(i).getHeight()) + classObjectList.get(i).getyPos())) {
+                if(me.isPopupTrigger()) {
+                    togglePopUp();
+                    isDraggingWho = i;
+                    selectedClassObject = i;
+                    classObjectList.get(selectedClassObject).setIsSelected(true);
+                    repaint();
+                } else {
+                    isDraggingWho = i;
+                    isDragging = true;
+                    selectedClassObject = i;
+                    classObjectList.get(selectedClassObject).setIsSelected(true);
+                    xOffSet = me.getX() - classObjectList.get(i).getxPos();
+                    yOffSet = me.getY() - classObjectList.get(i).getyPos();
+                    repaint();
+                }
+            }
+        }
+        if(!classObjectList.isEmpty()) {
+            if(tryRelationship && relationCandidates.isEmpty() && selectedClassObject > -1) {
+                relationCandidates.add(selectedClassObject);
+            } else if(tryRelationship && relationCandidates.size() == 1 && selectedClassObject > -1) {
+                classObjectList.get(relationCandidates.get(0)).setIsSelected(false);
+                relationCandidates.add(selectedClassObject);
+                makeRelationship = true;
+            }
+        }
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent me) {
+        if(isDraggingWho >= 0 && isDragging == true) {
+            isDraggingWho = -1;
+            isDragging = false;
+        }
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent evt) {
+        if (classObjectList.size() > 0 && isDraggingWho >= 0 && isDragging == true) {
+            moveClassObject(classObjectList.get(isDraggingWho), evt.getX() - xOffSet, evt.getY() - yOffSet);
+            repaint(); 
+        }
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
     
     
     
