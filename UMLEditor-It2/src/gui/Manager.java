@@ -23,7 +23,6 @@ public class Manager {
 		if (System.getProperty("mrj.version") != null) {
 			System.setProperty("apple.laf.useScreenMenuBar","true");
 		}
-        JFrame.setDefaultLookAndFeelDecorated(true);
         
         frame = new JFrame("UML Editor");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
