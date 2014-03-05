@@ -47,7 +47,7 @@ public class Attribute {
     }
 
     /**
-     * Sets the attribute to be private of public
+     * Sets the attribute to be private or public
      * @param type
      */
     public void setType(boolean type) {
