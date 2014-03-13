@@ -8,17 +8,17 @@ package models;
  */
 public class Operation {
     private String operationName;
-    private boolean type;
+    private int visibility;
     
     /**
      * Constructor for a new operation
      * 
      * @param operationName
-     * @param type
+     * @param visibility
      */
-    public Operation(String operationName, boolean type){
+    public Operation(String operationName, int visibility){
         this.operationName = operationName;
-        this.type = type;
+        this.visibility = visibility;
     }
 
     /**
@@ -38,19 +38,19 @@ public class Operation {
     }
 
     /**
-     * Returns if type is private or public
+     * Returns if visibility is private or public
      * @return
      */
-    public boolean isType() {
-        return type;
+    public int getVisibility() {
+        return visibility;
     }
 
     /**
      * Sets the operation to be private or public
-     * @param type
+     * @param visibility
      */
-    public void setType(boolean type) {
-        this.type = type;
+    public void setVisibility(int visibility) {
+        this.visibility = visibility;
     }
     
     

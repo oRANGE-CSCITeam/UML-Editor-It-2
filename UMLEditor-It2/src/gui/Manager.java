@@ -17,6 +17,8 @@ public class Manager {
 	private JFrame frame;
 	private ArrayList<ClassObject> classObjectList;
 	private ArrayList<Relationship> relationList;
+	private ClassObjectView classView;
+	private RelationshipView relationshipView;
 	
 	public Manager() {
    	    //Set the look and feel (for Macs too).
@@ -29,6 +31,10 @@ public class Manager {
         gui = new Gui(this, frame);
         frame.pack();
         frame.setVisible(true);
+        
+        classView = new ClassObjectView(this);
+        relationshipView = new RelationshipView(this);
+        
         
 	}
 	
@@ -53,5 +59,47 @@ public class Manager {
        	}
        );
 	}
+
+	public Gui getGui() {
+		return gui;
+	}
+
+	public void setGui(Gui gui) {
+		this.gui = gui;
+	}
+
+	public ArrayList<ClassObject> getClassObjectList() {
+		return classObjectList;
+	}
+
+	public void setClassObjectList(ArrayList<ClassObject> classObjectList) {
+		this.classObjectList = classObjectList;
+	}
+
+	public ArrayList<Relationship> getRelationList() {
+		return relationList;
+	}
+
+	public void setRelationList(ArrayList<Relationship> relationList) {
+		this.relationList = relationList;
+	}
+
+	public ClassObjectView getClassView() {
+		return classView;
+	}
+
+	public void setClassView(ClassObjectView classView) {
+		this.classView = classView;
+	}
+
+	public RelationshipView getRelationshipView() {
+		return relationshipView;
+	}
+
+	public void setRelationshipView(RelationshipView relationshipView) {
+		this.relationshipView = relationshipView;
+	}
+	
+	
 
 }

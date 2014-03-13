@@ -86,10 +86,10 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
         g.drawString("Click to insert Class Objects", 10, 20);
 
         //Draw All Relationship Lines
-        manager.getClassObjectView.display(g);
+        manager.getClassView().display(g);
         
         //Draw All Class Objects
-        manager.getRelationshipView.display(g);
+        manager.getRelationshipView().display(g);
         
     }
 
@@ -188,41 +188,32 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
 	@Override
 	public void mousePressed(MouseEvent me) {
         
-		if(selectedClassObject >= 0 && classObjectList.size() > 0){
-            classObjectList.get(selectedClassObject).setIsSelected(false);
+		if(selectedClassObject >= 0 && manager.getClassObjectList().size() > 0){
+            manager.getClassObjectList().get(selectedClassObject).setIsSelected(false);
             selectedClassObject = -1;
             repaint();
         }
         
-        for (int i = 0; i < classObjectList.size(); i++) {
-            if ((me.getX() > classObjectList.get(i).getxPos())
-                    && (me.getY() > classObjectList.get(i).getyPos())
-                    && (me.getX() < (classObjectList.get(i).getWidth() + classObjectList.get(i).getxPos()))
-                    && (me.getY() < (classObjectList.get(i).getHeight()) + classObjectList.get(i).getyPos())) {
+        for (int i = 0; i < manager.getClassObjectList().size(); i++) {
+            if ((me.getX() > manager.getClassObjectList().get(i).getxPos())
+                    && (me.getY() > manager.getClassObjectList().get(i).getyPos())
+                    && (me.getX() < (manager.getClassObjectList().get(i).getWidth() + manager.getClassObjectList().get(i).getxPos()))
+                    && (me.getY() < (manager.getClassObjectList().get(i).getHeight()) + manager.getClassObjectList().get(i).getyPos())) {
                 if(me.isPopupTrigger()) {
                     togglePopUp();
                     isDraggingWho = i;
                     selectedClassObject = i;
-                    classObjectList.get(selectedClassObject).setIsSelected(true);
+                    manager.getClassObjectList().get(selectedClassObject).setIsSelected(true);
                     repaint();
                 } else {
                     isDraggingWho = i;
                     isDragging = true;
                     selectedClassObject = i;
-                    classObjectList.get(selectedClassObject).setIsSelected(true);
-                    xOffSet = me.getX() - classObjectList.get(i).getxPos();
-                    yOffSet = me.getY() - classObjectList.get(i).getyPos();
+                    manager.getClassObjectList().get(selectedClassObject).setIsSelected(true);
+                    xOffSet = me.getX() - manager.getClassObjectList().get(i).getxPos();
+                    yOffSet = me.getY() - manager.getClassObjectList().get(i).getyPos();
                     repaint();
                 }
-            }
-        }
-        if(!classObjectList.isEmpty()) {
-            if(tryRelationship && relationCandidates.isEmpty() && selectedClassObject > -1) {
-                relationCandidates.add(selectedClassObject);
-            } else if(tryRelationship && relationCandidates.size() == 1 && selectedClassObject > -1) {
-                classObjectList.get(relationCandidates.get(0)).setIsSelected(false);
-                relationCandidates.add(selectedClassObject);
-                makeRelationship = true;
             }
         }
 	}
@@ -238,8 +229,8 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
 
 	@Override
 	public void mouseDragged(MouseEvent evt) {
-        if (classObjectList.size() > 0 && isDraggingWho >= 0 && isDragging == true) {
-            moveClassObject(classObjectList.get(isDraggingWho), evt.getX() - xOffSet, evt.getY() - yOffSet);
+        if (manager.getClassObjectList().size() > 0 && isDraggingWho >= 0 && isDragging == true) {
+            moveClassObject(manager.getClassObjectList().get(isDraggingWho), evt.getX() - xOffSet, evt.getY() - yOffSet);
             repaint(); 
         }
 		
@@ -250,7 +241,5 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
 		// TODO Auto-generated method stub
 		
 	}
-    
-    
-    
+ 
 }

@@ -9,17 +9,17 @@ package models;
  */
 public class Attribute {
     private String attributeName;
-    private boolean type;
+    private int visibility;
     
     /**
      * Constructor for a new attribute
      * 
      * @param attributeName
-     * @param type
+     * @param visibility
      */
-    public Attribute(String attributeName, boolean type){
+    public Attribute(String attributeName, int visibility){
         this.attributeName = attributeName;
-        this.type = type;
+        this.visibility = visibility;
     }
 
     /**
@@ -39,19 +39,19 @@ public class Attribute {
     }
 
     /**
-     * Returns if type is private or public
+     * Returns if visibility is private or public
      * @return
      */
-    public boolean isType() {
-        return type;
+    public int getVisibility() {
+        return visibility;
     }
 
     /**
      * Sets the attribute to be private or public
-     * @param type
+     * @param visibility
      */
-    public void setType(boolean type) {
-        this.type = type;
+    public void setVisibility(int visibility) {
+        this.visibility = visibility;
     }
     
     
