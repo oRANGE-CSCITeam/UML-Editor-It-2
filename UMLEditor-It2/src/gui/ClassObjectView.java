@@ -1,18 +1,27 @@
-/**
- * classObjectView is a class that will take in the all the classObjects from the Manager and will be
- * in charge of display them.
- */
+
 
 package gui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
+/**
+ * take in the all the classObjects from the Manager and will be
+ * in charge of displaying them.
+ * 
+ * @author oRANGE
+ *
+ */
 public class ClassObjectView {
 	private Manager manager;
 	private static ClassObjectView sharedClassView;
+	private Color theColor;
+	
+	
 	
 	public ClassObjectView(Manager manager) {
 		this.manager = manager;
+		theColor = Color.orange;
 
 	}
 	
@@ -21,6 +30,28 @@ public class ClassObjectView {
 	 * @param g
 	 */
 	public void display(Graphics g) {
+		for(int i = 0; i < manager.getClassObjectList().size(); i++)
+		{
+			g.setColor(new Color(0, 0, 0, 100));
+			g.fill3DRect(manager.getClassObjectList().get(i).getxPos() + 3, manager.getClassObjectList().get(i).getyPos() + 3,
+					manager.getClassObjectList().get(i).getWidth(), manager.getClassObjectList().get(i).getHeight(),
+					true);
+			g.setColor(theColor);
+			
+			g.fillRect(manager.getClassObjectList().get(i).getxPos(), manager.getClassObjectList().get(i).getyPos(), 
+					manager.getClassObjectList().get(i).getWidth(), manager.getClassObjectList().get(i).getHeight());
+			
+			g.setColor(Color.black);
+			g.drawRect(manager.getClassObjectList().get(i).getxPos(), manager.getClassObjectList().get(i).getyPos(), 
+					manager.getClassObjectList().get(i).getWidth(), 20);
+			
+			
+		
+			
+			
+			
+		}
+		
 		
 	}
 	
