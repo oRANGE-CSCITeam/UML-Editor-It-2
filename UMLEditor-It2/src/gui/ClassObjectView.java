@@ -17,7 +17,7 @@ import models.ClassObject;
  *
  */
 public class ClassObjectView {
-	private Manager manager;
+	//private Manager manager;
 	private static ClassObjectView sharedClassView;
 	private Color theColor;
 	private ArrayList<ClassObject> theList;
@@ -25,7 +25,7 @@ public class ClassObjectView {
 	
 	
 	public ClassObjectView(Manager manager) {
-		this.manager = manager;
+		//this.manager = manager;
 		theColor = Color.orange;
 		theList = manager.getClassObjectList();
 
