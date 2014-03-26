@@ -1,18 +1,33 @@
-/**
- * classObjectView is a class that will take in the all the classObjects from the Manager and will be
- * in charge of display them.
- */
+
 
 package gui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
+import java.util.ArrayList;
+
+import models.ClassObject;
+
+/**
+ * take in the all the classObjects from the Manager and will be
+ * in charge of displaying them.
+ * 
+ * @author oRANGE
+ *
+ */
 public class ClassObjectView {
-	private Manager manager;
+	//private Manager manager;
 	private static ClassObjectView sharedClassView;
+	private Color theColor;
+	private ArrayList<ClassObject> theList;
+	
+	
 	
 	public ClassObjectView(Manager manager) {
-		this.manager = manager;
+		//this.manager = manager;
+		theColor = Color.orange;
+		theList = manager.getClassObjectList();
 
 	}
 	
@@ -21,6 +36,90 @@ public class ClassObjectView {
 	 * @param g
 	 */
 	public void display(Graphics g) {
+		for(int i = 0; i < theList.size(); i++)
+		{
+			g.setColor(new Color(0, 0, 0, 100));
+			g.fill3DRect(theList.get(i).getxPos() + 3, theList.get(i).getyPos() + 3,
+					theList.get(i).getWidth(), theList.get(i).getHeight(),
+					true);
+			g.setColor(theColor);
+			
+			g.fillRect(theList.get(i).getxPos(), theList.get(i).getyPos(), 
+					theList.get(i).getWidth(), theList.get(i).getHeight());
+			
+			g.setColor(Color.black);
+			g.drawRect(theList.get(i).getxPos(), theList.get(i).getyPos(), 
+					theList.get(i).getWidth(), 20);
+			
+			//Draw border for the attributes
+			if(theList.get(i).getOperations().size() > 0 && theList.get(i).getAttributes().size() == 0)
+			{
+				g.drawRect(theList.get(i).getxPos(), theList.get(i).getyPos() + 20, theList.get(i).getWidth(), 20);
+			}
+			else
+			{
+				g.drawRect(theList.get(i).getxPos(), theList.get(i).getyPos() + 20, 
+						theList.get(i).getWidth(), theList.get(i).getAttributes().size() * 20);
+			}
+			
+			
+			//Draw border for the operations
+			if(theList.get(i).getOperations().size() > 0 && theList.get(i).getAttributes().size() == 0)
+			{
+				g.drawRect(theList.get(i).getxPos(), theList.get(i).getyPos() + 40, 
+						theList.get(i).getWidth(), theList.get(i).getOperations().size() * 20);
+			}
+			else
+			{
+				g.drawRect(theList.get(i).getxPos(), 
+						theList.get(i).getyPos() + (theList.get(i).getAttributes().size() * 20) + 20, 
+						theList.get(i).getWidth(), theList.get(i).getOperations().size() * 20);
+			}
+		
+			//Draw the name of the class
+			g.setColor(Color.black);
+			g.drawString(theList.get(i).getName(), theList.get(i).getxPos() + 5, theList.get(i).getyPos() + 15);
+			
+			//Draw the attributes
+			for(int j = 0; j < theList.get(i).getAttributes().size(); j++)
+			{
+				g.drawString(theList.get(i).getAttributes().get(j), theList.get(i).getxPos() + 5,
+						(theList.get(i).getyPos() +35) + (j * 20));
+			}
+			
+			//Draw the operations
+			if(theList.get(i).getOperations().size() > 0 && theList.get(i).getAttributes().size() == 0)
+			{
+				for(int j = 0; j < theList.get(i).getOperations().size(); j++)
+				{
+					g.drawString(theList.get(i).getOperations().get(j), theList.get(i).getxPos() + 5,
+							(20 +(theList.get(i).getxPos() + 35)) + (j * 20) );
+				}
+			}
+			else
+			{
+				for(int j = 0; j < theList.get(i).getOperations().size(); j++)
+				{
+					g.drawString(theList.get(i).getOperations().get(j),theList.get(i).getxPos() + 5,
+							((theList.get(i).getAttributes().size() * 20) + (theList.get(i).getxPos() + 35)) + (j * 20));
+				}
+			}
+			
+			//Draw highlight is selected
+			if(theList.get(i).isIsSelected())
+			{
+				for (int j = 0; j < 3; j++)
+				{
+					g.setColor(Color.DARK_GRAY);
+					g.drawRect(theList.get(i).getxPos() + j, theList.get(i).getyPos() + j, 
+							theList.get(i).getWidth(), theList.get(i).getHeight());
+				}
+			}
+			
+			
+			
+		}
+		
 		
 	}
 	
