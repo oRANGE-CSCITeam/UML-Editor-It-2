@@ -21,8 +21,7 @@ import models.Relationship;
  */
 public class EditorView extends JPanel implements MouseListener, MouseMotionListener{
 	
-	private boolean canAddClassObject, tryRelationship, isDragging, showPopUp, makeRelationship;
-    private int isDraggingWho, selectedClassObject;
+	private boolean canAddClassObject, tryRelationship;
     private int xOffSet, yOffSet;
     
     private Manager manager;
@@ -34,14 +33,8 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
     	addMouseListener(this);
         //If the add class button toggled "on" this will be true and a new classObject can be added
         canAddClassObject = false;
-        //This is to determine which of the classObjectes is being dragged in the List
-        isDraggingWho = -1;
-        isDragging = false;
         
         tryRelationship = false;
-        
-        selectedClassObject = -1;
-        showPopUp = false;
     }
 
     /**
@@ -93,8 +86,10 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
         
     }
 
-    //This method toggles if a new Class object can be added
-    public void toggleCanAddClassObject() {
+    /**
+     * This method toggles if a new Class object can be added
+     */
+   public void toggleCanAddClassObject() {
         if (!canAddClassObject) {
             canAddClassObject = true;
         } else {
@@ -102,28 +97,7 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
         }
     }
 
-    public boolean isShowPopUp() {
-        return showPopUp;
-    }
-
-    public int getIsDraggingWho() {
-        return isDraggingWho;
-    }
-
-    public void setIsDraggingWho(int isDraggingWho) {
-        this.isDraggingWho = isDraggingWho;
-    }
-    
-    
-    public void togglePopUp() {
-        if (!showPopUp) {
-            showPopUp = true;
-        } else {
-            showPopUp = false;
-        }
-    }
-    
-        public void toggleTryRelation() {
+    public void toggleTryRelation() {
         if (!tryRelationship) {
             tryRelationship = true;
         } else {
@@ -135,36 +109,12 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
         return canAddClassObject;
     }
 
-    public boolean isIsDragging() {
-        return isDragging;
-    }
-
-    public void setIsDragging(boolean isDragging) {
-        this.isDragging = isDragging;
-    }
-
-    public int getSelectedClassObject() {
-        return selectedClassObject;
-    }
-
-    public void setSelectedClassObject(int selectedClassObject) {
-        this.selectedClassObject = selectedClassObject;
-    }
-
     public boolean isTryRelationship() {
         return tryRelationship;
     }
 
     public void setTryRelationship(boolean tryRelationship) {
         this.tryRelationship = tryRelationship;
-    }
-
-    public boolean isMakeRelationship() {
-        return makeRelationship;
-    }
-
-    public void setMakeRelationship(boolean makeRelationship) {
-        this.makeRelationship = makeRelationship;
     }
 
 	@Override
@@ -184,32 +134,41 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	/**
+	 * This method listens for where the mouse is pressed in the EditorView
+	 * Then checks if it needs to select an object or allow dragging
+	 */
 	@Override
 	public void mousePressed(MouseEvent me) {
         
-		if(selectedClassObject >= 0 && manager.getClassObjectList().size() > 0){
-            manager.getClassObjectList().get(selectedClassObject).setIsSelected(false);
-            selectedClassObject = -1;
+		//Reset the selected object when clicked outside on white space
+		if(manager.getObjController().getSelectedClassObject() >= 0 && manager.getClassObjectList().size() > 0){
+            manager.getClassObjectList().get(manager.getObjController().getSelectedClassObject()).setIsSelected(false);
+            manager.getObjController().setSelectedClassObject(-1);
             repaint();
         }
         
         for (int i = 0; i < manager.getClassObjectList().size(); i++) {
-            if ((me.getX() > manager.getClassObjectList().get(i).getxPos())
+            //Find which class object is being selected in the list
+        	if ((me.getX() > manager.getClassObjectList().get(i).getxPos())
                     && (me.getY() > manager.getClassObjectList().get(i).getyPos())
                     && (me.getX() < (manager.getClassObjectList().get(i).getWidth() + manager.getClassObjectList().get(i).getxPos()))
                     && (me.getY() < (manager.getClassObjectList().get(i).getHeight()) + manager.getClassObjectList().get(i).getyPos())) {
-                if(me.isPopupTrigger()) {
-                    togglePopUp();
-                    isDraggingWho = i;
-                    selectedClassObject = i;
-                    manager.getClassObjectList().get(selectedClassObject).setIsSelected(true);
+                
+        		//Show the pop up menu and select
+            	if(me.isPopupTrigger()) {
+                    manager.getObjController().togglePopUp();
+                    manager.getObjController().setIsDraggingWho(i);
+                    manager.getObjController().setSelectedClassObject(i);
+                    manager.getClassObjectList().get(manager.getObjController().getSelectedClassObject()).setIsSelected(true);
                     repaint();
+                //Else not a pop up menu, but select and allow dragging
                 } else {
-                    isDraggingWho = i;
-                    isDragging = true;
-                    selectedClassObject = i;
-                    manager.getClassObjectList().get(selectedClassObject).setIsSelected(true);
+                    manager.getObjController().setIsDraggingWho(i);
+                    manager.getObjController().setDragging(true);
+                    manager.getObjController().setSelectedClassObject(i);
+                    manager.getClassObjectList().get(manager.getObjController().getSelectedClassObject()).setIsSelected(true);
                     xOffSet = me.getX() - manager.getClassObjectList().get(i).getxPos();
                     yOffSet = me.getY() - manager.getClassObjectList().get(i).getyPos();
                     repaint();
@@ -217,23 +176,28 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
             }
         }
 	}
-
+	
+	/**
+	 * This method stops turns off dragging when the user lets go of the object
+	 */
 	@Override
 	public void mouseReleased(MouseEvent me) {
-        if(isDraggingWho >= 0 && isDragging == true) {
-            isDraggingWho = -1;
-            isDragging = false;
+        if(manager.getObjController().getIsDraggingWho() >= 0 && manager.getObjController().isDragging() == true) {
+            manager.getObjController().setIsDraggingWho(-1);
+            manager.getObjController().setDragging(false);
         }
 		
 	}
-
+	
+	/**
+	 * This method calls the moveClassObject method and translates the location of the object is selected and being dragged
+	 */
 	@Override
 	public void mouseDragged(MouseEvent evt) {
-        if (manager.getClassObjectList().size() > 0 && isDraggingWho >= 0 && isDragging == true) {
-            moveClassObject(manager.getClassObjectList().get(isDraggingWho), evt.getX() - xOffSet, evt.getY() - yOffSet);
+        if (manager.getClassObjectList().size() > 0 && manager.getObjController().getIsDraggingWho() >= 0 && manager.getObjController().isDragging() == true) {
+            moveClassObject(manager.getClassObjectList().get(manager.getObjController().getIsDraggingWho()), evt.getX() - xOffSet, evt.getY() - yOffSet);
             repaint(); 
-        }
-		
+        }	
 	}
 
 	@Override
@@ -241,5 +205,4 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
 		// TODO Auto-generated method stub
 		
 	}
- 
 }

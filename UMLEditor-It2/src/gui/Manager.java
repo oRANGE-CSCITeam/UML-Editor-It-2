@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 import models.ClassObject;
+import models.ObjectController;
 import models.Relationship;
 
 public class Manager {
@@ -19,6 +20,7 @@ public class Manager {
 	private ArrayList<Relationship> relationList;
 	private ClassObjectView classView;
 	private RelationshipView relationshipView;
+	private ObjectController objController;
 	
 	public Manager() {
    	    //Set the look and feel (for Macs too).
@@ -32,6 +34,7 @@ public class Manager {
         frame.pack();
         frame.setVisible(true);
         
+        objController = new ObjectController(this);
         classView = new ClassObjectView(this);
         relationshipView = new RelationshipView(this);
         
@@ -98,6 +101,14 @@ public class Manager {
 
 	public void setRelationshipView(RelationshipView relationshipView) {
 		this.relationshipView = relationshipView;
+	}
+
+	public ObjectController getObjController() {
+		return objController;
+	}
+
+	public void setObjController(ObjectController objController) {
+		this.objController = objController;
 	}
 	
 	
