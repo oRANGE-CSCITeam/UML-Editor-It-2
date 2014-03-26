@@ -21,20 +21,15 @@ import models.Relationship;
  */
 public class EditorView extends JPanel implements MouseListener, MouseMotionListener{
 	
-	private boolean canAddClassObject, tryRelationship;
     private int xOffSet, yOffSet;
-    
     private Manager manager;
-    
-    ArrayList<Integer> relationCandidates =  new ArrayList();
+    String stringTest;
 
     public EditorView(Manager manager) {
     	this.manager = manager;
     	addMouseListener(this);
-        //If the add class button toggled "on" this will be true and a new classObject can be added
-        canAddClassObject = false;
-        
-        tryRelationship = false;
+    	addMouseMotionListener(this);
+    	stringTest = "Click to insert Class Objects";
     }
 
     /**
@@ -76,7 +71,7 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         // Draw Text
-        g.drawString("Click to insert Class Objects", 10, 20);
+        g.drawString(stringTest, 10, 20);
 
         //Draw All Relationship Lines
         manager.getClassView().display(g);
@@ -84,37 +79,6 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
         //Draw All Class Objects
         manager.getRelationshipView().display(g);
         
-    }
-
-    /**
-     * This method toggles if a new Class object can be added
-     */
-   public void toggleCanAddClassObject() {
-        if (!canAddClassObject) {
-            canAddClassObject = true;
-        } else {
-            canAddClassObject = false;
-        }
-    }
-
-    public void toggleTryRelation() {
-        if (!tryRelationship) {
-            tryRelationship = true;
-        } else {
-            tryRelationship = false;
-        }
-    }
-
-    public boolean isCanAddClassObject() {
-        return canAddClassObject;
-    }
-
-    public boolean isTryRelationship() {
-        return tryRelationship;
-    }
-
-    public void setTryRelationship(boolean tryRelationship) {
-        this.tryRelationship = tryRelationship;
     }
 
 	@Override
@@ -125,13 +89,13 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		stringTest = "Mouse Entered";
 		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		stringTest = "Mouse exited";
 		
 	}
 	
@@ -148,6 +112,13 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
             manager.getObjController().setSelectedClassObject(-1);
             repaint();
         }
+		
+		//Get the X & Y if we are adding a class
+		if(manager.isCanAddClass()) {
+			manager.setAddClassX(me.getX());
+			manager.setAddClassY(me.getY());
+			manager.setCanAddClass(false);
+		}
         
         for (int i = 0; i < manager.getClassObjectList().size(); i++) {
             //Find which class object is being selected in the list
@@ -194,15 +165,17 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
 	 */
 	@Override
 	public void mouseDragged(MouseEvent evt) {
-        if (manager.getClassObjectList().size() > 0 && manager.getObjController().getIsDraggingWho() >= 0 && manager.getObjController().isDragging() == true) {
+        if (manager.getClassObjectList().size() > 0 && manager.getObjController().getIsDraggingWho() >= 0 && manager.getObjController().isDragging()) {
             moveClassObject(manager.getClassObjectList().get(manager.getObjController().getIsDraggingWho()), evt.getX() - xOffSet, evt.getY() - yOffSet);
             repaint(); 
-        }	
+        }
+        stringTest = "Dragged";
+        
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		stringTest = "Moved";
 	}
 }

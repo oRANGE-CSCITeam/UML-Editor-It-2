@@ -39,11 +39,10 @@ public class ClassObjectView {
 		for(int i = 0; i < theList.size(); i++)
 		{
 			g.setColor(new Color(0, 0, 0, 100));
-			g.fill3DRect(theList.get(i).getxPos() + 3, theList.get(i).getyPos() + 3,
-					theList.get(i).getWidth(), theList.get(i).getHeight(),
-					true);
-			g.setColor(theColor);
+			g.fillRect(theList.get(i).getxPos() + 3, theList.get(i).getyPos() + 3,
+					theList.get(i).getWidth(), theList.get(i).getHeight());
 			
+			g.setColor(theColor);
 			g.fillRect(theList.get(i).getxPos(), theList.get(i).getyPos(), 
 					theList.get(i).getWidth(), theList.get(i).getHeight());
 			
@@ -118,9 +117,7 @@ public class ClassObjectView {
 			
 			
 			
-		}
-		
-		
+		}	
 	}
 	
 	/**

@@ -6,8 +6,10 @@ public class ObjectController {
 	
 	private boolean isDragging, showPopUp;
 	private int isDraggingWho, selectedClassObject;
+	private Manager manager;
 	
 	public ObjectController (Manager manager) {
+		this.manager = manager;
 		isDragging = false;
 		showPopUp = false;
 		isDraggingWho = -1;

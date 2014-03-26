@@ -16,11 +16,17 @@ public class Manager {
 	private static Manager sharedManager;
 	private Gui gui;
 	private JFrame frame;
+	
 	private ArrayList<ClassObject> classObjectList;
 	private ArrayList<Relationship> relationList;
+	private ArrayList<Integer> relationshipCandidates;
+	
 	private ClassObjectView classView;
 	private RelationshipView relationshipView;
 	private ObjectController objController;
+	
+	private boolean canAddClass, tryRelationship;
+	private int addClassX, addClassY;
 	
 	public Manager() {
    	    //Set the look and feel (for Macs too).
@@ -34,10 +40,15 @@ public class Manager {
         frame.pack();
         frame.setVisible(true);
         
+        classObjectList = new ArrayList<ClassObject>();
+        relationList = new ArrayList<Relationship>();
+        relationshipCandidates = new ArrayList<Integer>();
+        canAddClass = true;
+        tryRelationship = false;
+        
         objController = new ObjectController(this);
         classView = new ClassObjectView(this);
         relationshipView = new RelationshipView(this);
-        
         
 	}
 	
@@ -110,7 +121,44 @@ public class Manager {
 	public void setObjController(ObjectController objController) {
 		this.objController = objController;
 	}
-	
-	
 
+	public boolean isCanAddClass() {
+		return canAddClass;
+	}
+
+	public void setCanAddClass(boolean canAddClass) {
+		this.canAddClass = canAddClass;
+	}
+
+	public int getAddClassX() {
+		return addClassX;
+	}
+
+	public void setAddClassX(int addClassX) {
+		this.addClassX = addClassX;
+	}
+
+	public int getAddClassY() {
+		return addClassY;
+	}
+
+	public void setAddClassY(int addClassY) {
+		this.addClassY = addClassY;
+	}
+
+	public boolean isTryRelationship() {
+		return tryRelationship;
+	}
+
+	public void setTryRelationship(boolean tryRelationship) {
+		this.tryRelationship = tryRelationship;
+	}
+
+	public ArrayList<Integer> getRelationshipCandidates() {
+		return relationshipCandidates;
+	}
+
+	public void setRelationshipCandidates(ArrayList<Integer> relationshipCandidates) {
+		this.relationshipCandidates = relationshipCandidates;
+	}
 }
