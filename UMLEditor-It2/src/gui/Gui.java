@@ -24,13 +24,13 @@ public class Gui extends JPanel
 				implements MouseListener, ActionListener{
 	private JFrame frame;
 	private Manager manager;
+	EditorView view;
 	
 	
-	public Gui(Manager manager, JFrame frame) {
-		this.frame = frame;
+	public Gui(Manager manager) {
 		this.manager = manager;
 		
-		frame = new JFrame("UML Editor (Iteration 2)");
+		JFrame frame = new JFrame("UML Editor (Iteration 2)");
 		JMenuBar darkGrayMenuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu ("File");
 		JMenuItem New = new JMenuItem("New", KeyEvent.VK_T);
@@ -48,12 +48,14 @@ public class Gui extends JPanel
 	        final JToggleButton classButton = new JToggleButton("Create Class");
 		final JToggleButton RelationshipButton = new JToggleButton("Create Relationship");
 		JButton organizeButton = new JButton("Organize");
+		view = new EditorView(manager);
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane();
 		//frame.setSize(1000, 500);
 		frame.setVisible(true);
 		frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
+		frame.add(BorderLayout.CENTER, view);
 		
 		
 		//--set initial window positions-------------

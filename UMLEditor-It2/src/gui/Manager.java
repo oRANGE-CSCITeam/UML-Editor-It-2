@@ -15,7 +15,6 @@ import models.Relationship;
 public class Manager {
 	private static Manager sharedManager;
 	private Gui gui;
-	private JFrame frame;
 	
 	private ArrayList<ClassObject> classObjectList;
 	private ArrayList<Relationship> relationList;
@@ -34,11 +33,8 @@ public class Manager {
 			System.setProperty("apple.laf.useScreenMenuBar","true");
 		}
         
-        frame = new JFrame("UML Editor");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gui = new Gui(this, frame);
-        frame.pack();
-        frame.setVisible(true);
+        gui = new Gui(this);
+        
         
         classObjectList = new ArrayList<ClassObject>();
         relationList = new ArrayList<Relationship>();
