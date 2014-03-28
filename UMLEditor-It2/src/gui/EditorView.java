@@ -117,7 +117,7 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
 		if(manager.isCanAddClass()) {
 			manager.setAddClassX(me.getX());
 			manager.setAddClassY(me.getY());
-			manager.setCanAddClass(false);
+			manager.showAddClass();
 		}
         
         for (int i = 0; i < manager.getClassObjectList().size(); i++) {

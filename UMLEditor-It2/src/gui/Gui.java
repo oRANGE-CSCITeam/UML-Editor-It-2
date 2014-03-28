@@ -30,9 +30,10 @@ public class Gui extends JFrame
 	private AddAttribute addAttributeDialog;
 	private AddOperation addoperationDialog;
 	
+	JToggleButton classButton;
 	
-	public Gui(Manager manager) {
-		this.manager = manager;
+	public Gui(Manager manager1) {
+		this.manager = manager1;
 		
 		this.setName("UML Editor (Iteration 2)");
 		JMenuBar darkGrayMenuBar = new JMenuBar();
@@ -49,9 +50,11 @@ public class Gui extends JFrame
 		JMenuItem Clear = new JMenuItem("Clear", KeyEvent.VK_T);
 		JMenuItem Delete = new JMenuItem("Delete", KeyEvent.VK_T);
 		JPanel leftSidePanel = new JPanel();
-	        final JToggleButton classButton = new JToggleButton("Create Class");
+	    
+		classButton = new JToggleButton("Create Class");
 		final JToggleButton RelationshipButton = new JToggleButton("Create Relationship");
 		JButton organizeButton = new JButton("Organize");
+		
 		view = new EditorView(manager);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -166,6 +169,7 @@ public class Gui extends JFrame
 			public void actionPerformed(ActionEvent ev) {
 				if (classButton.isSelected()){
 					RelationshipButton.setSelected(false);
+					manager.setCanAddClass(true);
 				}
 			}
 		});
@@ -190,7 +194,7 @@ public class Gui extends JFrame
 		//Create new instance of dialogs
 		addRelationshipDialog = new AddRelationship();
 		editRelationshipDialog = new EditRelationship();
-		addClassDialog = new AddClass();
+		addClassDialog = new AddClass(manager);
 		addAttributeDialog = new AddAttribute();
 		addoperationDialog = new AddOperation();
 		
@@ -256,6 +260,10 @@ public class Gui extends JFrame
 
 	public AddOperation getAddoperationDialog() {
 		return addoperationDialog;
+	}
+
+	public JToggleButton getClassButton() {
+		return classButton;
 	}
 	
 	
@@ -608,11 +616,13 @@ class EditRelationship extends javax.swing.JFrame {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class AddClass extends javax.swing.JFrame {
-
+		private Manager manager;
+	
     /**
      * Creates new form AddClass
      */
-    public AddClass() {
+    public AddClass(Manager manager) {
+    	this.manager = manager;
         initComponents();
     }
 
@@ -661,7 +671,7 @@ class AddClass extends javax.swing.JFrame {
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation();
         setTitle("Add Class");
 
         jLabel1.setText("Class name");
@@ -713,6 +723,11 @@ class AddClass extends javax.swing.JFrame {
         jScrollPane3.setViewportView(jList3);
 
         jButton8.setText("Done");
+        jButton8.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        		manager.addClass();
+        	}
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -820,6 +835,8 @@ class AddClass extends javax.swing.JFrame {
                 .addComponent(jButton8)
                 .addContainerGap())
         );
+        
+        
 
         pack();
     }// </editor-fold>                        
@@ -856,12 +873,6 @@ class AddClass extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AddClass().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify                     
@@ -888,7 +899,38 @@ class AddClass extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTextField jTextField1;
-    // End of variables declaration                   
+    // End of variables declaration
+
+	public javax.swing.JList getjList1() {
+		return jList1;
+	}
+
+	public javax.swing.JList getjList2() {
+		return jList2;
+	}
+
+	public javax.swing.JList getjList3() {
+		return jList3;
+	}
+
+	public javax.swing.JScrollPane getjScrollPane1() {
+		return jScrollPane1;
+	}
+
+	public javax.swing.JScrollPane getjScrollPane2() {
+		return jScrollPane2;
+	}
+
+	public javax.swing.JScrollPane getjScrollPane3() {
+		return jScrollPane3;
+	}
+
+	public javax.swing.JTextField getjTextField1() {
+		return jTextField1;
+	}
+    
+    //Getters
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
