@@ -59,6 +59,21 @@ public class Manager {
 		return sharedManager;
 	}
 	
+	public void showAddClass() {
+		gui.getAddClassDialog().setVisible(true);
+	}
+	
+	public void addClass() {
+		String tempClassName = "";
+		tempClassName = gui.getAddClassDialog().getjTextField1().getText();
+		gui.getAddClassDialog().getjTextField1().setText("");
+		classObjectList.add(new ClassObject(tempClassName, addClassX, addClassY, 0));
+		gui.getClassButton().setSelected(false);
+		canAddClass = false;
+		gui.getAddClassDialog().dispose();
+		gui.getView().repaint();
+	}
+	
 	public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(
        	new Runnable() {
