@@ -207,4 +207,8 @@ public class Manager {
 	public void undo(){
 		undo.pop().run();
 	}
+	
+	public void redo(){
+		redo.pop().run();
+	}
 }
