@@ -155,6 +155,11 @@ public class Gui extends JFrame
 		//JMenuItem Delete = new JMenuItem("Delete", KeyEvent.VK_T);
         Delete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_6, ActionEvent.CTRL_MASK));
 		editMenu.add(Delete);
+		Delete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				manager.deleteClass();
+			}
+		});
 		
 		//end  adding MenuItems to Edit~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		

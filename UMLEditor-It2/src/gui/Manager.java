@@ -98,6 +98,14 @@ public class Manager {
 		gui.getView().repaint();
 	}
 	
+	public void deleteClass() {
+		if(objController.getSelectedClassObject() >= 0) {
+			classObjectList.remove(objController.getSelectedClassObject());
+			objController.setSelectedClassObject(-1);
+			gui.getView().repaint();
+		}
+	}
+	
 	public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(
        	new Runnable() {
