@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -31,6 +32,8 @@ public class Gui extends JFrame
 	private AddOperation addoperationDialog;
 	
 	JToggleButton classButton;
+	JMenuItem Undo;
+	JMenuItem Redo;
 	
 	public Gui(Manager manager1) {
 		this.manager = manager1;
@@ -43,8 +46,8 @@ public class Gui extends JFrame
 		JMenuItem Save = new JMenuItem("Save", KeyEvent.VK_T);
 		JMenuItem Quit = new JMenuItem("Quit", KeyEvent.VK_T);
 		JMenu editMenu = new JMenu ("Edit");
-		JMenuItem Undo = new JMenuItem("Undo", KeyEvent.VK_T);
-		JMenuItem Redo = new JMenuItem("Redo", KeyEvent.VK_T);
+		Undo = new JMenuItem("Undo", KeyEvent.VK_T);
+		Redo = new JMenuItem("Redo", KeyEvent.VK_T);
 		JMenuItem Copy = new JMenuItem("Copy", KeyEvent.VK_T);
 		JMenuItem Paste = new JMenuItem("Paste", KeyEvent.VK_T);
 		JMenuItem Clear = new JMenuItem("Clear", KeyEvent.VK_T);
@@ -125,6 +128,7 @@ public class Gui extends JFrame
         //JMenuItem Undo = new JMenuItem("Undo", KeyEvent.VK_T);
         Undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.CTRL_MASK));
 		editMenu.add(Undo);
+		
 		Undo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				manager.undo();
@@ -135,6 +139,12 @@ public class Gui extends JFrame
 		//JMenuItem Redo = new JMenuItem("Redo", KeyEvent.VK_T);
         Redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.CTRL_MASK));
 		editMenu.add(Redo);
+		
+		Redo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt){
+				manager.redo();
+			}
+		});
 		
         //copy
 		//JMenuItem Copy = new JMenuItem("Copy", KeyEvent.VK_T);
@@ -211,6 +221,8 @@ public class Gui extends JFrame
 		//Set the frame visible at the end when everything is added
 		this.setVisible(true);
 	}
+	
+	
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -275,6 +287,16 @@ public class Gui extends JFrame
 	public JToggleButton getClassButton() {
 		return classButton;
 	}
+
+	public JMenuItem getUndo() {
+		return Undo;
+	}
+
+	public JMenuItem getRedo() {
+		return Redo;
+	}
+	
+	
 	
 	
 	
