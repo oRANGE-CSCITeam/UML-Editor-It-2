@@ -20,17 +20,21 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
 
-public class Gui extends JPanel
+public class Gui extends JFrame
 				implements MouseListener, ActionListener{
-	private JFrame frame;
 	private Manager manager;
-	EditorView view;
+	private EditorView view;
+	private AddRelationship addRelationshipDialog;
+	private EditRelationship editRelationshipDialog;
+	private AddClass addClassDialog;
+	private AddAttribute addAttributeDialog;
+	private AddOperation addoperationDialog;
 	
 	
 	public Gui(Manager manager) {
 		this.manager = manager;
 		
-		JFrame frame = new JFrame("UML Editor (Iteration 2)");
+		this.setName("UML Editor (Iteration 2)");
 		JMenuBar darkGrayMenuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu ("File");
 		JMenuItem New = new JMenuItem("New", KeyEvent.VK_T);
@@ -50,23 +54,22 @@ public class Gui extends JPanel
 		JButton organizeButton = new JButton("Organize");
 		view = new EditorView(manager);
 		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane();
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.getContentPane();
 		//frame.setSize(1000, 500);
-		frame.setVisible(true);
-		frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
-		frame.add(BorderLayout.CENTER, view);
+		this.setExtendedState(this.getExtendedState() | Frame.MAXIMIZED_BOTH);
+		this.add(BorderLayout.CENTER, view);
 		
 		
 		//--set initial window positions-------------
 		//Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		//frame.setLocation((dim.width-frame.getWidth()), (dim.height-frame.getHeight()));
 		//frame.setSize(dim.width, dim.height);
-		frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
+		this.setExtendedState(this.getExtendedState() | Frame.MAXIMIZED_BOTH);
 		
 		//creates the Menu Bar
 		//JMenuBar darkGrayMenuBar = new JMenuBar();
-		frame.add(BorderLayout.NORTH, darkGrayMenuBar);
+		this.add(BorderLayout.NORTH, darkGrayMenuBar);
 		darkGrayMenuBar.setOpaque(true);
 		darkGrayMenuBar.setBackground(Color.lightGray);
 		darkGrayMenuBar.setPreferredSize(new Dimension(1000,20));
@@ -150,7 +153,7 @@ public class Gui extends JPanel
 		
 		//Left Side Panel
 		//JPanel leftSidePanel = new JPanel();
-		frame.add(BorderLayout.WEST, leftSidePanel);
+		this.add(BorderLayout.WEST, leftSidePanel);
 		leftSidePanel.setBackground(Color.gray);
 		leftSidePanel.setPreferredSize(new Dimension(200,100));
 		leftSidePanel.setLayout(new BoxLayout(leftSidePanel, BoxLayout.Y_AXIS));
@@ -182,6 +185,17 @@ public class Gui extends JPanel
 		//JButton organizeButton = new JButton("Organize");
 		leftSidePanel.add(organizeButton);
 		organizeButton.setPreferredSize(new Dimension(200, 25));
+		
+
+		//Create new instance of dialogs
+		addRelationshipDialog = new AddRelationship();
+		editRelationshipDialog = new EditRelationship();
+		addClassDialog = new AddClass();
+		addAttributeDialog = new AddAttribute();
+		addoperationDialog = new AddOperation();
+		
+		//Set the frame visible at the end when everything is added
+		this.setVisible(true);
 	}
 
 	@Override
@@ -219,14 +233,39 @@ public class Gui extends JPanel
 		// TODO Auto-generated method stub
 		
 	}
-	
 
+	public EditorView getView() {
+		return view;
+	}
+
+	public AddRelationship getAddRelationshipDialog() {
+		return addRelationshipDialog;
+	}
+
+	public EditRelationship getEditRelationshipDialog() {
+		return editRelationshipDialog;
+	}
+
+	public AddClass getAddClassDialog() {
+		return addClassDialog;
+	}
+
+	public AddAttribute getAddAttributeDialog() {
+		return addAttributeDialog;
+	}
+
+	public AddOperation getAddoperationDialog() {
+		return addoperationDialog;
+	}
+	
+	
+	
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public class AddRelationship extends javax.swing.JFrame {
+class AddRelationship extends javax.swing.JFrame {
 
     /**
      * Creates new form AddRelationship
@@ -399,7 +438,7 @@ public class AddRelationship extends javax.swing.JFrame {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public class EditRelationship extends javax.swing.JFrame {
+class EditRelationship extends javax.swing.JFrame {
 
     /**
      * Creates new form EditRelationship
@@ -568,7 +607,7 @@ public class EditRelationship extends javax.swing.JFrame {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public class AddClass extends javax.swing.JFrame {
+class AddClass extends javax.swing.JFrame {
 
     /**
      * Creates new form AddClass
@@ -856,7 +895,7 @@ public class AddClass extends javax.swing.JFrame {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-public class AddAttribute extends javax.swing.JFrame {
+class AddAttribute extends javax.swing.JFrame {
 
     /**
      * Creates new form AddAttribute
@@ -965,7 +1004,7 @@ public class AddAttribute extends javax.swing.JFrame {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public class AddOperation extends javax.swing.JFrame {
+class AddOperation extends javax.swing.JFrame {
 
     /**
      * Creates new form AddOperation

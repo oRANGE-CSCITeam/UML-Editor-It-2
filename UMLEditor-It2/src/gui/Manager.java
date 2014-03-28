@@ -35,7 +35,6 @@ public class Manager {
         
         gui = new Gui(this);
         
-        
         classObjectList = new ArrayList<ClassObject>();
         relationList = new ArrayList<Relationship>();
         relationshipCandidates = new ArrayList<Integer>();
