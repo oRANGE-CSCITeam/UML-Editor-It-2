@@ -5,6 +5,7 @@
 package gui;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.swing.JFrame;
 
@@ -19,6 +20,10 @@ public class Manager {
 	private ArrayList<ClassObject> classObjectList;
 	private ArrayList<Relationship> relationList;
 	private ArrayList<Integer> relationshipCandidates;
+	
+	//Declare the Undo/Redo Stacks
+	Stack<Runnable> undo;
+	Stack<Runnable> redo;
 	
 	private ClassObjectView classView;
 	private RelationshipView relationshipView;
@@ -40,6 +45,10 @@ public class Manager {
         relationshipCandidates = new ArrayList<Integer>();
         canAddClass = true;
         tryRelationship = false;
+        
+        //Initialize Undo/Redo Stacks
+        undo = new Stack<Runnable>();
+        redo = new Stack<Runnable>();
         
         objController = new ObjectController(this);
         classView = new ClassObjectView(this);
@@ -67,7 +76,22 @@ public class Manager {
 		String tempClassName = "";
 		tempClassName = gui.getAddClassDialog().getjTextField1().getText();
 		gui.getAddClassDialog().getjTextField1().setText("");
-		classObjectList.add(new ClassObject(tempClassName, addClassX, addClassY, 0));
+		ClassObject tempClass = new ClassObject(tempClassName, addClassX, addClassY, 0);
+		classObjectList.add(tempClass);
+		//Add to undo Stack
+		undo.push(new Runnable(){
+			@Override
+			public void run(){
+				if(classObjectList.size() > 0)
+				{
+					classObjectList.remove(classObjectList.size() - 1);
+					gui.getView().repaint();
+				}
+				
+			}
+			
+		});
+		
 		gui.getClassButton().setSelected(false);
 		canAddClass = false;
 		gui.getAddClassDialog().dispose();
@@ -170,5 +194,9 @@ public class Manager {
 
 	public void setRelationshipCandidates(ArrayList<Integer> relationshipCandidates) {
 		this.relationshipCandidates = relationshipCandidates;
+	}
+	
+	public void undo(){
+		undo.pop().run();
 	}
 }
