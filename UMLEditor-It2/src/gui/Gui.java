@@ -103,7 +103,7 @@ public class Gui extends JFrame
 		
 		//quit
 		//JMenuItem Quit = new JMenuItem("Quit", KeyEvent.VK_T);
-        Quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, ActionEvent.ALT_MASK));
+        Quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.ALT_MASK));
 		fileMenu.add(Quit);
 		Quit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ev) {
@@ -125,6 +125,11 @@ public class Gui extends JFrame
         //JMenuItem Undo = new JMenuItem("Undo", KeyEvent.VK_T);
         Undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.CTRL_MASK));
 		editMenu.add(Undo);
+		Undo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				manager.undo();
+			}
+		});
 		
         //re-do
 		//JMenuItem Redo = new JMenuItem("Redo", KeyEvent.VK_T);
