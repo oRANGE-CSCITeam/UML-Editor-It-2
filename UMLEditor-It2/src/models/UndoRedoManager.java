@@ -21,12 +21,15 @@ public class UndoRedoManager {
 	private Stack<Runnable> undo;
 	private Stack<Runnable> redo;
 	
+	private boolean redoing;
+	
 	public UndoRedoManager() {
 		
 		classObjectStack = new Stack<ClassObject>();
 		selectedObjectStack = new Stack<Integer>();
 		undo = new Stack<Runnable>();
 		redo = new Stack<Runnable>();
+		redoing = false;
 	}
 	
 	public void undo() {
@@ -64,4 +67,14 @@ public class UndoRedoManager {
 	public Stack<Integer> getSelectedObjectStack() {
 		return selectedObjectStack;
 	}
+
+	public boolean isRedoing() {
+		return redoing;
+	}
+
+	public void setRedoing(boolean redoing) {
+		this.redoing = redoing;
+	}
+	
+	
 }

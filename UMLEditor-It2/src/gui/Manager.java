@@ -13,6 +13,7 @@ import javax.swing.undo.UndoManager;
 import models.ClassObject;
 import models.ObjectController;
 import models.Relationship;
+import models.UndoRedoManager;
 
 public class Manager {
 	private static Manager sharedManager;
@@ -22,13 +23,8 @@ public class Manager {
 	private ArrayList<Relationship> relationList;
 	private ArrayList<Integer> relationshipCandidates;
 	
-	//Declare the Undo/Redo Stacks
-	private Stack<Runnable> undo;
-	private Stack<Runnable> redo;
-	
-	private Stack<ClassObject> classObjectStack;
-	private Stack<Integer> selectedClassStack;
-	
+	//Declare the Undo/Redo manager
+	private UndoRedoManager undoRedoManager;	
 	
 	private ClassObjectView classView;
 	private RelationshipView relationshipView;
@@ -53,12 +49,7 @@ public class Manager {
         canAddClass = false;
         tryRelationship = false;
         
-        //Initialize Undo/Redo Stacks
-        undo = new Stack<Runnable>();
-        redo = new Stack<Runnable>();
-        classObjectStack = new Stack<ClassObject>();
-        selectedClassStack = new Stack<Integer>();
-        
+        undoRedoManager = new UndoRedoManager();
         objController = new ObjectController(this);
         classView = new ClassObjectView(this);
         relationshipView = new RelationshipView(this);
@@ -84,25 +75,32 @@ public class Manager {
 	 * 
 	 */
 	public void addClass() {
-		String tempClassName = "";
-		tempClassName = gui.getAddClassDialog().getjTextField1().getText();
-		gui.getAddClassDialog().getjTextField1().setText("");
-		tempClass = new ClassObject(tempClassName, addClassX, addClassY, 0);
-		classObjectList.add(tempClass);
-		//Add to undo Stack
-		if(redo.size() > 0){
-			redo.pop();
+		if(undoRedoManager.isRedoing()) {
+			classObjectList.add(undoRedoManager.getClassObjectStack().pop());
+			undoRedoManager.setRedoing(false);
+		} else {
+			String tempClassName = "";
+			tempClassName = gui.getAddClassDialog().getjTextField1().getText();
+			gui.getAddClassDialog().getjTextField1().setText("");
+			tempClass = new ClassObject(tempClassName, addClassX, addClassY, 0);
+			classObjectList.add(tempClass);
+			
+			if(undoRedoManager.getRedo().size() > 0) {
+				undoRedoManager.getRedo().pop();
+			}
 		}
-		undo.push(new Runnable(){
+		//Add to undo Manager
+		undoRedoManager.addUndo(new Runnable(){
 			@Override
 			public void run(){
 				if(classObjectList.size() > 0)
 				{
-					classObjectStack.push(classObjectList.get(classObjectList.size() - 1));
-					redo.push(new Runnable(){
+					undoRedoManager.getClassObjectStack().push(classObjectList.get(classObjectList.size() - 1));
+					undoRedoManager.addRedo(new Runnable(){
 						@Override
-						public void run(){	
-							addClassRedo(classObjectStack.pop());
+						public void run(){
+							undoRedoManager.setRedoing(true);
+							addClass();
 							gui.getView().repaint();				
 						}
 					});
@@ -116,91 +114,68 @@ public class Manager {
 		gui.getAddClassDialog().dispose();
 		gui.getView().repaint();
 	}
-	
-	public void addClassRedo(ClassObject obj) {
-		classObjectList.add(obj);
-		undo.push(new Runnable(){
-			@Override
-			public void run(){
-				if(classObjectList.size() >= 0)
-				{
-					classObjectStack.push(classObjectList.get(classObjectList.size() - 1));
-					redo.push(new Runnable(){
-						@Override
-						public void run(){	
-							addClassRedo(classObjectStack.pop());
-							gui.getView().repaint();
-							
-						}
-					});
-					classObjectList.remove(classObjectList.size() - 1);
-					gui.getView().repaint();
-				}
-				
-			}
-			
-		});
-	}
 	/**
 	 * 
 	 */
 	public void deleteClass() {
 		if(objController.getSelectedClassObject() >= 0) {
-			classObjectStack.push(classObjectList.get(objController.getSelectedClassObject()));
+			undoRedoManager.getClassObjectStack().push(classObjectList.get(objController.getSelectedClassObject()));
 			classObjectList.remove(objController.getSelectedClassObject());
-			selectedClassStack.push(objController.getSelectedClassObject());
+			undoRedoManager.getSelectedObjectStack().push(objController.getSelectedClassObject());
 			objController.setSelectedClassObject(-1);
-			//Add to undo stack
+			undoRedoManager.setRedoing(false);
+			if(undoRedoManager.getRedo().size() > 0) {
+				undoRedoManager.getRedo().pop();
+			}
 			
-			undo.push(new Runnable(){
+			//Add to undo stack
+			undoRedoManager.addUndo(new Runnable(){
 				@Override
-				public void run(){
-					
-					classObjectList.add(selectedClassStack.peek(),classObjectStack.pop());
-					classObjectList.get(selectedClassStack.peek()).setIsSelected(false);
+				public void run(){	
+					classObjectList.add(undoRedoManager.getSelectedObjectStack().peek(),undoRedoManager.getClassObjectStack().pop());
+					classObjectList.get(undoRedoManager.getSelectedObjectStack().peek()).setIsSelected(false);
 					gui.getView().repaint();
-					
-					redo.push(new Runnable() {
+					undoRedoManager.addRedo(new Runnable() {
 						@Override
 						public void run() {
-							deleteClassRedo();
+							undoRedoManager.setRedoing(true);
+							deleteClass();
 							gui.getView().repaint();
 						}
 					});
+				}
+			});
+			gui.getView().repaint();
+		}
+		//If we enter the method due to a redo
+		if(undoRedoManager.isRedoing()) {
+			undoRedoManager.getClassObjectStack().push(classObjectList.get(undoRedoManager.getSelectedObjectStack().peek()));
+			classObjectList.remove(undoRedoManager.getClassObjectStack().peek());
+			objController.setSelectedClassObject(-1);
+			undoRedoManager.setRedoing(false);
+			
+			//Add to undo stack
+			undoRedoManager.addUndo(new Runnable(){
+				@Override
+				public void run(){
 					
+					classObjectList.add(undoRedoManager.getSelectedObjectStack().peek(), undoRedoManager.getClassObjectStack().pop());
+					classObjectList.get(undoRedoManager.getSelectedObjectStack().peek()).setIsSelected(false);
+					gui.getView().repaint();
+					
+					undoRedoManager.addRedo(new Runnable() {
+						@Override
+						public void run() {
+							undoRedoManager.setRedoing(true);
+							deleteClass();
+							gui.getView().repaint();
+						}
+					});
 				}
 			});
 			gui.getView().repaint();
 		}
 	}
-	
-	public void deleteClassRedo() {
-		
-			classObjectStack.push(classObjectList.get(selectedClassStack.peek()));
-			classObjectList.remove(classObjectStack.peek());
-			objController.setSelectedClassObject(-1);
-			//Add to undo stack
-			
-			undo.push(new Runnable(){
-				@Override
-				public void run(){
-					
-					classObjectList.add(selectedClassStack.peek(),classObjectStack.pop());
-					gui.getView().repaint();
-					
-					redo.push(new Runnable() {
-						@Override
-						public void run() {
-							deleteClassRedo();
-							gui.getView().repaint();
-						}
-					});
-					
-				}
-			});
-			gui.getView().repaint();
-	}
-	
 	
 	public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(
@@ -299,34 +274,9 @@ public class Manager {
 	public void setRelationshipCandidates(ArrayList<Integer> relationshipCandidates) {
 		this.relationshipCandidates = relationshipCandidates;
 	}
-	
-	
-	
-	public Stack<ClassObject> getClassObjectStack() {
-		return classObjectStack;
-	}
 
-	public void undo(){
-		if(undo.size() > 0)
-		{
-			undo.pop().run();
-			
-		}
-		
-		
-		
-	}
-	
-	public void redo(){
-		if(redo.size() > 0) {
-		
-			redo.pop().run();
-		}
-		
-	}
-
-	public Stack<Runnable> getUndo() {
-		return undo;
+	public UndoRedoManager getUndoRedoManager() {
+		return undoRedoManager;
 	}
 	
 }
