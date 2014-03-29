@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -12,12 +13,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
 
@@ -40,6 +43,7 @@ public class Gui extends JFrame
 		
 		this.setName("UML Editor (Iteration 2)");
 		JMenuBar darkGrayMenuBar = new JMenuBar();
+		JPanel toolPanel = new JPanel();
 		JMenu fileMenu = new JMenu ("File");
 		JMenuItem New = new JMenuItem("New", KeyEvent.VK_T);
 		JMenuItem Open = new JMenuItem("Open", KeyEvent.VK_T);
@@ -53,6 +57,11 @@ public class Gui extends JFrame
 		JMenuItem Clear = new JMenuItem("Clear", KeyEvent.VK_T);
 		JMenuItem Delete = new JMenuItem("Delete", KeyEvent.VK_T);
 		JPanel leftSidePanel = new JPanel();
+		JButton undoButton = new JButton();
+		undoButton.setBackground(Color.lightGray);
+		//undoButton.setPreferredSize(new Dimension(20,20));
+		undoButton.setIcon(new ImageIcon("src/resources/old_edit_undo.png"));
+		
 	    
 		classButton = new JToggleButton("Create Class");
 		final JToggleButton RelationshipButton = new JToggleButton("Create Relationship");
@@ -75,10 +84,34 @@ public class Gui extends JFrame
 		
 		//creates the Menu Bar
 		//JMenuBar darkGrayMenuBar = new JMenuBar();
+		
 		this.add(BorderLayout.NORTH, darkGrayMenuBar);
+		
+		
+		
+		
 		darkGrayMenuBar.setOpaque(true);
 		darkGrayMenuBar.setBackground(Color.lightGray);
 		darkGrayMenuBar.setPreferredSize(new Dimension(1000,20));
+		
+		//Creates the tools bar
+		this.add(BorderLayout.EAST,toolPanel);
+		toolPanel.setPreferredSize(new Dimension(40,1000));
+		toolPanel.setBackground(Color.lightGray);
+		toolPanel.setVisible(true);
+		
+		//Add buttons to tool bar
+		toolPanel.add(undoButton);
+		
+		undoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				manager.undo();
+			}
+		});
+		
+		
+		
+		
 		
 		//creates File Menu
 		//JMenu fileMenu = new JMenu ("File");
@@ -86,6 +119,8 @@ public class Gui extends JFrame
         fileMenu.getAccessibleContext().setAccessibleDescription("File Options");
         darkGrayMenuBar.add(fileMenu);
         fileMenu.setVisible(true);
+        
+        
 		
 		//add menuItems to File------------------------------------------------------------------------------------------------------------------------------
         
@@ -172,6 +207,7 @@ public class Gui extends JFrame
 		});
 		
 		//end  adding MenuItems to Edit~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		
 		
 		
 		//Left Side Panel

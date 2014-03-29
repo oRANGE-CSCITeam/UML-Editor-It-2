@@ -300,6 +300,12 @@ public class Manager {
 		this.relationshipCandidates = relationshipCandidates;
 	}
 	
+	
+	
+	public Stack<ClassObject> getClassObjectStack() {
+		return classObjectStack;
+	}
+
 	public void undo(){
 		if(undo.size() > 0)
 		{
