@@ -6,12 +6,14 @@ import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -45,7 +47,7 @@ public class Gui extends JFrame
 		this.setLayout(new BorderLayout());
 		JMenuBar darkGrayMenuBar = new JMenuBar();
 		JPanel toolPanel = new JPanel();
-		toolPanel.setLayout(new BorderLayout());
+		toolPanel.setLayout(new GridLayout(1,10));
 		JMenu fileMenu = new JMenu ("File");
 		JMenuItem New = new JMenuItem("New", KeyEvent.VK_T);
 		JMenuItem Open = new JMenuItem("Open", KeyEvent.VK_T);
@@ -109,14 +111,16 @@ public class Gui extends JFrame
 		
 		//Creates the tools bar
 		//this.add(BorderLayout.EAST,toolPanel);
-		toolPanel.setLayout(new BorderLayout());
-		toolPanel.setPreferredSize(new Dimension(30,30));
+		
+		//toolPanel.setPreferredSize(new Dimension(30,30));
 		toolPanel.setVisible(true);
 		
 		//Add buttons to tool bar
-		toolPanel.add(undoButton, BorderLayout.WEST);
+		//toolPanel.add(Box.createRigidArea(new Dimension(0,1)));
+		toolPanel.add(undoButton);
 		toolPanel.add(redoButton);
-		toolPanel.add(test);
+		//toolPanel.add(test);
+		
 		
 		undoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
