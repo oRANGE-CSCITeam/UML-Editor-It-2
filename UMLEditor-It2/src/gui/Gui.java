@@ -42,8 +42,10 @@ public class Gui extends JFrame
 		this.manager = manager1;
 		
 		this.setName("UML Editor (Iteration 2)");
+		this.setLayout(new BorderLayout());
 		JMenuBar darkGrayMenuBar = new JMenuBar();
 		JPanel toolPanel = new JPanel();
+		toolPanel.setLayout(new BorderLayout());
 		JMenu fileMenu = new JMenu ("File");
 		JMenuItem New = new JMenuItem("New", KeyEvent.VK_T);
 		JMenuItem Open = new JMenuItem("Open", KeyEvent.VK_T);
@@ -57,10 +59,16 @@ public class Gui extends JFrame
 		JMenuItem Clear = new JMenuItem("Clear", KeyEvent.VK_T);
 		JMenuItem Delete = new JMenuItem("Delete", KeyEvent.VK_T);
 		JPanel leftSidePanel = new JPanel();
+		
+		
 		JButton undoButton = new JButton();
-		undoButton.setBackground(Color.lightGray);
-		//undoButton.setPreferredSize(new Dimension(20,20));
 		undoButton.setIcon(new ImageIcon("src/resources/old_edit_undo.png"));
+		JButton redoButton = new JButton();
+		redoButton.setIcon(new ImageIcon("src/resources/old_edit_redo.png"));
+		JButton test = new JButton("Test");
+		
+		JPanel northPanel = new JPanel();
+		northPanel.setLayout(new BorderLayout());
 		
 	    
 		classButton = new JToggleButton("Create Class");
@@ -73,7 +81,7 @@ public class Gui extends JFrame
 		this.getContentPane();
 		//frame.setSize(1000, 500);
 		this.setExtendedState(this.getExtendedState() | Frame.MAXIMIZED_BOTH);
-		this.add(BorderLayout.CENTER, view);
+		this.add(view, BorderLayout.CENTER);
 		
 		
 		//--set initial window positions-------------
@@ -84,8 +92,13 @@ public class Gui extends JFrame
 		
 		//creates the Menu Bar
 		//JMenuBar darkGrayMenuBar = new JMenuBar();
+		//this.add(darkGrayMenuBar, BorderLayout.NORTH);
 		
-		this.add(BorderLayout.NORTH, darkGrayMenuBar);
+		//Adds Menu bar and toolbar to north
+		this.add(BorderLayout.NORTH,northPanel);
+		northPanel.add(BorderLayout.NORTH, darkGrayMenuBar);
+		northPanel.add(BorderLayout.SOUTH, toolPanel);
+		
 		
 		
 		
@@ -95,19 +108,29 @@ public class Gui extends JFrame
 		darkGrayMenuBar.setPreferredSize(new Dimension(1000,20));
 		
 		//Creates the tools bar
-		this.add(BorderLayout.EAST,toolPanel);
-		toolPanel.setPreferredSize(new Dimension(40,1000));
-		toolPanel.setBackground(Color.lightGray);
+		//this.add(BorderLayout.EAST,toolPanel);
+		toolPanel.setLayout(new BorderLayout());
+		toolPanel.setPreferredSize(new Dimension(30,30));
 		toolPanel.setVisible(true);
 		
 		//Add buttons to tool bar
-		toolPanel.add(undoButton);
+		toolPanel.add(undoButton, BorderLayout.WEST);
+		toolPanel.add(redoButton);
+		toolPanel.add(test);
 		
 		undoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				manager.undo();
+				manager.getUndoRedoManager().undo();
 			}
 		});
+		
+		redoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				manager.getUndoRedoManager().redo();
+			}
+		});
+		
+		
 		
 		
 		
@@ -166,7 +189,7 @@ public class Gui extends JFrame
 		
 		Undo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				manager.undo();
+				manager.getUndoRedoManager().undo();
 			}
 		});
 		
@@ -177,7 +200,7 @@ public class Gui extends JFrame
 		
 		Redo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt){
-				manager.redo();
+				manager.getUndoRedoManager().redo();
 			}
 		});
 		
@@ -212,7 +235,7 @@ public class Gui extends JFrame
 		
 		//Left Side Panel
 		//JPanel leftSidePanel = new JPanel();
-		this.add(BorderLayout.WEST, leftSidePanel);
+		this.add(leftSidePanel, BorderLayout.WEST);
 		leftSidePanel.setBackground(Color.gray);
 		leftSidePanel.setPreferredSize(new Dimension(200,100));
 		leftSidePanel.setLayout(new BoxLayout(leftSidePanel, BoxLayout.Y_AXIS));
