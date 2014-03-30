@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -13,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -47,7 +49,8 @@ public class Gui extends JFrame
 		this.setLayout(new BorderLayout());
 		JMenuBar darkGrayMenuBar = new JMenuBar();
 		JPanel toolPanel = new JPanel();
-		toolPanel.setLayout(new GridLayout(1,10));
+		toolPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		toolPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JMenu fileMenu = new JMenu ("File");
 		JMenuItem New = new JMenuItem("New", KeyEvent.VK_T);
 		JMenuItem Open = new JMenuItem("Open", KeyEvent.VK_T);
@@ -117,9 +120,11 @@ public class Gui extends JFrame
 		
 		//Add buttons to tool bar
 		//toolPanel.add(Box.createRigidArea(new Dimension(0,1)));
+		
 		toolPanel.add(undoButton);
 		toolPanel.add(redoButton);
-		//toolPanel.add(test);
+		toolPanel.add(test);
+		
 		
 		
 		undoButton.addActionListener(new ActionListener() {
