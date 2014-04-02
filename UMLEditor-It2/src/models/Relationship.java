@@ -59,15 +59,6 @@ public class Relationship  {
     }
     
     /**
-     * Draws the line relationship between one class and the other
-     * @param g
-     */
-    public void drawLines(Graphics g){
-        g.setColor(Color.black);
-        g.drawLine(originX, originY, destinationX, destinationX);    
-    }
-
-    /**
      * Returns information about the main class in a relationship
      * @return mainC -  the main class
      */

@@ -36,10 +36,7 @@ public class Manager {
 	private ClassObject tempClass;
 	
 	public Manager() {
-   	    //Set the look and feel (for Macs too).
-		if (System.getProperty("mrj.version") != null) {
-			System.setProperty("apple.laf.useScreenMenuBar","true");
-		}
+		
         
         gui = new Gui(this);
         
@@ -71,6 +68,10 @@ public class Manager {
 	public void showAddClass() {
 		gui.getAddClassDialog().setVisible(true);
 	}
+	public void showAddAttribute() {
+		gui.getAddAttributeDialog().setVisible(true);
+	}
+	
 	/**
 	 * 
 	 */
