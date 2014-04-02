@@ -24,28 +24,28 @@ public AddClass(Manager manager) {
 private void initComponents() {
 
     jFrame1 = new javax.swing.JFrame();
-    jTextField1 = new javax.swing.JTextField();
+    colorTextField = new javax.swing.JTextField();
     jLabel1 = new javax.swing.JLabel();
-    jButton1 = new javax.swing.JButton();
+    colorButton = new javax.swing.JButton();
     jLabel2 = new javax.swing.JLabel();
-    jScrollPane1 = new javax.swing.JScrollPane();
-    jList1 = new javax.swing.JList();
-    jButton2 = new javax.swing.JButton();
-    jButton3 = new javax.swing.JButton();
-    jButton4 = new javax.swing.JButton();
+    attributesScrollPane = new javax.swing.JScrollPane();
+    attributesList = new javax.swing.JList();
+    addAttributeButton = new javax.swing.JButton();
+    removeAttributeButton = new javax.swing.JButton();
+    editAttributeButton = new javax.swing.JButton();
     jLabel3 = new javax.swing.JLabel();
-    jScrollPane2 = new javax.swing.JScrollPane();
-    jList2 = new javax.swing.JList();
+    operationsScrollPane = new javax.swing.JScrollPane();
+    operationsList = new javax.swing.JList();
     jSeparator1 = new javax.swing.JSeparator();
     jSeparator2 = new javax.swing.JSeparator();
-    jButton5 = new javax.swing.JButton();
-    jButton6 = new javax.swing.JButton();
-    jButton7 = new javax.swing.JButton();
+    addOperationButton = new javax.swing.JButton();
+    removeOperationButton = new javax.swing.JButton();
+    editOperationButton = new javax.swing.JButton();
     jSeparator3 = new javax.swing.JSeparator();
     jLabel4 = new javax.swing.JLabel();
-    jScrollPane3 = new javax.swing.JScrollPane();
-    jList3 = new javax.swing.JList();
-    jButton8 = new javax.swing.JButton();
+    classTypeScrollPane = new javax.swing.JScrollPane();
+    classTypeList = new javax.swing.JList();
+    doneButton = new javax.swing.JButton();
 
 
     javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
@@ -64,60 +64,60 @@ private void initComponents() {
 
     jLabel1.setText("Class name");
 
-    jButton1.setText("Color");
-    jButton1.addActionListener(new java.awt.event.ActionListener() {
+    colorButton.setText("Color");
+    colorButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton1ActionPerformed(evt);
+            colorButtonActionPerformed(evt);
         }
     });
 
     jLabel2.setText("Attributes");
 
-    jList1.setModel(new javax.swing.AbstractListModel() {
+    attributesList.setModel(new javax.swing.AbstractListModel() {
         String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
         public int getSize() { return strings.length; }
         public Object getElementAt(int i) { return strings[i]; }
     });
-    jScrollPane1.setViewportView(jList1);
+    attributesScrollPane.setViewportView(attributesList);
     
     //show the add attribute dialog
-    jButton2.setText("Add");
-    jButton2.addActionListener(new ActionListener() {
+    addAttributeButton.setText("Add");
+    addAttributeButton.addActionListener(new ActionListener() {
     	public void actionPerformed(ActionEvent evt) {
     		manager.showAddAttribute();
     	}
     });
 
-    jButton3.setText("Remove");
+    removeAttributeButton.setText("Remove");
 
-    jButton4.setText("Edit");
+    editAttributeButton.setText("Edit");
 
     jLabel3.setText("Operations");
 
-    jList2.setModel(new javax.swing.AbstractListModel() {
+    operationsList.setModel(new javax.swing.AbstractListModel() {
         String[] strings = { "Association", "Item 2", "Item 3", "Item 4", "Item 5" };
         public int getSize() { return strings.length; }
         public Object getElementAt(int i) { return strings[i]; }
     });
-    jScrollPane2.setViewportView(jList2);
+    operationsScrollPane.setViewportView(operationsList);
 
-    jButton5.setText("Add");
+    addOperationButton.setText("Add");
 
-    jButton6.setText("Remove");
+    removeOperationButton.setText("Remove");
 
-    jButton7.setText("Edit");
+    editOperationButton.setText("Edit");
 
     jLabel4.setText("Class Type");
 
-    jList3.setModel(new javax.swing.AbstractListModel() {
+    classTypeList.setModel(new javax.swing.AbstractListModel() {
         String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
         public int getSize() { return strings.length; }
         public Object getElementAt(int i) { return strings[i]; }
     });
-    jScrollPane3.setViewportView(jList3);
+    classTypeScrollPane.setViewportView(classTypeList);
 
-    jButton8.setText("Done");
-    jButton8.addActionListener(new ActionListener() {
+    doneButton.setText("Done");
+    doneButton.addActionListener(new ActionListener() {
     	public void actionPerformed(ActionEvent evt) {
     		manager.addClass();
     	}
@@ -138,42 +138,42 @@ private void initComponents() {
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel1)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jTextField1))
+                            .addComponent(colorTextField))
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel3)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(operationsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel2)
                                     .addGap(16, 16, 16)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(attributesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGap(0, 0, Short.MAX_VALUE)))
                     .addGap(18, 18, 18)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(addAttributeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(removeAttributeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(colorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton4))
+                            .addComponent(editAttributeButton))
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(addOperationButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(removeOperationButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton7))))
+                            .addComponent(editOperationButton))))
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(jLabel4)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(classTypeScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGap(34, 34, 34))
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton8)
+            .addComponent(doneButton)
             .addContainerGap())
     );
     layout.setVerticalGroup(
@@ -182,8 +182,8 @@ private void initComponents() {
             .addGap(13, 13, 13)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel1)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jButton1))
+                .addComponent(colorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(colorButton))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(35, 35, 35)
@@ -193,13 +193,13 @@ private void initComponents() {
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(2, 2, 2)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(attributesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jButton2)
-                                .addComponent(jButton4))
+                                .addComponent(addAttributeButton)
+                                .addComponent(editAttributeButton))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton3)))))
+                            .addComponent(removeAttributeButton)))))
             .addGap(16, 16, 16)
             .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -211,11 +211,11 @@ private void initComponents() {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jButton5)
-                                .addComponent(jButton7))
+                                .addComponent(addOperationButton)
+                                .addComponent(editOperationButton))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton6))
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(removeOperationButton))
+                        .addComponent(operationsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,9 +224,9 @@ private void initComponents() {
                     .addComponent(jLabel4))
                 .addGroup(layout.createSequentialGroup()
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(classTypeScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-            .addComponent(jButton8)
+            .addComponent(doneButton)
             .addContainerGap())
     );
     
@@ -235,7 +235,7 @@ private void initComponents() {
     pack();
 }// </editor-fold>                        
 
-private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+private void colorButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
     // TODO add your handling code here:
     
 }                                        
@@ -270,57 +270,57 @@ public static void main(String args[]) {
 }
 
 // Variables declaration - do not modify                     
-private javax.swing.JButton jButton1;
-private javax.swing.JButton jButton2;
-private javax.swing.JButton jButton3;
-private javax.swing.JButton jButton4;
-private javax.swing.JButton jButton5;
-private javax.swing.JButton jButton6;
-private javax.swing.JButton jButton7;
-private javax.swing.JButton jButton8;
+private javax.swing.JButton colorButton;
+private javax.swing.JButton addAttributeButton;
+private javax.swing.JButton removeAttributeButton;
+private javax.swing.JButton editAttributeButton;
+private javax.swing.JButton addOperationButton;
+private javax.swing.JButton removeOperationButton;
+private javax.swing.JButton editOperationButton;
+private javax.swing.JButton doneButton;
 private javax.swing.JFrame jFrame1;
 private javax.swing.JLabel jLabel1;
 private javax.swing.JLabel jLabel2;
 private javax.swing.JLabel jLabel3;
 private javax.swing.JLabel jLabel4;
-private javax.swing.JList jList1;
-private javax.swing.JList jList2;
-private javax.swing.JList jList3;
-private javax.swing.JScrollPane jScrollPane1;
-private javax.swing.JScrollPane jScrollPane2;
-private javax.swing.JScrollPane jScrollPane3;
+private javax.swing.JList attributesList;
+private javax.swing.JList operationsList;
+private javax.swing.JList classTypeList;
+private javax.swing.JScrollPane attributesScrollPane;
+private javax.swing.JScrollPane operationsScrollPane;
+private javax.swing.JScrollPane classTypeScrollPane;
 private javax.swing.JSeparator jSeparator1;
 private javax.swing.JSeparator jSeparator2;
 private javax.swing.JSeparator jSeparator3;
-private javax.swing.JTextField jTextField1;
+private javax.swing.JTextField colorTextField;
 // End of variables declaration
 
-public javax.swing.JList getjList1() {
-	return jList1;
+public javax.swing.JList getattributesList() {
+	return attributesList;
 }
 
-public javax.swing.JList getjList2() {
-	return jList2;
+public javax.swing.JList getoperationsList() {
+	return operationsList;
 }
 
-public javax.swing.JList getjList3() {
-	return jList3;
+public javax.swing.JList getclassTypeList() {
+	return classTypeList;
 }
 
-public javax.swing.JScrollPane getjScrollPane1() {
-	return jScrollPane1;
+public javax.swing.JScrollPane getattributesScrollPane() {
+	return attributesScrollPane;
 }
 
-public javax.swing.JScrollPane getjScrollPane2() {
-	return jScrollPane2;
+public javax.swing.JScrollPane getoperationsScrollPane() {
+	return operationsScrollPane;
 }
 
-public javax.swing.JScrollPane getjScrollPane3() {
-	return jScrollPane3;
+public javax.swing.JScrollPane getclassTypeScrollPane() {
+	return classTypeScrollPane;
 }
 
-public javax.swing.JTextField getjTextField1() {
-	return jTextField1;
+public javax.swing.JTextField getcolorTextField() {
+	return colorTextField;
 }
 
 //Getters
