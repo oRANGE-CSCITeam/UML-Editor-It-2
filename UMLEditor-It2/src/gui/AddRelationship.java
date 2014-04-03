@@ -29,7 +29,7 @@ class AddRelationship extends javax.swing.JFrame {
         targetTextField = new javax.swing.JTextField();
         okButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Add Relationship");
 
         jLabel2.setText("Type of Relationship");
