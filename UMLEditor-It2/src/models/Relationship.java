@@ -23,6 +23,10 @@ public class Relationship  {
     
     private int rType;
     
+
+    private int[] Xpoints = new int[4];
+    private int[] Ypoints = new int[4];
+    
     /**
      * Creates a new Relationship
      * @param origin is the source class of the relationship
@@ -57,6 +61,42 @@ public class Relationship  {
         destinationX = (destination.getWidth() / 2) + destination.getxPos();
         destinationX = (destination.getHeight() / 2) + destination.getyPos();
     }
+    
+    /**
+     * Draws the line relationship between one class and the other
+     * @param g
+     */
+    public void drawLines(Graphics g){
+        g.setColor(Color.black);
+        g.drawLine(originX, originY, destinationX, destinationX);
+        int modifier;
+        if(origin.getWidth() > origin.getHeight()){
+        	modifier = origin.getWidth();
+        }else{
+        	modifier = origin.getHeight();
+        }
+    	Xpoints[0] = originX + modifier + 2;
+    	Xpoints[1] = originX + modifier;
+    	Xpoints[2] = originX + modifier - 2;
+    	Xpoints[3] = originX + modifier + 2;
+    	Ypoints[0] = originY + modifier;
+    	Ypoints[1] = originY + modifier + 4;
+    	Ypoints[2] = originY + modifier;
+    	Ypoints[3] = originY + modifier;
+        if(rType == 1){
+        	g.drawRect(originX, originY, 5, 5);
+        	g.fillRect(originX, originY, 5, 5);
+        }else if(rType == 2){
+        	g.drawRect(originX, originY, 5, 5);
+        	g.clearRect(originX, originY, 5, 5);
+        }else if(rType == 3){
+        	g.drawPolygon(Xpoints, Ypoints, 4);
+        }else if(rType == 4){
+        	g.drawPolygon(Xpoints, Ypoints, 4);
+        	g.fillPolygon(Xpoints, Ypoints, 4);
+        }
+    }
+
     
     /**
      * Returns information about the main class in a relationship
