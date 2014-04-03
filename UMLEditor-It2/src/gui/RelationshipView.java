@@ -7,6 +7,8 @@ package gui;
 
 import java.awt.Graphics;
 
+import models.Relationship;
+
 public class RelationshipView {
 	private Manager manager;
 	private static RelationshipView sharedRelationView;
@@ -20,7 +22,12 @@ public class RelationshipView {
 	 * @param g
 	 */
 	public void display(Graphics g) {
-		
+		for(int i = 0; i < manager.getRelationList().size(); i++){
+			manager.getRelationList().get(i).update();
+			manager.getRelationList().get(i).drawLines(g);
+			
+		}
+
 	}
 	
 	/**
