@@ -21,13 +21,11 @@ public class ClassObject {
     private int id;
     private ArrayList<Attribute> attributes;
     private ArrayList<Operation> operations;
-    private Map<ClassObject, Relationship> relationMap;
 
     private int xPos;
     private int yPos;
     private int width;
     private int height;
-    private boolean isClicked;
     private final int widthScale = 7;
     private Color color;
     private boolean isSelected;
@@ -42,7 +40,6 @@ public class ClassObject {
         
         attributes = new ArrayList<Attribute>();
         operations = new ArrayList<Operation>();
-        relationMap = new HashMap<ClassObject, Relationship>();
         
         this.id = id;
         this.name = newName;
@@ -53,7 +50,6 @@ public class ClassObject {
         this.height = 20;
         
         color = Color.orange;
-        isClicked = false;
         isSelected = false;
     }
 
@@ -121,23 +117,6 @@ public class ClassObject {
     }
 
     /**
-     *  
-     * @param classObject
-     * @param relationship
-     */
-    public void addRelationship(ClassObject classObject, Relationship relationship) {
-        relationMap.put(classObject, relationship);
-    }
-
-    public void removeRelationship(ClassObject classObject) {
-        relationMap.remove(classObject);
-    }
-
-    public void removeAllRelationships() {
-        relationMap.clear();
-    }
-
-    /**
      * Return name of class
      * @return name -  the name of the class
      */
@@ -159,10 +138,6 @@ public class ClassObject {
      */
     public ArrayList<Operation> getOperations() {
         return operations;
-    }
-
-    public Map<ClassObject, Relationship> getRelationMap() {
-        return relationMap;
     }
 
     /**
@@ -289,22 +264,6 @@ public class ClassObject {
                 g.drawRect(xPos + i, yPos + i, width , getHeight());
             }
         }
-    }
-
-    /**
-     * Returns if the object is being clicked
-     * @return
-     */
-    public boolean isClicked() {
-        return isClicked;
-    }
-
-    /**
-     * Sets the object as clicked
-     * @param bool
-     */
-    public void setIsClicked(boolean bool) {
-        isClicked = bool;
     }
     
     /**
