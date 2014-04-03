@@ -17,7 +17,17 @@ public class Operation {
      * @param visibility
      */
     public Operation(String operationName, int visibility){
-        this.operationName = operationName;
+    	
+    	switch (visibility) {
+		case 0: this.operationName = "+ " + operationName;
+			break;
+		case 1: this.operationName = "- " + operationName;
+			break;
+		case 2: this.operationName = "# " + operationName;
+			break;
+		case 3: this.operationName = "~ " + operationName;
+			break;
+	}  
         this.visibility = visibility;
     }
 

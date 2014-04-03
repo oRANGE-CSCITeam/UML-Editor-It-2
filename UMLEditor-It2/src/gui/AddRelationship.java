@@ -5,7 +5,8 @@ class AddRelationship extends javax.swing.JFrame {
     /**
      * Creates new form AddRelationship
      */
-    public AddRelationship() {
+    public AddRelationship(Manager manager) {
+    	this.manager = manager;
         initComponents();
     }
 
@@ -147,14 +148,6 @@ class AddRelationship extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(AddRelationship.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AddRelationship().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify                     
@@ -167,5 +160,6 @@ class AddRelationship extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JTextField sourceTextField;
     private javax.swing.JTextField targetTextField;
+    private Manager manager;
     // End of variables declaration                   
 }

@@ -10,6 +10,7 @@ import java.util.Stack;
 import javax.swing.JFrame;
 import javax.swing.undo.UndoManager;
 
+import models.Attribute;
 import models.ClassObject;
 import models.ObjectController;
 import models.Relationship;
@@ -22,6 +23,7 @@ public class Manager {
 	private ArrayList<ClassObject> classObjectList;
 	private ArrayList<Relationship> relationList;
 	private ArrayList<Integer> relationshipCandidates;
+	private ArrayList<Attribute> addAttributeList;
 	
 	//Declare the Undo/Redo manager
 	private UndoRedoManager undoRedoManager;	
@@ -31,7 +33,7 @@ public class Manager {
 	private ObjectController objController;
 	
 	private boolean canAddClass, tryRelationship;
-	private int addClassX, addClassY;
+	private int addClassX, addClassY, selectedAttribute;
 	
 	private ClassObject tempClass;
 	
@@ -43,6 +45,7 @@ public class Manager {
         classObjectList = new ArrayList<ClassObject>();
         relationList = new ArrayList<Relationship>();
         relationshipCandidates = new ArrayList<Integer>();
+        addAttributeList = new ArrayList<Attribute>();
         canAddClass = false;
         tryRelationship = false;
         
@@ -50,6 +53,7 @@ public class Manager {
         objController = new ObjectController(this);
         classView = new ClassObjectView(this);
         relationshipView = new RelationshipView(this);
+        selectedAttribute = -1;
         
 	}
 	
@@ -72,6 +76,61 @@ public class Manager {
 		gui.getAddAttributeDialog().setVisible(true);
 	}
 	
+	public void addAttribute() {
+		if (selectedAttribute >= 0 && addAttributeList.size() > 0) {
+				addAttributeList.get(selectedAttribute).setAttributeName(gui.getAddAttributeDialog().getAttributeNameTextField().getText());
+				addAttributeList.get(selectedAttribute).setVisibility(gui.getAddAttributeDialog().getAttributeTypeComboBox().getSelectedIndex());
+				String[] tempAttributeList; 
+				tempAttributeList = new String[addAttributeList.size()];
+            for (int i = 0; i < addAttributeList.size(); i++) {
+                tempAttributeList[i] = addAttributeList.get(i).getAttributeName();
+            }
+            gui.getAddClassDialog().getattributesList().setListData(tempAttributeList);
+            gui.getAddAttributeDialog().getAttributeTypeComboBox().setSelectedIndex(0);
+	        gui.getAddAttributeDialog().getAttributeNameTextField().setText("");
+	        gui.getAddAttributeDialog().dispose();
+	        selectedAttribute = -1;
+        } else {
+	        String attribute = gui.getAddAttributeDialog().getAttributeNameTextField().getText();
+	        String[] tempAttributeList;  
+	        int type = gui.getAddAttributeDialog().getAttributeTypeComboBox().getSelectedIndex();
+	        
+	        addAttributeList.add(new Attribute(attribute, type));
+	        tempAttributeList = new String[addAttributeList.size()];
+	
+	        for (int i = 0; i < addAttributeList.size(); i++) {
+	            tempAttributeList[i] = addAttributeList.get(i).getAttributeName();
+	        }
+	        gui.getAddClassDialog().getattributesList().setListData(tempAttributeList);
+	        gui.getAddAttributeDialog().getAttributeTypeComboBox().setSelectedIndex(0);
+	        gui.getAddAttributeDialog().getAttributeNameTextField().setText("");
+	        gui.getAddAttributeDialog().dispose();
+        }
+	}
+	
+	public void removeAttribute() {
+        String[] tempAttributeList;
+        if (gui.getAddClassDialog().getattributesList().getSelectedIndices().length > 0 && addAttributeList.size() > 0) {
+            for (int i = 0; i < gui.getAddClassDialog().getattributesList().getSelectedIndices().length; i++) {
+                addAttributeList.remove(gui.getAddClassDialog().getattributesList().getSelectedIndices()[0]);
+            }
+            tempAttributeList = new String[addAttributeList.size()];
+            for (int i = 0; i < addAttributeList.size(); i++) {
+                tempAttributeList[i] = addAttributeList.get(i).getAttributeName();
+            }
+            gui.getAddClassDialog().getattributesList().setListData(tempAttributeList);
+        }
+	}
+	
+	public void showEditAttribute() {
+		if(gui.getAddClassDialog().getattributesList().getSelectedIndex() >= 0) {
+			selectedAttribute = gui.getAddClassDialog().getattributesList().getSelectedIndex();
+			gui.getAddAttributeDialog().getAttributeNameTextField().setText((String) gui.getAddClassDialog().getattributesList().getSelectedValue());
+			gui.getAddAttributeDialog().getAttributeTypeComboBox().setSelectedIndex(addAttributeList.get(gui.getAddClassDialog().getattributesList().getSelectedIndex()).getVisibility());
+			gui.getAddAttributeDialog().setVisible(true);
+		}
+	}
+	
 	/**
 	 * 
 	 */
@@ -81,9 +140,14 @@ public class Manager {
 			undoRedoManager.setRedoing(false);
 		} else {
 			String tempClassName = "";
-			tempClassName = gui.getAddClassDialog().getjTextField1().getText();
-			gui.getAddClassDialog().getjTextField1().setText("");
-			tempClass = new ClassObject(tempClassName, addClassX, addClassY, 0);
+			tempClassName = gui.getAddClassDialog().getcolorTextField().getText();
+			gui.getAddClassDialog().getcolorTextField().setText("");
+			tempClass = new ClassObject(tempClassName, addClassX, addClassY, gui.getAddClassDialog().getclassTypeList().getSelectedIndex());
+			//Add all the attributes from the list
+			for(int i = 0; i < addAttributeList.size(); i++) {
+				tempClass.addAttribute(addAttributeList.get(i).getAttributeName().substring(2), addAttributeList.get(i).getVisibility());
+			}
+			addAttributeList.clear();
 			classObjectList.add(tempClass);
 			
 			if(undoRedoManager.getRedo().size() > 0) {
@@ -112,6 +176,7 @@ public class Manager {
 		});
 		gui.getClassButton().setSelected(false);
 		canAddClass = false;
+		gui.getAddClassDialog().getattributesList().setListData(new String[0]);
 		gui.getAddClassDialog().dispose();
 		gui.getView().repaint();
 	}

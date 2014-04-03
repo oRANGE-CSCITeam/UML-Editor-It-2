@@ -82,7 +82,7 @@ public class ClassObjectView {
 			//Draw the attributes
 			for(int j = 0; j < theList.get(i).getAttributes().size(); j++)
 			{
-				g.drawString(theList.get(i).getAttributes().get(j), theList.get(i).getxPos() + 5,
+				g.drawString(theList.get(i).getAttributes().get(j).getAttributeName(), theList.get(i).getxPos() + 5,
 						(theList.get(i).getyPos() +35) + (j * 20));
 			}
 			
@@ -91,7 +91,7 @@ public class ClassObjectView {
 			{
 				for(int j = 0; j < theList.get(i).getOperations().size(); j++)
 				{
-					g.drawString(theList.get(i).getOperations().get(j), theList.get(i).getxPos() + 5,
+					g.drawString(theList.get(i).getOperations().get(j).getOperationName(), theList.get(i).getxPos() + 5,
 							(20 +(theList.get(i).getxPos() + 35)) + (j * 20) );
 				}
 			}
@@ -99,7 +99,7 @@ public class ClassObjectView {
 			{
 				for(int j = 0; j < theList.get(i).getOperations().size(); j++)
 				{
-					g.drawString(theList.get(i).getOperations().get(j),theList.get(i).getxPos() + 5,
+					g.drawString(theList.get(i).getOperations().get(j).getOperationName(),theList.get(i).getxPos() + 5,
 							((theList.get(i).getAttributes().size() * 20) + (theList.get(i).getxPos() + 35)) + (j * 20));
 				}
 			}

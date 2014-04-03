@@ -272,11 +272,11 @@ public class Gui extends JFrame
 		
 
 		//Create new instance of dialogs
-		addRelationshipDialog = new AddRelationship();
-		editRelationshipDialog = new EditRelationship();
+		addRelationshipDialog = new AddRelationship(manager);
+		editRelationshipDialog = new EditRelationship(manager);
 		addClassDialog = new AddClass(manager);
-		addAttributeDialog = new AddAttribute();
-		addoperationDialog = new AddOperation();
+		addAttributeDialog = new AddAttribute(manager);
+		addoperationDialog = new AddOperation(manager);
 		
 		//Set the frame visible at the end when everything is added
 		this.setVisible(true);

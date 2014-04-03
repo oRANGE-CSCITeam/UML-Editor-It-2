@@ -73,15 +73,11 @@ private void initComponents() {
 
     jLabel2.setText("Attributes");
 
-    attributesList.setModel(new javax.swing.AbstractListModel() {
-        String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-        public int getSize() { return strings.length; }
-        public Object getElementAt(int i) { return strings[i]; }
-    });
     attributesScrollPane.setViewportView(attributesList);
     
-    //show the add attribute dialog
+    
     addAttributeButton.setText("Add");
+    //show the add attribute dialog
     addAttributeButton.addActionListener(new ActionListener() {
     	public void actionPerformed(ActionEvent evt) {
     		manager.showAddAttribute();
@@ -89,8 +85,20 @@ private void initComponents() {
     });
 
     removeAttributeButton.setText("Remove");
+    //Call the removeAttribute method in manager
+    removeAttributeButton.addActionListener(new ActionListener() {
+    	public void actionPerformed(ActionEvent evt) {
+    		manager.removeAttribute();
+    	}
+    });
 
     editAttributeButton.setText("Edit");
+    //Call the editAttribute method in manager
+    editAttributeButton.addActionListener(new ActionListener() {
+    	public void actionPerformed(ActionEvent evt) {
+    		manager.showEditAttribute();
+    	}
+    });
 
     jLabel3.setText("Operations");
 
@@ -117,6 +125,7 @@ private void initComponents() {
     classTypeScrollPane.setViewportView(classTypeList);
 
     doneButton.setText("Done");
+    //Call the addClass method in Manager
     doneButton.addActionListener(new ActionListener() {
     	public void actionPerformed(ActionEvent evt) {
     		manager.addClass();

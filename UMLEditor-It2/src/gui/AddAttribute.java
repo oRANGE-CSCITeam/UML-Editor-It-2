@@ -1,11 +1,15 @@
 package gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
  class AddAttribute extends javax.swing.JFrame {
 
     /**
      * Creates new form AddAttribute
      */
-    public AddAttribute() {
+    public AddAttribute(Manager manager) {
+    	this.manager = manager;
         initComponents();
     }
 
@@ -29,9 +33,16 @@ package gui;
 
         jLabel1.setText("Attribute Type");
 
-        attributeTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        attributeTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Public", "Private", "Protected", "Package" }));
 
         addButton.setText("Add");
+        
+        //Call addAttribute method in the manager
+        addButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        		manager.addAttribute();
+        	}
+        });
 
         attributeNameTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -109,14 +120,6 @@ package gui;
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(AddAttribute.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AddAttribute().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify                     
@@ -125,5 +128,22 @@ package gui;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField attributeNameTextField;
-    // End of variables declaration                   
+    private Manager manager;
+    // End of variables declaration    
+	public javax.swing.JComboBox getAttributeTypeComboBox() {
+		return attributeTypeComboBox;
+	}
+
+	public void setAttributeTypeComboBox(javax.swing.JComboBox attributeTypeComboBox) {
+		this.attributeTypeComboBox = attributeTypeComboBox;
+	}
+
+	public javax.swing.JTextField getAttributeNameTextField() {
+		return attributeNameTextField;
+	}
+
+	public void setAttributeNameTextField(
+			javax.swing.JTextField attributeNameTextField) {
+		this.attributeNameTextField = attributeNameTextField;
+	}
 }

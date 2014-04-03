@@ -5,7 +5,8 @@ class EditRelationship extends javax.swing.JFrame {
     /**
      * Creates new form EditRelationship
      */
-    public EditRelationship() {
+    public EditRelationship(Manager manager) {
+    	this.manager = manager;
         initComponents();
     }
 
@@ -141,14 +142,6 @@ class EditRelationship extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(EditRelationship.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new EditRelationship().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify                     
@@ -162,5 +155,6 @@ class EditRelationship extends javax.swing.JFrame {
     private javax.swing.JList relationshipsList;
     private javax.swing.JScrollPane classesScrollPane;
     private javax.swing.JScrollPane relationshipsScrollPane;
+    private Manager manager;
     // End of variables declaration                   
 }

@@ -19,8 +19,8 @@ public class ClassObject {
 
     private String name;
     private int id;
-    private ArrayList<String> attributes;
-    private ArrayList<String> operations;
+    private ArrayList<Attribute> attributes;
+    private ArrayList<Operation> operations;
     private Map<ClassObject, Relationship> relationMap;
 
     private int xPos;
@@ -40,8 +40,8 @@ public class ClassObject {
      */
     public ClassObject(String newName, int xPos, int yPos, int id) {
         
-        attributes = new ArrayList<String>();
-        operations = new ArrayList<String>();
+        attributes = new ArrayList<Attribute>();
+        operations = new ArrayList<Operation>();
         relationMap = new HashMap<ClassObject, Relationship>();
         
         this.id = id;
@@ -66,13 +66,9 @@ public class ClassObject {
      * @param isPrivate - if attribute is private of public
      */
     
-    public void addAttribute(String attributeName, boolean isPrivate) {
+    public void addAttribute(String attributeName, int visibility) {
         if(!attributeName.equals("")){
-            if (isPrivate) {
-                attributes.add("- " + attributeName);
-            } else {
-                attributes.add("+ " + attributeName);
-            }
+        	attributes.add(new Attribute(attributeName, visibility)); 
             this.width = setWidth() * widthScale + 10;
             this.height += 20;
         }
@@ -99,9 +95,9 @@ public class ClassObject {
      * Add an operation to the class
      * @param operationName 
      */
-    public void addOperation(String operationName) {
+    public void addOperation(String operationName, int visibility) {
         if(!operationName.equals("")){
-            operations.add(operationName);
+        	operations.add(new Operation(operationName, visibility)); 
             this.width = setWidth() * widthScale + 10;
             this.height += 20;
         }
@@ -153,7 +149,7 @@ public class ClassObject {
      * Returns ArrayList containing all attributes.
      * @return attributes - holds all the attributes
      */
-    public ArrayList<String> getAttributes() {
+    public ArrayList<Attribute> getAttributes() {
         return attributes;
     }
 
@@ -161,7 +157,7 @@ public class ClassObject {
      * Returns ArrayList containing all operations
      * @return operations - hold all the operations
      */
-    public ArrayList<String> getOperations() {
+    public ArrayList<Operation> getOperations() {
         return operations;
     }
 
@@ -272,17 +268,17 @@ public class ClassObject {
 
         //Draws Attributes
         for(int i = 0; i < attributes.size(); i++) {
-            g.drawString(attributes.get(i), xPos + 5, (yPos + 35) + (i * 20));
+            g.drawString(attributes.get(i).getAttributeName(), xPos + 5, (yPos + 35) + (i * 20));
         }
         
         //Draw Operations
         if(operations.size() > 0 && attributes.size() == 0) {
             for(int i = 0; i < operations.size(); i++) {
-                g.drawString(operations.get(i), xPos + 5, (20 + (yPos + 35)) + (i * 20));
+                g.drawString(operations.get(i).getOperationName(), xPos + 5, (20 + (yPos + 35)) + (i * 20));
             }
         } else {
             for(int i = 0; i < operations.size(); i++) {
-                g.drawString(operations.get(i), xPos + 5, ((attributes.size() * 20) + (yPos + 35)) + (i * 20));
+                g.drawString(operations.get(i).getOperationName(), xPos + 5, ((attributes.size() * 20) + (yPos + 35)) + (i * 20));
             }
         }
         
@@ -319,9 +315,9 @@ public class ClassObject {
         int max = 0;
         int setMax = 0;
         for(int i = 0; i < attributes.size(); i++)
-            if(attributes.get(i).length() >= attributes.get(max).length()){
+            if(attributes.get(i).getAttributeName().length() >= attributes.get(max).getAttributeName().length()){
                 max = i;
-                setMax = attributes.get(max).length();
+                setMax = attributes.get(max).getAttributeName().length();
             }
         return setMax;    
     }
@@ -334,9 +330,9 @@ public class ClassObject {
         int max = 0;
         int setMax = 0;
         for(int i = 0; i < operations.size(); i++)
-            if(operations.get(i).length() >= operations.get(max).length()){
+            if(operations.get(i).getOperationName().length() >= operations.get(max).getOperationName().length()){
                 max = i;
-                setMax = operations.get(max).length();
+                setMax = operations.get(max).getOperationName().length();
             }
         return setMax;    
     }
@@ -357,8 +353,6 @@ public class ClassObject {
     public void setIsSelected(boolean isSelected) {
         this.isSelected = isSelected;
     }
-
-
 
 	public int getId() {
 		return id;

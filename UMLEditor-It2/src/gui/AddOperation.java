@@ -5,7 +5,8 @@ class AddOperation extends javax.swing.JFrame {
     /**
      * Creates new form AddOperation
      */
-    public AddOperation() {
+    public AddOperation(Manager manager) {
+    	this.manager = manager;
         initComponents();
     }
 
@@ -100,14 +101,6 @@ class AddOperation extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(AddOperation.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AddOperation().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify                     
@@ -116,5 +109,6 @@ class AddOperation extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField operationNameTextField;
+    private Manager manager;
     // End of variables declaration                   
 }
