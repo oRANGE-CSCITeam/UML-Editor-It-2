@@ -55,17 +55,17 @@ public class Gui extends JFrame
 		toolPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		toolPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JMenu fileMenu = new JMenu ("File");
-		JMenuItem New = new JMenuItem("New", KeyEvent.VK_T);
-		JMenuItem Open = new JMenuItem("Open", KeyEvent.VK_T);
-		JMenuItem Save = new JMenuItem("Save", KeyEvent.VK_T);
-		JMenuItem Quit = new JMenuItem("Quit", KeyEvent.VK_T);
+		JMenuItem newMI = new JMenuItem("New", KeyEvent.VK_T);
+		JMenuItem open = new JMenuItem("Open", KeyEvent.VK_T);
+		JMenuItem save = new JMenuItem("Save", KeyEvent.VK_T);
+		JMenuItem quit = new JMenuItem("Quit", KeyEvent.VK_T);
 		JMenu editMenu = new JMenu ("Edit");
 		Undo = new JMenuItem("Undo", KeyEvent.VK_T);
 		Redo = new JMenuItem("Redo", KeyEvent.VK_T);
-		JMenuItem Copy = new JMenuItem("Copy", KeyEvent.VK_T);
-		JMenuItem Paste = new JMenuItem("Paste", KeyEvent.VK_T);
-		JMenuItem Clear = new JMenuItem("Clear", KeyEvent.VK_T);
-		JMenuItem Delete = new JMenuItem("Delete", KeyEvent.VK_T);
+		JMenuItem copy = new JMenuItem("Copy", KeyEvent.VK_T);
+		JMenuItem paste = new JMenuItem("Paste", KeyEvent.VK_T);
+		JMenuItem clear = new JMenuItem("Clear", KeyEvent.VK_T);
+		JMenuItem delete = new JMenuItem("Delete", KeyEvent.VK_T);
 		JPanel leftSidePanel = new JPanel();
 		
 		
@@ -150,24 +150,24 @@ public class Gui extends JFrame
         
         //new
         //JMenuItem New = new JMenuItem("New", KeyEvent.VK_T);
-        New.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.ALT_MASK));
-		fileMenu.add(New);
+        newMI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.ALT_MASK));
+		fileMenu.add(newMI);
         
         //open
         //JMenuItem Open = new JMenuItem("Open", KeyEvent.VK_T);
-        Open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
-		fileMenu.add(Open);
+        open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.ALT_MASK));
+		fileMenu.add(open);
 		
 		//save
 		//JMenuItem Save = new JMenuItem("Save", KeyEvent.VK_T);
-        Save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, ActionEvent.ALT_MASK));
-		fileMenu.add(Save);
+        save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
+		fileMenu.add(save);
 		
 		//quit
 		//JMenuItem Quit = new JMenuItem("Quit", KeyEvent.VK_T);
-        Quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.ALT_MASK));
-		fileMenu.add(Quit);
-		Quit.addActionListener(new ActionListener(){
+        quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.ALT_MASK));
+		fileMenu.add(quit);
+		quit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ev) {
 				System.exit(0);
 			}
@@ -207,24 +207,24 @@ public class Gui extends JFrame
 		
         //copy
 		//JMenuItem Copy = new JMenuItem("Copy", KeyEvent.VK_T);
-        Copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, ActionEvent.CTRL_MASK));
-		editMenu.add(Copy);
+        copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
+		editMenu.add(copy);
 		
         //paste
 		//JMenuItem Paste = new JMenuItem("Paste", KeyEvent.VK_T);
-        Paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, ActionEvent.CTRL_MASK));
-		editMenu.add(Paste);
+        paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
+		editMenu.add(paste);
 		
         //clear
 		//JMenuItem Clear = new JMenuItem("Clear", KeyEvent.VK_T);
-        Clear.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_5, ActionEvent.CTRL_MASK));
-		editMenu.add(Clear);
+        clear.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
+		editMenu.add(clear);
 		
         //delete  (grays out when nothing selected) 
 		//JMenuItem Delete = new JMenuItem("Delete", KeyEvent.VK_T);
-        Delete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_6, ActionEvent.CTRL_MASK));
-		editMenu.add(Delete);
-		Delete.addActionListener(new ActionListener() {
+        delete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
+		editMenu.add(delete);
+		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				manager.deleteClass();
 			}
