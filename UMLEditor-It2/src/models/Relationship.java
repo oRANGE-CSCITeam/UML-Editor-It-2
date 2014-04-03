@@ -69,7 +69,7 @@ public class Relationship  {
     public void drawLines(Graphics g){
         g.setColor(Color.black);
         g.drawLine(originX, originY, destinationX, destinationX);
-        int modifier;
+        /*int modifier;
         if(origin.getWidth() > origin.getHeight()){
         	modifier = origin.getWidth();
         }else{
@@ -95,6 +95,7 @@ public class Relationship  {
         	g.drawPolygon(Xpoints, Ypoints, 4);
         	g.fillPolygon(Xpoints, Ypoints, 4);
         }
+        */
     }
 
     
