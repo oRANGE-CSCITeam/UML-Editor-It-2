@@ -1,14 +1,17 @@
+/**
+ * This Class will manage the objects that get selected in the gui as well as which objects are being dragged
+ */
 package models;
 
 import gui.Manager;
 
 public class ObjectController {
-	
+
 	private boolean isDragging, showPopUp;
 	private int isDraggingWho, selectedClassObject;
 	private Manager manager;
-	
-	public ObjectController (Manager manager) {
+
+	public ObjectController(Manager manager) {
 		this.manager = manager;
 		isDragging = false;
 		showPopUp = false;
@@ -47,14 +50,14 @@ public class ObjectController {
 	public void setSelectedClassObject(int selectedClassObject) {
 		this.selectedClassObject = selectedClassObject;
 	}
-	
-    public void togglePopUp() {
-        if (!showPopUp) {
-            showPopUp = true;
-            manager.getGui().getPopUpMenu().setVisible(true);
-        } else {
-            showPopUp = false;
-            manager.getGui().getPopUpMenu().setVisible(false);
-        }
-    }
+
+	public void togglePopUp() {
+		if (!showPopUp) {
+			showPopUp = true;
+			manager.getGui().getPopUpMenu().setVisible(true);
+		} else {
+			showPopUp = false;
+			manager.getGui().getPopUpMenu().setVisible(false);
+		}
+	}
 }

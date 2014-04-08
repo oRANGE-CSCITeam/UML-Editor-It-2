@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class ClassObjectTest {
-	
+
 	@Test
 	public void testClassObject() {
 		ClassObject target = new ClassObject("Name", 10, 10, 0);
@@ -15,9 +15,8 @@ public class ClassObjectTest {
 		assertEquals(0, target.getId());
 		assertEquals(0, target.getAttributes().size());
 		assertEquals(0, target.getOperations().size());
-		
+
 	}
-	
 
 	@Test
 	public void testAddAttribute() {
