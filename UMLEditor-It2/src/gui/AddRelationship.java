@@ -1,5 +1,8 @@
 package gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 class AddRelationship extends javax.swing.JFrame {
 
     /**
@@ -34,7 +37,7 @@ class AddRelationship extends javax.swing.JFrame {
 
         jLabel2.setText("Type of Relationship");
 
-        relationshipsComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        relationshipsComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Association", "Directed Association", "Aggregation", "Composition", "Inheritance" }));
 
         multiplicityCheckBox.setText("Multiplicity");
 
@@ -55,6 +58,12 @@ class AddRelationship extends javax.swing.JFrame {
         });
 
         okButton.setText("OK");
+        okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manager.createRelationship();
+				
+			}
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -161,5 +170,14 @@ class AddRelationship extends javax.swing.JFrame {
     private javax.swing.JTextField sourceTextField;
     private javax.swing.JTextField targetTextField;
     private Manager manager;
-    // End of variables declaration                   
+    // End of variables declaration     
+	public javax.swing.JComboBox getRelationshipsComboBox() {
+		return relationshipsComboBox;
+	}
+
+	public void setRelationshipsComboBox(javax.swing.JComboBox relationshipsComboBox) {
+		this.relationshipsComboBox = relationshipsComboBox;
+	}
+    
+    
 }

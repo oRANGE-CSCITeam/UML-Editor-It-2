@@ -18,17 +18,8 @@ public class Attribute {
      * @param visibility
      */
     public Attribute(String attributeName, int visibility){
-    	switch (visibility) {
-    		case 0: this.attributeName = "+ " + attributeName;
-    			break;
-    		case 1: this.attributeName = "- " + attributeName;
-    			break;
-    		case 2: this.attributeName = "# " + attributeName;
-    			break;
-    		case 3: this.attributeName = "~ " + attributeName;
-    			break;
-    	}  
-        this.visibility = visibility;
+    	this.attributeName = attributeName;
+    	this.visibility = visibility;
     }
 
     /**

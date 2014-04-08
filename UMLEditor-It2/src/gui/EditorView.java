@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -48,7 +49,7 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
         final int CURR_H = classObject.getHeight();
         final int OFFSET = 1;
 
-        if ((CURR_X != x) || (CURR_Y != y)) {
+        if (((CURR_X != x) || (CURR_Y != y)) && (x > this.getX() && y > this.getY())) {
 
             // The classObject is moving, repaint background 
             // over the old classObject location. 
@@ -63,6 +64,13 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
                     classObject.getWidth() + OFFSET,
                     classObject.getHeight() + OFFSET);
         }
+        
+        //Work in progress for autoscrolling
+        if(x > this.getWidth() || y > this.getHeight()) {
+        	this.setPreferredSize(new Dimension(this.getWidth() + (x - this.getWidth()) + 20, this.getHeight() + (y - this.getHeight()) + 20));
+        	manager.getGui().getScrollContainer().updateUI();
+        	manager.getGui().getScrollContainer().repaint();
+        }
     }
 
     /**
@@ -70,14 +78,19 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
      */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Draw Text
-        g.drawString(stringTest, 10, 20);
 
         //Draw All Relationship Lines
-        manager.getClassView().display(g);
+        manager.getRelationshipView().display(g);
+        
+        // Draw Text
+        g.drawString(stringTest, 10, 20);
         
         //Draw All Class Objects
-        manager.getRelationshipView().display(g);
+        manager.getClassView().display(g);
+        
+
+        
+
         
     }
 
@@ -105,7 +118,7 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
 	 */
 	@Override
 	public void mousePressed(MouseEvent me) {
-        
+		
 		//Reset the selected object when clicked outside on white space
 		if(manager.getObjController().getSelectedClassObject() >= 0 && manager.getClassObjectList().size() > 0){
             manager.getClassObjectList().get(manager.getObjController().getSelectedClassObject()).setIsSelected(false);
@@ -129,7 +142,7 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
                 
         		//Show the pop up menu and select
             	if(me.isPopupTrigger()) {
-                    manager.getObjController().togglePopUp();
+            		manager.getGui().getPopUpMenu().show(me.getComponent(), me.getX(), me.getY());
                     manager.getObjController().setIsDraggingWho(i);
                     manager.getObjController().setSelectedClassObject(i);
                     manager.getClassObjectList().get(manager.getObjController().getSelectedClassObject()).setIsSelected(true);
@@ -142,10 +155,26 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
                     manager.getClassObjectList().get(manager.getObjController().getSelectedClassObject()).setIsSelected(true);
                     xOffSet = me.getX() - manager.getClassObjectList().get(i).getxPos();
                     yOffSet = me.getY() - manager.getClassObjectList().get(i).getyPos();
+                    
+                    //Try a relationship by adding candidates
+                    if(manager.isTryRelationship() && manager.getRelationshipCandidates().size() == 0) {
+                    	manager.getRelationshipCandidates().add(manager.getObjController().getSelectedClassObject());
+                    } else if(manager.isTryRelationship() &&  manager.getRelationshipCandidates().size() == 1) {
+                    	manager.getRelationshipCandidates().add(manager.getObjController().getSelectedClassObject());
+                    	manager.showAddRelationshipDialog();
+                    }
                     repaint();
                 }
+            	
             }
+        	//Clear the relationship creation of clicked on white space
+        	if(i == (manager.getClassObjectList().size() - 1) && manager.getObjController().getSelectedClassObject() == -1) {
+        		manager.getRelationshipCandidates().clear();
+                manager.setTryRelationship(false);
+                manager.getGui().getRelationshipButton().setSelected(false);
+        	}
         }
+
 	}
 	
 	/**
@@ -156,6 +185,24 @@ public class EditorView extends JPanel implements MouseListener, MouseMotionList
         if(manager.getObjController().getIsDraggingWho() >= 0 && manager.getObjController().isDragging() == true) {
             manager.getObjController().setIsDraggingWho(-1);
             manager.getObjController().setDragging(false);
+        }
+        
+        //For popUpMenu in other platforms
+        for (int i = 0; i < manager.getClassObjectList().size(); i++) {
+            //Find which class object is being selected in the list
+        	if ((me.getX() > manager.getClassObjectList().get(i).getxPos())
+                    && (me.getY() > manager.getClassObjectList().get(i).getyPos())
+                    && (me.getX() < (manager.getClassObjectList().get(i).getWidth() + manager.getClassObjectList().get(i).getxPos()))
+                    && (me.getY() < (manager.getClassObjectList().get(i).getHeight()) + manager.getClassObjectList().get(i).getyPos())) {        
+				//Show the pop up menu and select
+		    	if(me.isPopupTrigger()) {
+		    		manager.getGui().getPopUpMenu().show(me.getComponent(), me.getX(), me.getY());
+		            manager.getObjController().setIsDraggingWho(i);
+		            manager.getObjController().setSelectedClassObject(i);
+		            manager.getClassObjectList().get(manager.getObjController().getSelectedClassObject()).setIsSelected(true);
+		            repaint();
+		    	}
+        	}
         }
 		
 	}

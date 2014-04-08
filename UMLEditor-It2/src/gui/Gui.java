@@ -24,7 +24,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
 
@@ -36,11 +39,14 @@ public class Gui extends JFrame
 	private EditRelationship editRelationshipDialog;
 	private AddClass addClassDialog;
 	private AddAttribute addAttributeDialog;
-	private AddOperation addoperationDialog;
-	
-	JToggleButton classButton;
-	JMenuItem Undo;
-	JMenuItem Redo;
+	private AddOperation addOperationDialog;
+	private JPopupMenu popUpMenu;
+	private JToggleButton classButton;
+	private JToggleButton selectButton;
+	JToggleButton relationshipButton;
+	private JMenuItem Undo;
+	private JMenuItem Redo;
+	private JScrollPane scrollContainer;
 	
 	public Gui(Manager manager1) {
 		
@@ -67,8 +73,15 @@ public class Gui extends JFrame
 		JMenuItem clear = new JMenuItem("Clear", KeyEvent.VK_T);
 		JMenuItem delete = new JMenuItem("Delete", KeyEvent.VK_T);
 		JPanel leftSidePanel = new JPanel();
+		view = new EditorView(manager);
+		scrollContainer = new JScrollPane(view);
+		view.setAutoscrolls(true);
+		JTabbedPane viewTab = new JTabbedPane();
+		viewTab.addTab("Untitled", scrollContainer);
 		
-		
+		view.setPreferredSize(scrollContainer.getSize());
+		popUpMenu = new JPopupMenu();
+		selectButton = new JToggleButton("Select");
 		JButton undoButton = new JButton();
 		undoButton.setIcon(new ImageIcon("src/resources/old_edit_undo.png"));
 		JButton redoButton = new JButton();
@@ -80,16 +93,16 @@ public class Gui extends JFrame
 		
 	    
 		classButton = new JToggleButton("Create Class");
-		final JToggleButton RelationshipButton = new JToggleButton("Create Relationship");
+		relationshipButton = new JToggleButton("Create Relationship");
 		JButton organizeButton = new JButton("Organize");
 		
-		view = new EditorView(manager);
+		
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.getContentPane();
 		//frame.setSize(1000, 500);
 		this.setExtendedState(this.getExtendedState() | Frame.MAXIMIZED_BOTH);
-		this.add(view, BorderLayout.CENTER);
+		this.add(viewTab, BorderLayout.CENTER);
 		
 		
 		//--set initial window positions-------------
@@ -106,7 +119,8 @@ public class Gui extends JFrame
 		this.add(BorderLayout.NORTH,northPanel);
 		this.setJMenuBar(darkGrayMenuBar);
 		northPanel.add(BorderLayout.NORTH, toolPanel);
-			
+		
+		
 		
 		//darkGrayMenuBar.setOpaque(true);
 		//darkGrayMenuBar.setBackground(Color.lightGray);
@@ -185,7 +199,7 @@ public class Gui extends JFrame
         //add menuItems to Edit~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         //undo
         //JMenuItem Undo = new JMenuItem("Undo", KeyEvent.VK_T);
-        Undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.CTRL_MASK));
+        Undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
 		editMenu.add(Undo);
 		
 		Undo.addActionListener(new ActionListener() {
@@ -196,7 +210,7 @@ public class Gui extends JFrame
 		
         //re-do
 		//JMenuItem Redo = new JMenuItem("Redo", KeyEvent.VK_T);
-        Redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.CTRL_MASK));
+        Redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
 		editMenu.add(Redo);
 		
 		Redo.addActionListener(new ActionListener() {
@@ -232,7 +246,10 @@ public class Gui extends JFrame
 		
 		//end  adding MenuItems to Edit~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		
-		
+		//Add menu items to popUpMenu
+		popUpMenu.add(copy);
+		popUpMenu.add(paste);
+		popUpMenu.add(delete);
 		
 		//Left Side Panel
 		//JPanel leftSidePanel = new JPanel();
@@ -241,6 +258,20 @@ public class Gui extends JFrame
 		leftSidePanel.setPreferredSize(new Dimension(200,100));
 		leftSidePanel.setLayout(new BoxLayout(leftSidePanel, BoxLayout.Y_AXIS));
 		
+		//Create Select Toggle Button
+		leftSidePanel.add(selectButton);
+		selectButton.setPreferredSize(new Dimension(200, 25)); //tries but doesn't set correct size (over-ruled)
+		selectButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ev) {
+				if (selectButton.isSelected()){
+					relationshipButton.setSelected(false);
+					classButton.setSelected(false);
+					manager.setCanAddClass(false);
+					manager.setTryRelationship(false);
+				}
+			}
+		});
+		
 		//Create Class Toggle Button
 		//JToggleButton classButton = new JToggleButton("Create Class");
 		leftSidePanel.add(classButton);
@@ -248,7 +279,13 @@ public class Gui extends JFrame
 		classButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ev) {
 				if (classButton.isSelected()){
-					RelationshipButton.setSelected(false);
+					relationshipButton.setSelected(false);
+					selectButton.setSelected(false);
+					manager.setTryRelationship(false);
+				}
+				if(manager.isCanAddClass()){
+					manager.setCanAddClass(false);
+				} else {
 					manager.setCanAddClass(true);
 				}
 			}
@@ -256,12 +293,15 @@ public class Gui extends JFrame
 		
 		//Create Relationship Toggle Button
 		//JToggleButton RelationshipButton = new JToggleButton("Create Relationship");
-		leftSidePanel.add(RelationshipButton);
-		RelationshipButton.setPreferredSize(new Dimension(200, 25)); //tries but doesn't set correct size (over-ruled)
-		RelationshipButton.addActionListener(new ActionListener(){
+		leftSidePanel.add(relationshipButton);
+		relationshipButton.setPreferredSize(new Dimension(200, 25)); //tries but doesn't set correct size (over-ruled)
+		relationshipButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ev) {
-				if (RelationshipButton.isSelected()){
+				if (relationshipButton.isSelected()){
 					classButton.setSelected(false);
+					selectButton.setSelected(false);
+					manager.setCanAddClass(false);
+					manager.setTryRelationship(true);
 				}
 			}
 		});
@@ -276,7 +316,7 @@ public class Gui extends JFrame
 		editRelationshipDialog = new EditRelationship(manager);
 		addClassDialog = new AddClass(manager);
 		addAttributeDialog = new AddAttribute(manager);
-		addoperationDialog = new AddOperation(manager);
+		addOperationDialog = new AddOperation(manager);
 		
 		//Set the frame visible at the end when everything is added
 		this.setVisible(true);
@@ -340,8 +380,8 @@ public class Gui extends JFrame
 		return addAttributeDialog;
 	}
 
-	public AddOperation getAddoperationDialog() {
-		return addoperationDialog;
+	public AddOperation getAddOperationDialog() {
+		return addOperationDialog;
 	}
 
 	public JToggleButton getClassButton() {
@@ -355,5 +395,27 @@ public class Gui extends JFrame
 	public JMenuItem getRedo() {
 		return Redo;
 	}
-		
+
+	public JPopupMenu getPopUpMenu() {
+		return popUpMenu;
+	}
+
+	public JToggleButton getSelectButton() {
+		return selectButton;
+	}
+
+	
+
+
+	public JScrollPane getScrollContainer() {
+		return scrollContainer;
+	}
+
+
+
+	public JToggleButton getRelationshipButton() {
+		return relationshipButton;
+	}
+	
+	
 }

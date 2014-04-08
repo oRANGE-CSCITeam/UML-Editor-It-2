@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 class AddClass extends javax.swing.JFrame {
 	private Manager manager;
@@ -24,7 +26,7 @@ public AddClass(Manager manager) {
 private void initComponents() {
 
     jFrame1 = new javax.swing.JFrame();
-    colorTextField = new javax.swing.JTextField();
+    classNameTextField = new javax.swing.JTextField();
     jLabel1 = new javax.swing.JLabel();
     colorButton = new javax.swing.JButton();
     jLabel2 = new javax.swing.JLabel();
@@ -46,7 +48,51 @@ private void initComponents() {
     classTypeScrollPane = new javax.swing.JScrollPane();
     classTypeList = new javax.swing.JList();
     doneButton = new javax.swing.JButton();
+    
+    this.setAlwaysOnTop(true);
+    this.setResizable(false);
+    //Control what to do depending on the state of the frame
+    this.addWindowListener(new WindowListener() {
+    	public void windowClosed(WindowEvent evt) {
+    		// TODO Auto-generated method stub
+    	}
 
+		@Override
+		public void windowActivated(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowClosing(WindowEvent arg0) {
+			close();
+			
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowIconified(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowOpened(WindowEvent arg0) {
+			manager.getGui().setEnabled(false);		
+		}
+    });
+    
 
     javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
     jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -67,7 +113,7 @@ private void initComponents() {
     colorButton.setText("Color");
     colorButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            colorButtonActionPerformed(evt);
+            //Add color function
         }
     });
 
@@ -102,18 +148,32 @@ private void initComponents() {
 
     jLabel3.setText("Operations");
 
-    operationsList.setModel(new javax.swing.AbstractListModel() {
-        String[] strings = { "Association", "Item 2", "Item 3", "Item 4", "Item 5" };
-        public int getSize() { return strings.length; }
-        public Object getElementAt(int i) { return strings[i]; }
-    });
     operationsScrollPane.setViewportView(operationsList);
 
     addOperationButton.setText("Add");
+    //show the add operation dialog
+    addOperationButton.addActionListener(new ActionListener() {
+    	public void actionPerformed(ActionEvent evt) {
+    		manager.showAddOperation();
+    	}
+    });
 
     removeOperationButton.setText("Remove");
-
+    //Call the removeOperation method in manager
+    removeOperationButton.addActionListener(new ActionListener() {
+    	public void actionPerformed(ActionEvent evt) {
+    		manager.removeOperation();
+    	}
+    });
+    
+    
     editOperationButton.setText("Edit");
+    //Call the editOperation method in manager
+    editOperationButton.addActionListener(new ActionListener() {
+    	public void actionPerformed(ActionEvent evt) {
+    		manager.showEditOperation();
+    	}
+    });
 
     jLabel4.setText("Class Type");
 
@@ -147,7 +207,7 @@ private void initComponents() {
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel1)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(colorTextField))
+                            .addComponent(classNameTextField))
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
@@ -191,7 +251,7 @@ private void initComponents() {
             .addGap(13, 13, 13)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel1)
-                .addComponent(colorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(classNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(colorButton))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -239,15 +299,21 @@ private void initComponents() {
             .addContainerGap())
     );
     
-    
-
     pack();
-}// </editor-fold>                        
-
-private void colorButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
-    // TODO add your handling code here:
-    
-}                                        
+}                       
+     
+	public void close() {
+		manager.getGui().setEnabled(true);
+		manager.setCanAddClass(false);
+		manager.getGui().getClassButton().setSelected(false);
+		manager.getGui().getSelectButton().setSelected(true);
+		manager.setCanAddClass(false);
+		classNameTextField.setText("");
+		attributesList.setListData(new String[0]);
+		operationsList.setListData(new String[0]);
+		dispose();
+		manager.getGui().getView().repaint();
+	}
 
 /**
  * @param args the command line arguments
@@ -301,37 +367,35 @@ private javax.swing.JScrollPane classTypeScrollPane;
 private javax.swing.JSeparator jSeparator1;
 private javax.swing.JSeparator jSeparator2;
 private javax.swing.JSeparator jSeparator3;
-private javax.swing.JTextField colorTextField;
+private javax.swing.JTextField classNameTextField;
 // End of variables declaration
 
-public javax.swing.JList getattributesList() {
+public javax.swing.JList getAttributesList() {
 	return attributesList;
 }
 
-public javax.swing.JList getoperationsList() {
+public javax.swing.JList getOperationsList() {
 	return operationsList;
 }
 
-public javax.swing.JList getclassTypeList() {
+public javax.swing.JList getClassTypeList() {
 	return classTypeList;
 }
 
-public javax.swing.JScrollPane getattributesScrollPane() {
+public javax.swing.JScrollPane getAttributesScrollPane() {
 	return attributesScrollPane;
 }
 
-public javax.swing.JScrollPane getoperationsScrollPane() {
+public javax.swing.JScrollPane getOperationsScrollPane() {
 	return operationsScrollPane;
 }
 
-public javax.swing.JScrollPane getclassTypeScrollPane() {
+public javax.swing.JScrollPane getClassTypeScrollPane() {
 	return classTypeScrollPane;
 }
 
-public javax.swing.JTextField getcolorTextField() {
-	return colorTextField;
+public javax.swing.JTextField getClassNameTextField() {
+	return classNameTextField;
 }
-
-//Getters
 
 }

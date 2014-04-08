@@ -51,8 +51,10 @@ public class ObjectController {
     public void togglePopUp() {
         if (!showPopUp) {
             showPopUp = true;
+            manager.getGui().getPopUpMenu().setVisible(true);
         } else {
             showPopUp = false;
+            manager.getGui().getPopUpMenu().setVisible(false);
         }
     }
 }

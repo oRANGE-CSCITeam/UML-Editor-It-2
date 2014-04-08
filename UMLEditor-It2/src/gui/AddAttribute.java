@@ -27,7 +27,8 @@ import java.awt.event.ActionListener;
         addButton = new javax.swing.JButton();
         attributeNameTextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-
+        
+        setAlwaysOnTop(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Add Attribute");
 

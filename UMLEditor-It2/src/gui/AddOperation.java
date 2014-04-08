@@ -1,5 +1,8 @@
 package gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 class AddOperation extends javax.swing.JFrame {
 
     /**
@@ -25,14 +28,22 @@ class AddOperation extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         operationNameTextField = new javax.swing.JTextField();
 
+        setAlwaysOnTop(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Add Operation");
 
         jLabel1.setText("Operation Type");
 
-        operationTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        operationTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Public", "Private", "Protected", "Package" }));
 
         addButton.setText("Add");
+        //Call addOperation method in the manager
+        addButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        		manager.addOperation();
+        	}
+        });
+
 
         jLabel2.setText("Operation Name");
 
@@ -110,5 +121,23 @@ class AddOperation extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField operationNameTextField;
     private Manager manager;
-    // End of variables declaration                   
+    // End of variables declaration      
+	public javax.swing.JComboBox getOperationTypeComboBox() {
+		return operationTypeComboBox;
+	}
+
+	public void setOperationTypeComboBox(javax.swing.JComboBox operationTypeComboBox) {
+		this.operationTypeComboBox = operationTypeComboBox;
+	}
+
+	public javax.swing.JTextField getOperationNameTextField() {
+		return operationNameTextField;
+	}
+
+	public void setOperationNameTextField(
+			javax.swing.JTextField operationNameTextField) {
+		this.operationNameTextField = operationNameTextField;
+	}
+    
+    
 }

@@ -26,7 +26,7 @@ public class ClassObject {
     private int yPos;
     private int width;
     private int height;
-    private final int widthScale = 7;
+    private final int widthScale = 8;
     private Color color;
     private boolean isSelected;
 
@@ -273,6 +273,9 @@ public class ClassObject {
     public int getLongestAttribute() {
         int max = 0;
         int setMax = 0;
+        if(attributes.size() > 0) {
+        	setMax = attributes.get(max).getAttributeName().length();
+        }
         for(int i = 0; i < attributes.size(); i++)
             if(attributes.get(i).getAttributeName().length() >= attributes.get(max).getAttributeName().length()){
                 max = i;
@@ -288,6 +291,9 @@ public class ClassObject {
     public int getLongestOperation() {
         int max = 0;
         int setMax = 0;
+        if(operations.size() > 0) {
+        	setMax = operations.get(max).getOperationName().length();
+        }
         for(int i = 0; i < operations.size(); i++)
             if(operations.get(i).getOperationName().length() >= operations.get(max).getOperationName().length()){
                 max = i;
