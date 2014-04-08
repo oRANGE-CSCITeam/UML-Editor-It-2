@@ -40,7 +40,7 @@ public class Manager {
 	private ClassObject tempClass;
 
 	public Manager() {
-
+		
 		gui = new Gui(this);
 
 		classObjectList = new ArrayList<ClassObject>();
