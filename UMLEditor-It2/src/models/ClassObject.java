@@ -208,64 +208,7 @@ public class ClassObject {
         this.color = color;
     }
 
-    /**
-     * Graphically displays the class object to look like a box
-     * @param g
-     */
-    public void display(Graphics g) {
-        //Draws the box for the entire classObject
-        g.setColor(new Color(0, 0, 0, 100));
-        g.fillRect(xPos + 3, yPos + 3, width, getHeight());
-        g.setColor(color);
-        g.fillRect(xPos, yPos, width, getHeight());
-
-        //Draws border for name
-        g.setColor(Color.black);
-        g.drawRect(xPos, yPos, width, 20);
-
-        //Draws border for attributes
-        if(operations.size() > 0 && attributes.size() == 0){
-            g.drawRect(xPos, yPos + 20, width, 20);
-        } else {
-            g.drawRect(xPos, yPos + 20, width, attributes.size() * 20);
-        }
         
-        //Draws border for operations
-        if(operations.size() > 0 && attributes.size() == 0) {
-            g.drawRect(xPos, yPos + 40, width, operations.size() * 20);
-        } else {
-            g.drawRect(xPos, yPos + (attributes.size() * 20) + 20, width, operations.size() * 20);
-        }
-
-        //Draws the name
-        g.setColor(Color.black);
-        g.drawString(name, xPos + 5, yPos + 15);
-
-        //Draws Attributes
-        for(int i = 0; i < attributes.size(); i++) {
-            g.drawString(attributes.get(i).getAttributeName(), xPos + 5, (yPos + 35) + (i * 20));
-        }
-        
-        //Draw Operations
-        if(operations.size() > 0 && attributes.size() == 0) {
-            for(int i = 0; i < operations.size(); i++) {
-                g.drawString(operations.get(i).getOperationName(), xPos + 5, (20 + (yPos + 35)) + (i * 20));
-            }
-        } else {
-            for(int i = 0; i < operations.size(); i++) {
-                g.drawString(operations.get(i).getOperationName(), xPos + 5, ((attributes.size() * 20) + (yPos + 35)) + (i * 20));
-            }
-        }
-        
-        //Draw Selected Highlight
-        if(isSelected){
-            for(int i = 0; i < 3; i++) {
-                g.setColor(Color.DARK_GRAY);
-                g.drawRect(xPos + i, yPos + i, width , getHeight());
-            }
-        }
-    }
-    
     /**
      * Returns longest string in the attribute list
      * @return
