@@ -82,9 +82,9 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		popUpMenu = new JPopupMenu();
 		selectButton = new JToggleButton("Select");
 		JButton undoButton = new JButton();
-		undoButton.setIcon(new ImageIcon("src/resources/old_edit_undo.png"));
+		undoButton.setIcon(new ImageIcon("CitruxUML/src/resources/old_edit_undo.png"));
 		JButton redoButton = new JButton();
-		redoButton.setIcon(new ImageIcon("src/resources/old_edit_redo.png"));
+		redoButton.setIcon(new ImageIcon("CitruxUML/src/resources/old_edit_redo.png"));
 		JButton test = new JButton("Test");
 
 		JPanel northPanel = new JPanel();
@@ -97,15 +97,17 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.getContentPane();
 		// frame.setSize(1000, 500);
-		this.setExtendedState(this.getExtendedState() | Frame.MAXIMIZED_BOTH);
+		//this.setExtendedState(this.getExtendedState() | Frame.MAXIMIZED_BOTH);
 		this.add(viewTab, BorderLayout.CENTER);
-
+		this.setLocation(300, 200);
+		this.setSize(800,600);
+		
 		// --set initial window positions-------------
 		// Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		// frame.setLocation((dim.width-frame.getWidth()),
 		// (dim.height-frame.getHeight()));
 		// frame.setSize(dim.width, dim.height);
-		this.setExtendedState(this.getExtendedState() | Frame.MAXIMIZED_BOTH);
+		//this.setExtendedState(this.getExtendedState() | Frame.MAXIMIZED_BOTH);
 
 		// creates the Menu Bar
 		// JMenuBar darkGrayMenuBar = new JMenuBar();
