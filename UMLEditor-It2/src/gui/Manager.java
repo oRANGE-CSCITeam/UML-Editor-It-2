@@ -4,11 +4,19 @@
 
 package gui;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Stack;
 
 import javax.swing.JFrame;
 import javax.swing.undo.UndoManager;
+
+import save.Datamodel;
 
 import models.Attribute;
 import models.ClassObject;
@@ -635,5 +643,25 @@ public class Manager {
 
 	public UndoRedoManager getUndoRedoManager() {
 		return undoRedoManager;
+	}
+	/*
+	 * Operations related to Saving
+	 */
+	public void SaveState () throws FileNotFoundException, IOException {
+		
+		Datamodel state = new Datamodel(classObjectList, relationList, relationshipCandidates);
+		
+		ObjectOutputStream scribe = new ObjectOutputStream (new FileOutputStream("UML.ser"));
+		scribe.writeObject(state);
+		scribe.close();
+	}
+	
+	public void LoadState () throws FileNotFoundException, IOException, ClassNotFoundException {
+		
+		Datamodel state = new Datamodel(classObjectList, relationList, relationshipCandidates);
+		state.cleardata();
+		ObjectInputStream scribe = new ObjectInputStream(new FileInputStream("UML.ser"));
+		state = (Datamodel) scribe.readObject();
+		scribe.close();
 	}
 }
