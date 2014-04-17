@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
+import java.io.Serializable;
 
 /**
  * Class that will hold information such as what type of relationship as well as
@@ -13,7 +14,7 @@ import java.awt.Polygon;
  * 
  * @author oRANGE
  */
-public class Relationship {
+public class Relationship implements Serializable {
 	private ClassObject origin;
 	private int originX;
 	private int originY;

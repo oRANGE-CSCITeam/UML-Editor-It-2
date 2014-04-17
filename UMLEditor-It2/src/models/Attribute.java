@@ -1,11 +1,13 @@
 package models;
 
+import java.io.Serializable;
+
 /**
  * Attribute class that hold all the basic information needed for an attribute
  * 
  * @author oRANGE
  */
-public class Attribute {
+public class Attribute implements Serializable {
 	private String attributeName;
 	private int visibility;
 

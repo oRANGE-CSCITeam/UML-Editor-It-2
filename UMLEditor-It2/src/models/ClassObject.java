@@ -3,6 +3,7 @@ package models;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
  * 
  * @author oRANGE
  */
-public class ClassObject {
+public class ClassObject implements Serializable {
 
 	private String name;
 	private int id;
