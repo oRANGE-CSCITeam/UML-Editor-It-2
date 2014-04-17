@@ -264,15 +264,13 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		// JPanel leftSidePanel = new JPanel();
 		this.add(leftSidePanel, BorderLayout.WEST);
 		leftSidePanel.setBackground(Color.gray);
-		leftSidePanel.setPreferredSize(new Dimension(200, 100));
-		leftSidePanel.setLayout(new BoxLayout(leftSidePanel, BoxLayout.Y_AXIS));
+		leftSidePanel.setPreferredSize(new Dimension(200, 80));
+		//GridLayout grid = ()
+		leftSidePanel.setLayout(new GridLayout(30,1, 1,1));
 
 		// Create Select Toggle Button
 		leftSidePanel.add(selectButton);
-		selectButton.setPreferredSize(new Dimension(200, 25)); // tries but
-																// doesn't set
-																// correct size
-																// (over-ruled)
+		
 		selectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				if (selectButton.isSelected()) {
@@ -287,10 +285,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		// Create Class Toggle Button
 		// JToggleButton classButton = new JToggleButton("Create Class");
 		leftSidePanel.add(classButton);
-		classButton.setPreferredSize(new Dimension(200, 25)); // tries but
-																// doesn't set
-																// correct size
-																// (over-ruled)
+		
 		classButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				if (classButton.isSelected()) {
