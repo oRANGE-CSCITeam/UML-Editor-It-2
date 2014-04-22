@@ -8,6 +8,10 @@ import java.io.Serializable;
  * @author oRANGE
  */
 public class Operation implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String operationName;
 	private int visibility;
 

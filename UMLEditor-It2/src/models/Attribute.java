@@ -8,6 +8,10 @@ import java.io.Serializable;
  * @author oRANGE
  */
 public class Attribute implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String attributeName;
 	private int visibility;
 
@@ -17,6 +21,9 @@ public class Attribute implements Serializable {
 	 * @param attributeName
 	 * @param visibility
 	 */
+	
+	
+	
 	public Attribute(String attributeName, int visibility) {
 		this.attributeName = attributeName;
 		this.visibility = visibility;

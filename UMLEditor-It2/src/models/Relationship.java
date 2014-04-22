@@ -1,11 +1,5 @@
 package models;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.io.Serializable;
 
 /**
@@ -15,6 +9,10 @@ import java.io.Serializable;
  * @author oRANGE
  */
 public class Relationship implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ClassObject origin;
 	private int originX;
 	private int originY;
