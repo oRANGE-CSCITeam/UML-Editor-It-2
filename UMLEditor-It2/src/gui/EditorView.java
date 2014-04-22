@@ -135,7 +135,7 @@ public class EditorView extends JPanel implements MouseListener,
 			if(manager.getCopyObjectStack().isEmpty()) {
 				manager.getGui().getPaste().setEnabled(false);
 			} else {
-				manager.getGui().getPaste().setEnabled(false);
+				manager.getGui().getPaste().setEnabled(true);
 			}
 			manager.getGui().getDelete().setEnabled(false);
 			manager.getGui().getCopy().setEnabled(false);

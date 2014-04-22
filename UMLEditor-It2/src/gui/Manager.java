@@ -104,15 +104,50 @@ public class Manager {
 	 * This method will add the selected class into the copy stack
 	 */
 	public void copyClass() {
-		copyObjectStack.pop();
-		copyObjectStack.push(classObjectList.get(objController.getSelectedClassObject()));
+		if(!copyObjectStack.isEmpty()) {
+			copyObjectStack.pop();
+		}
+		ClassObject tempClass = classObjectList.get(objController.getSelectedClassObject()).copy();
+		tempClass.setId(classId);
+		classId++;
+		copyObjectStack.push(tempClass);
 	}
 	
 	/**
 	 * This method will pop the copied class from the copy stack and add the class the to the class list
 	 */
 	public void pasteClass() {
-		//classObjectList
+		if(undoRedoManager.isRedoing()) {
+			classObjectList.add(undoRedoManager.getClassObjectStack().pop());
+			undoRedoManager.setRedoing(false);
+		} else {
+			copyObjectStack.peek().setxPos(addClassX);
+			copyObjectStack.peek().setyPos(addClassY);
+			classObjectList.add(copyObjectStack.peek().copy());
+		}
+		
+		// Add to undo Manager
+		undoRedoManager.addUndo(new Runnable() {
+			@Override
+			public void run() {
+				if (classObjectList.size() > 0) {
+					undoRedoManager.getClassObjectStack().push(
+							classObjectList.get(classObjectList.size() - 1));
+					undoRedoManager.addRedo(new Runnable() {
+						@Override
+						public void run() {
+							undoRedoManager.setRedoing(true);
+							pasteClass();
+							gui.getView().repaint();
+						}
+					});
+					classObjectList.remove(classObjectList.size() - 1);
+					gui.getView().repaint();
+				}
+			}
+		});
+		
+		gui.getView().repaint();
 	}
 
 	/**

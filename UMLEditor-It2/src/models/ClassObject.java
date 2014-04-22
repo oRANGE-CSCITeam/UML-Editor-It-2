@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * 
  * @author oRANGE
  */
-public class ClassObject implements Serializable, Cloneable {
+public class ClassObject implements Serializable {
 
 	/**
 	 * 
@@ -281,12 +281,28 @@ public class ClassObject implements Serializable, Cloneable {
 	 * Clone this class
 	 * @return ClassObject clone
 	 */
-	public ClassObject clone() {
+	
+	public ClassObject copy() {
 		String tempName = name;
 		int tempX = xPos;
 		int tempY = yPos;
 		int tempType = type;
 		ClassObject tempClass = new ClassObject(tempName, tempX, tempY, tempType);
+		
+		if(attributes.size() > 0) {
+			for(int i = 0; i < attributes.size(); i++) {
+				String tempAttributeName = attributes.get(i).getAttributeName();
+				int tempAttributeVisibility = attributes.get(i).getVisibility();
+				tempClass.addAttribute(tempAttributeName, tempAttributeVisibility);
+			}
+		}
+		if(operations.size() > 0) {
+			for(int i = 0; i < operations.size(); i++) {
+				String tempOperationName = operations.get(i).getOperationName();
+				int tempOperationVisibility = operations.get(i).getVisibility();
+				tempClass.addOperation(tempOperationName, tempOperationVisibility);
+			}
+		}
 		
 		return tempClass;
 		
