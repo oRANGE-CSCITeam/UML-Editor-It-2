@@ -1,11 +1,8 @@
 package models;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This object represents the Class Object or box for the UML editor to hold all
@@ -13,10 +10,15 @@ import java.util.Map;
  * 
  * @author oRANGE
  */
-public class ClassObject {
+public class ClassObject implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private int id;
+	private int type;
 	private ArrayList<Attribute> attributes;
 	private ArrayList<Operation> operations;
 
@@ -38,12 +40,12 @@ public class ClassObject {
 	 * @param yPos
 	 *            - the class y-coordinate
 	 */
-	public ClassObject(String newName, int xPos, int yPos, int id) {
+	public ClassObject(String newName, int xPos, int yPos, int type) {
 
 		attributes = new ArrayList<Attribute>();
 		operations = new ArrayList<Operation>();
 
-		this.id = id;
+		this.type = type;
 		this.name = newName;
 		this.xPos = xPos;
 		this.yPos = yPos;
@@ -274,6 +276,37 @@ public class ClassObject {
 		int max = Math.max(name.length(), getLongestAttribute());
 		return Math.max(max, getLongestOperation());
 	}
+	
+	/**
+	 * Clone this class
+	 * @return ClassObject clone
+	 */
+	
+	public ClassObject copy() {
+		String tempName = name;
+		int tempX = xPos;
+		int tempY = yPos;
+		int tempType = type;
+		ClassObject tempClass = new ClassObject(tempName, tempX, tempY, tempType);
+		
+		if(attributes.size() > 0) {
+			for(int i = 0; i < attributes.size(); i++) {
+				String tempAttributeName = attributes.get(i).getAttributeName();
+				int tempAttributeVisibility = attributes.get(i).getVisibility();
+				tempClass.addAttribute(tempAttributeName, tempAttributeVisibility);
+			}
+		}
+		if(operations.size() > 0) {
+			for(int i = 0; i < operations.size(); i++) {
+				String tempOperationName = operations.get(i).getOperationName();
+				int tempOperationVisibility = operations.get(i).getVisibility();
+				tempClass.addOperation(tempOperationName, tempOperationVisibility);
+			}
+		}
+		
+		return tempClass;
+		
+	}
 
 	public boolean isIsSelected() {
 		return isSelected;
@@ -291,4 +324,14 @@ public class ClassObject {
 		this.id = id;
 	}
 
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+	
+	
+	
 }

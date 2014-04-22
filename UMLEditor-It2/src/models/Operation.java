@@ -1,11 +1,17 @@
 package models;
 
+import java.io.Serializable;
+
 /**
  * Operation class that hold all the basic information needed for an operation
  * 
  * @author oRANGE
  */
-public class Operation {
+public class Operation implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String operationName;
 	private int visibility;
 

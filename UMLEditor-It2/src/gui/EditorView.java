@@ -129,6 +129,23 @@ public class EditorView extends JPanel implements MouseListener,
 			manager.getObjController().setSelectedClassObject(-1);
 			repaint();
 		}
+		
+		//For bring the popUpmenu if right clicked
+		if(me.isPopupTrigger()) {
+			if(manager.getCopyObjectStack().isEmpty()) {
+				manager.getGui().getPaste().setEnabled(false);
+			} else {
+				manager.getGui().getPaste().setEnabled(true);
+			}
+			manager.getGui().getDelete().setEnabled(false);
+			manager.getGui().getCopy().setEnabled(false);
+			
+			manager.getGui().getPopUpMenu().show(me.getComponent(), me.getX(), me.getY());
+			manager.setAddClassX(me.getX());
+			manager.setAddClassY(me.getY());
+		}
+		repaint();
+		
 
 		// Get the X & Y if we are adding a class
 		if (manager.isCanAddClass()) {
@@ -151,6 +168,8 @@ public class EditorView extends JPanel implements MouseListener,
 
 				// Show the pop up menu and select
 				if (me.isPopupTrigger()) {
+					manager.getGui().getCopy().setEnabled(true);
+					manager.getGui().getDelete().setEnabled(true);
 					manager.getGui().getPopUpMenu()
 							.show(me.getComponent(), me.getX(), me.getY());
 					manager.getObjController().setIsDraggingWho(i);
