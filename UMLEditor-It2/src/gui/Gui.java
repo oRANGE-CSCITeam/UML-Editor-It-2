@@ -45,6 +45,9 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	JToggleButton relationshipButton;
 	private JMenuItem Undo;
 	private JMenuItem Redo;
+	private JMenuItem copy;
+	private JMenuItem paste;
+	private JMenuItem delete;
 	private JScrollPane scrollContainer;
 
 	public Gui(Manager manager1) {
@@ -67,10 +70,10 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		JMenu editMenu = new JMenu("Edit");
 		Undo = new JMenuItem("Undo", KeyEvent.VK_T);
 		Redo = new JMenuItem("Redo", KeyEvent.VK_T);
-		JMenuItem copy = new JMenuItem("Copy", KeyEvent.VK_T);
-		JMenuItem paste = new JMenuItem("Paste", KeyEvent.VK_T);
+		copy = new JMenuItem("Copy", KeyEvent.VK_T);
+		paste = new JMenuItem("Paste", KeyEvent.VK_T);
 		JMenuItem clear = new JMenuItem("Clear", KeyEvent.VK_T);
-		JMenuItem delete = new JMenuItem("Delete", KeyEvent.VK_T);
+		delete = new JMenuItem("Delete", KeyEvent.VK_T);
 		JPanel leftSidePanel = new JPanel();
 		view = new EditorView(manager);
 		scrollContainer = new JScrollPane(view);
@@ -80,13 +83,24 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 
 		view.setPreferredSize(scrollContainer.getSize());
 		popUpMenu = new JPopupMenu();
-		selectButton = new JToggleButton("Select");
+		selectButton = new JToggleButton();
+		try {
+		selectButton.setIcon(new ImageIcon(getClass().getResource("../selectButton-01.png")));
+		} catch(NullPointerException e) {
+		}
+		
 		JButton undoButton = new JButton();
-		undoButton.setIcon(new ImageIcon("CitruxUML/src/resources/old_edit_undo.png"));
+		try {
+		undoButton.setIcon(new ImageIcon(getClass().getResource("../old_edit_undo.png")));
+		} catch(NullPointerException e) {
+		}
 		JButton redoButton = new JButton();
-		redoButton.setIcon(new ImageIcon("CitruxUML/src/resources/old_edit_redo.png"));
+		try {
+		redoButton.setIcon(new ImageIcon(getClass().getResource("../old_edit_redo.png")));
+		} catch(NullPointerException e) {
+		}
 		JButton test = new JButton("Test");
-
+		
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new BorderLayout());
 
@@ -228,12 +242,22 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
 				ActionEvent.CTRL_MASK));
 		editMenu.add(copy);
+		copy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				manager.copyClass();
+			}
+		});
 
 		// paste
 		// JMenuItem Paste = new JMenuItem("Paste", KeyEvent.VK_T);
 		paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
 				ActionEvent.CTRL_MASK));
 		editMenu.add(paste);
+		paste.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				manager.pasteClass();
+			}
+		});
 
 		// clear
 		// JMenuItem Clear = new JMenuItem("Clear", KeyEvent.VK_T);
@@ -425,5 +449,21 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	public JToggleButton getRelationshipButton() {
 		return relationshipButton;
 	}
+
+	public JMenuItem getCopy() {
+		return copy;
+	}
+
+	public JMenuItem getPaste() {
+		return paste;
+	}
+
+	public JMenuItem getDelete() {
+		return delete;
+	}
+	
+	
+	
+	
 
 }
