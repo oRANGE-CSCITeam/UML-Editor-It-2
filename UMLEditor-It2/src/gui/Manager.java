@@ -13,9 +13,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import javax.swing.JFrame;
-import javax.swing.undo.UndoManager;
-
 import save.Datamodel;
 
 import models.Attribute;
