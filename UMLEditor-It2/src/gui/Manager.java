@@ -29,6 +29,8 @@ public class Manager {
 	private ArrayList<Integer> relationshipCandidates;
 	private ArrayList<Attribute> addAttributeList;
 	private ArrayList<Operation> addOperationList;
+	private ArrayList<Integer> deleteRelationIndex;
+	private Stack<ClassObject> copyObjectStack;
 
 	// Declare the Undo/Redo manager
 	private UndoRedoManager undoRedoManager;
@@ -41,6 +43,7 @@ public class Manager {
 	private int addClassX, addClassY, selectedAttribute, selectedOperation;
 
 	private ClassObject tempClass;
+	private int classId;
 
 	public Manager() {
 		
@@ -51,6 +54,9 @@ public class Manager {
 		relationshipCandidates = new ArrayList<Integer>();
 		addAttributeList = new ArrayList<Attribute>();
 		addOperationList = new ArrayList<Operation>();
+		deleteRelationIndex = new ArrayList<Integer>();
+		copyObjectStack = new Stack<ClassObject>();
+		
 		canAddClass = false;
 		tryRelationship = false;
 
@@ -60,6 +66,7 @@ public class Manager {
 		relationshipView = new RelationshipView(this);
 		selectedAttribute = -1;
 		selectedOperation = -1;
+		classId = 0;
 
 	}
 
@@ -86,6 +93,21 @@ public class Manager {
 				gui.getAddClassDialog().getX() + 50,
 				gui.getAddClassDialog().getY() + 25);
 		gui.getAddAttributeDialog().setVisible(true);
+	}
+	
+	/**
+	 * This method will add the selected class into the copy stack
+	 */
+	public void copyClass() {
+		copyObjectStack.pop();
+		copyObjectStack.push(classObjectList.get(objController.getSelectedClassObject()));
+	}
+	
+	/**
+	 * This method will pop the copied class from the copy stack and add the class the to the class list
+	 */
+	public void pasteClass() {
+		//classObjectList
 	}
 
 	/**
@@ -382,13 +404,40 @@ public class Manager {
 	}
 
 	public void createRelationship() {
-		relationList.add(new Relationship(classObjectList
-				.get(relationshipCandidates.get(0)), classObjectList
-				.get(relationshipCandidates.get(1)), gui
-				.getAddRelationshipDialog().getRelationshipsComboBox()
-				.getSelectedIndex()));
-		gui.getAddRelationshipDialog().getRelationshipsComboBox()
-				.setSelectedIndex(0);
+		if(undoRedoManager.isRedoing()) {
+			relationList.add(undoRedoManager.getRelationshipStack().pop());
+			undoRedoManager.setRedoing(false);
+		} else {
+			Relationship tempRelation = new Relationship(classObjectList
+					.get(relationshipCandidates.get(0)), classObjectList
+					.get(relationshipCandidates.get(1)), gui
+					.getAddRelationshipDialog().getRelationshipsComboBox()
+					.getSelectedIndex());
+			relationList.add(tempRelation);
+		}
+			
+		// Add to undo stack
+		undoRedoManager.addUndo(new Runnable() {
+			@Override
+			public void run() {
+				if (relationList.size() > 0) {
+					undoRedoManager.getRelationshipStack().push(
+							relationList.get(relationList.size() - 1));
+					undoRedoManager.addRedo(new Runnable() {
+						@Override
+						public void run() {
+							undoRedoManager.setRedoing(true);
+							createRelationship();
+							gui.getView().repaint();
+						}
+					});
+					relationList.remove(relationList.size() - 1);
+					gui.getView().repaint();
+				}
+			}
+		});
+		
+		gui.getAddRelationshipDialog().getRelationshipsComboBox().setSelectedIndex(0);
 		relationshipCandidates.clear();
 		tryRelationship = false;
 		gui.getRelationshipButton().setSelected(false);
@@ -411,6 +460,8 @@ public class Manager {
 			tempClass = new ClassObject(tempClassName, addClassX, addClassY,
 					gui.getAddClassDialog().getClassTypeList()
 							.getSelectedIndex());
+			tempClass.setId(classId);
+			classId++;
 			// Add all the attributes from the list
 			for (int i = 0; i < addAttributeList.size(); i++) {
 				tempClass.addAttribute(addAttributeList.get(i)
@@ -467,9 +518,17 @@ public class Manager {
 	 */
 	public void deleteClass() {
 		if (objController.getSelectedClassObject() >= 0) {
-			undoRedoManager.getClassObjectStack()
-					.push(classObjectList.get(objController
-							.getSelectedClassObject()));
+			//push class in stack for potential redoing
+			undoRedoManager.getClassObjectStack().push(classObjectList.get(objController.getSelectedClassObject()));
+			//push relationships that maybe part of this class for potential redoing
+			for(int i = 0; i < relationList.size(); i++) {
+				if(relationList.get(i).getDestination().getId() == classObjectList.get(objController.getSelectedClassObject()).getId() || relationList.get(i).getOrigin().getId() == classObjectList.get(objController.getSelectedClassObject()).getId()) {
+					undoRedoManager.getRelationshipStack().push(relationList.get(i));
+					relationList.remove(i);
+					i--;
+					undoRedoManager.setDeletedRelationships(undoRedoManager.getDeletedRelationships() + 1);
+				}
+			}
 			classObjectList.remove(objController.getSelectedClassObject());
 			undoRedoManager.getSelectedObjectStack().push(
 					objController.getSelectedClassObject());
@@ -486,6 +545,12 @@ public class Manager {
 					classObjectList.add(undoRedoManager
 							.getSelectedObjectStack().peek(), undoRedoManager
 							.getClassObjectStack().pop());
+					//Redo every relationship deleted by the deletion of this class
+					for(int i = undoRedoManager.getDeletedRelationships(); i > 0; i--) {
+						relationList.add(undoRedoManager.getRelationshipStack().pop());
+						undoRedoManager.setDeletedRelationships(undoRedoManager.getDeletedRelationships() - 1);
+					}
+					
 					classObjectList.get(
 							undoRedoManager.getSelectedObjectStack().peek())
 							.setIsSelected(false);
@@ -504,11 +569,18 @@ public class Manager {
 		}
 		// If we enter the method due to a redo
 		if (undoRedoManager.isRedoing()) {
-			undoRedoManager.getClassObjectStack().push(
-					classObjectList.get(undoRedoManager
-							.getSelectedObjectStack().peek()));
-			classObjectList
-					.remove(undoRedoManager.getClassObjectStack().peek());
+			undoRedoManager.getClassObjectStack().push(classObjectList.get(undoRedoManager.getSelectedObjectStack().peek()));
+			for(int i = 0; i < relationList.size(); i++) {
+				if(relationList.get(i).getDestination().getId() == classObjectList.get(undoRedoManager
+						.getSelectedObjectStack().peek()).getId() || relationList.get(i).getOrigin().getId() == classObjectList.get(undoRedoManager
+								.getSelectedObjectStack().peek()).getId()) {
+					undoRedoManager.getRelationshipStack().push(relationList.get(i));
+					relationList.remove(i);
+					i--;
+					undoRedoManager.setDeletedRelationships(undoRedoManager.getDeletedRelationships() + 1);
+				}
+			}
+			classObjectList.remove(undoRedoManager.getClassObjectStack().peek());
 			objController.setSelectedClassObject(-1);
 			undoRedoManager.setRedoing(false);
 
@@ -520,6 +592,12 @@ public class Manager {
 					classObjectList.add(undoRedoManager
 							.getSelectedObjectStack().peek(), undoRedoManager
 							.getClassObjectStack().pop());
+					//Redo every relationship deleted by the deletion of this class
+					for(int i = undoRedoManager.getDeletedRelationships(); i > 0; i--) {
+						relationList.add(undoRedoManager.getRelationshipStack().pop());
+						undoRedoManager.setDeletedRelationships(undoRedoManager.getDeletedRelationships() - 1);
+					}
+					
 					classObjectList.get(
 							undoRedoManager.getSelectedObjectStack().peek())
 							.setIsSelected(false);
@@ -639,6 +717,11 @@ public class Manager {
 	public UndoRedoManager getUndoRedoManager() {
 		return undoRedoManager;
 	}
+	
+	public Stack<ClassObject> getCopyObjectStack() {
+		return copyObjectStack;
+	}
+
 	/*
 	 * Operations related to Saving
 	 */

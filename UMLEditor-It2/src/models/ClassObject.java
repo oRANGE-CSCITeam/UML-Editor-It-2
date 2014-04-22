@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * 
  * @author oRANGE
  */
-public class ClassObject implements Serializable {
+public class ClassObject implements Serializable, Cloneable {
 
 	/**
 	 * 
@@ -18,6 +18,7 @@ public class ClassObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private int id;
+	private int type;
 	private ArrayList<Attribute> attributes;
 	private ArrayList<Operation> operations;
 
@@ -39,12 +40,12 @@ public class ClassObject implements Serializable {
 	 * @param yPos
 	 *            - the class y-coordinate
 	 */
-	public ClassObject(String newName, int xPos, int yPos, int id) {
+	public ClassObject(String newName, int xPos, int yPos, int type) {
 
 		attributes = new ArrayList<Attribute>();
 		operations = new ArrayList<Operation>();
 
-		this.id = id;
+		this.type = type;
 		this.name = newName;
 		this.xPos = xPos;
 		this.yPos = yPos;
@@ -275,6 +276,21 @@ public class ClassObject implements Serializable {
 		int max = Math.max(name.length(), getLongestAttribute());
 		return Math.max(max, getLongestOperation());
 	}
+	
+	/**
+	 * Clone this class
+	 * @return ClassObject clone
+	 */
+	public ClassObject clone() {
+		String tempName = name;
+		int tempX = xPos;
+		int tempY = yPos;
+		int tempType = type;
+		ClassObject tempClass = new ClassObject(tempName, tempX, tempY, tempType);
+		
+		return tempClass;
+		
+	}
 
 	public boolean isIsSelected() {
 		return isSelected;
@@ -292,4 +308,14 @@ public class ClassObject implements Serializable {
 		this.id = id;
 	}
 
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+	
+	
+	
 }

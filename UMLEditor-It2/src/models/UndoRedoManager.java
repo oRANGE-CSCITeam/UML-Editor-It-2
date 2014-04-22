@@ -18,10 +18,14 @@ public class UndoRedoManager {
 	// For saving the location of a deleted class Object, typically used for a
 	// redo
 	private Stack<Integer> selectedObjectStack;
+	
+	private Stack<Relationship> relationshipStack;
 
 	// These are the runnable stacks
 	private Stack<Runnable> undo;
 	private Stack<Runnable> redo;
+	
+	private int deletedRelationships;
 
 	private boolean redoing;
 
@@ -29,9 +33,12 @@ public class UndoRedoManager {
 
 		classObjectStack = new Stack<ClassObject>();
 		selectedObjectStack = new Stack<Integer>();
+		relationshipStack = new Stack<Relationship>();
 		undo = new Stack<Runnable>();
 		redo = new Stack<Runnable>();
 		redoing = false;
+		deletedRelationships = 0;
+		
 	}
 
 	public void undo() {
@@ -78,4 +85,17 @@ public class UndoRedoManager {
 		this.redoing = redoing;
 	}
 
+	public Stack<Relationship> getRelationshipStack() {
+		return relationshipStack;
+	}
+
+	public int getDeletedRelationships() {
+		return deletedRelationships;
+	}
+
+	public void setDeletedRelationships(int deletedRelationships) {
+		this.deletedRelationships = deletedRelationships;
+	}
 }
+
+
