@@ -1,11 +1,8 @@
 package models;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This object represents the Class Object or box for the UML editor to hold all
@@ -13,8 +10,12 @@ import java.util.Map;
  * 
  * @author oRANGE
  */
-public class ClassObject {
+public class ClassObject implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private int id;
 	private ArrayList<Attribute> attributes;

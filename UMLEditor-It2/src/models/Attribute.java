@@ -1,11 +1,17 @@
 package models;
 
+import java.io.Serializable;
+
 /**
  * Attribute class that hold all the basic information needed for an attribute
  * 
  * @author oRANGE
  */
-public class Attribute {
+public class Attribute implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String attributeName;
 	private int visibility;
 
@@ -15,6 +21,9 @@ public class Attribute {
 	 * @param attributeName
 	 * @param visibility
 	 */
+	
+	
+	
 	public Attribute(String attributeName, int visibility) {
 		this.attributeName = attributeName;
 		this.visibility = visibility;

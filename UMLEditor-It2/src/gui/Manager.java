@@ -732,7 +732,7 @@ public class Manager {
 	 */
 	public void SaveState () throws FileNotFoundException, IOException {
 		
-		Datamodel state = new Datamodel(classObjectList, relationList, relationshipCandidates);
+		Datamodel state = new Datamodel(classObjectList, relationList);
 		
 		ObjectOutputStream scribe = new ObjectOutputStream (new FileOutputStream("UML.ser"));
 		scribe.writeObject(state);
@@ -741,7 +741,7 @@ public class Manager {
 	
 	public void LoadState () throws FileNotFoundException, IOException, ClassNotFoundException {
 		
-		Datamodel state = new Datamodel(classObjectList, relationList, relationshipCandidates);
+		Datamodel state = new Datamodel(classObjectList, relationList);
 		state.cleardata();
 		ObjectInputStream scribe = new ObjectInputStream(new FileInputStream("UML.ser"));
 		state = (Datamodel) scribe.readObject();
