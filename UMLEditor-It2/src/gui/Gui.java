@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
@@ -8,17 +9,23 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
+import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -30,6 +37,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Gui extends JFrame implements MouseListener, ActionListener {
 	private Manager manager;
@@ -46,6 +54,9 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	private JMenuItem Undo;
 	private JMenuItem Redo;
 	private JScrollPane scrollContainer;
+	JMenuItem export;
+	
+	JFileChooser exportFile;
 
 	public Gui(Manager manager1) {
 
@@ -64,6 +75,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		JMenuItem open = new JMenuItem("Open", KeyEvent.VK_T);
 		JMenuItem save = new JMenuItem("Save", KeyEvent.VK_T);
 		JMenuItem quit = new JMenuItem("Quit", KeyEvent.VK_T);
+		export = new JMenuItem("Export");
 		JMenu editMenu = new JMenu("Edit");
 		Undo = new JMenuItem("Undo", KeyEvent.VK_T);
 		Redo = new JMenuItem("Redo", KeyEvent.VK_T);
@@ -77,6 +89,9 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		view.setAutoscrolls(true);
 		JTabbedPane viewTab = new JTabbedPane();
 		viewTab.addTab("Untitled", scrollContainer);
+		
+		exportFile = new JFileChooser();
+		exportFile.setFileFilter(new FileNameExtensionFilter("JPEG File", "jpg"));
 
 		view.setPreferredSize(scrollContainer.getSize());
 		popUpMenu = new JPopupMenu();
@@ -175,6 +190,38 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				ActionEvent.ALT_MASK));
 		fileMenu.add(save);
+		
+		//Adds Export to the fileMenu
+		fileMenu.add(export);
+		export.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evt){
+				int returnVal = exportFile.showSaveDialog(Gui.this);
+				BufferedImage bi = null;
+				try {
+					bi = new Robot().createScreenCapture(new Rectangle(view.getLocationOnScreen().x, view.getLocationOnScreen().y, view.getWidth(), view.getHeight()));
+				} catch (AWTException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				File imageFile;
+				if(returnVal == JFileChooser.APPROVE_OPTION) 
+				{ 
+					  
+					 imageFile = new File(exportFile.getSelectedFile() + ".jpg");
+					 try
+					{
+						ImageIO.write(bi,"jpg",imageFile);
+						
+					}catch (Exception e) {}
+				}
+				
+			}
+				//exportFile.showSaveDialog(Gui.this);
+			
+		});
+		
+		
 
 		// quit
 		// JMenuItem Quit = new JMenuItem("Quit", KeyEvent.VK_T);
