@@ -99,6 +99,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		view.setPreferredSize(scrollContainer.getSize());
 		popUpMenu = new JPopupMenu();
 		selectButton = new JToggleButton();
+		selectButton.setToolTipText("Select");
 		try {
 		selectButton.setIcon(new ImageIcon(getClass().getResource("../selectButton-01.png")));
 		} catch(NullPointerException e) {
@@ -119,7 +120,12 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new BorderLayout());
 
-		classButton = new JToggleButton("Create Class");
+		classButton = new JToggleButton();
+		classButton.setToolTipText("Add a Class");
+		try {
+			classButton.setIcon(new ImageIcon(getClass().getResource("../addObjectButton-01.png")));
+			} catch(NullPointerException e) {
+			}
 		relationshipButton = new JToggleButton("Create Relationship");
 		JButton organizeButton = new JButton("Organize");
 
