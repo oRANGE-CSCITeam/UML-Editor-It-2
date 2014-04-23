@@ -126,8 +126,18 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 			classButton.setIcon(new ImageIcon(getClass().getResource("../addObjectButton-01.png")));
 			} catch(NullPointerException e) {
 			}
-		relationshipButton = new JToggleButton("Create Relationship");
-		JButton organizeButton = new JButton("Organize");
+		relationshipButton = new JToggleButton();
+		relationshipButton.setToolTipText("Create Relationship");
+		try {
+			relationshipButton.setIcon(new ImageIcon(getClass().getResource("../addRelationButton-01.png")));
+			} catch(NullPointerException e) {
+			}
+		JButton organizeButton = new JButton();
+		organizeButton.setToolTipText("Organize");
+		try {
+			organizeButton.setIcon(new ImageIcon(getClass().getResource("../organizeButton-01.png")));
+			} catch(NullPointerException e) {
+			}
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.getContentPane();
@@ -382,13 +392,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		// JToggleButton RelationshipButton = new
 		// JToggleButton("Create Relationship");
 		leftSidePanel.add(relationshipButton);
-		relationshipButton.setPreferredSize(new Dimension(200, 25)); // tries
-																		// but
-																		// doesn't
-																		// set
-																		// correct
-																		// size
-																		// (over-ruled)
+		
 		relationshipButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				if (relationshipButton.isSelected()) {
@@ -402,7 +406,6 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 
 		// JButton organizeButton = new JButton("Organize");
 		leftSidePanel.add(organizeButton);
-		organizeButton.setPreferredSize(new Dimension(200, 25));
 
 		// Create new instance of dialogs
 		addRelationshipDialog = new AddRelationship(manager);
