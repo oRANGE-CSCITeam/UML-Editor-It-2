@@ -335,9 +335,9 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		// JPanel leftSidePanel = new JPanel();
 		this.add(leftSidePanel, BorderLayout.WEST);
 		leftSidePanel.setBackground(Color.gray);
-		leftSidePanel.setPreferredSize(new Dimension(200, 80));
+		leftSidePanel.setPreferredSize(new Dimension(50, 50));
 		//GridLayout grid = ()
-		leftSidePanel.setLayout(new GridLayout(30,1, 1,1));
+		leftSidePanel.setLayout(new FlowLayout());
 
 		// Create Select Toggle Button
 		leftSidePanel.add(selectButton);
