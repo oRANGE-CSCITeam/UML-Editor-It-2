@@ -101,18 +101,18 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		selectButton = new JToggleButton();
 		selectButton.setToolTipText("Select");
 		try {
-		selectButton.setIcon(new ImageIcon(getClass().getResource("../selectButton-01.png")));
+		selectButton.setIcon(new ImageIcon(getClass().getResource("selectButton-01.png")));
 		} catch(NullPointerException e) {
 		}
 		
 		JButton undoButton = new JButton();
 		try {
-		undoButton.setIcon(new ImageIcon(getClass().getResource("../old_edit_undo.png")));
+		undoButton.setIcon(new ImageIcon(getClass().getResource("old_edit_undo.png")));
 		} catch(NullPointerException e) {
 		}
 		JButton redoButton = new JButton();
 		try {
-		redoButton.setIcon(new ImageIcon(getClass().getResource("../old_edit_redo.png")));
+		redoButton.setIcon(new ImageIcon(getClass().getResource("old_edit_redo.png")));
 		} catch(NullPointerException e) {
 		}
 		JButton test = new JButton("Test");
@@ -123,19 +123,19 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		classButton = new JToggleButton();
 		classButton.setToolTipText("Add a Class");
 		try {
-			classButton.setIcon(new ImageIcon(getClass().getResource("../addObjectButton-01.png")));
+			classButton.setIcon(new ImageIcon(getClass().getResource("addObjectButton-01.png")));
 			} catch(NullPointerException e) {
 			}
 		relationshipButton = new JToggleButton();
 		relationshipButton.setToolTipText("Create Relationship");
 		try {
-			relationshipButton.setIcon(new ImageIcon(getClass().getResource("../addRelationButton-01.png")));
+			relationshipButton.setIcon(new ImageIcon(getClass().getResource("addRelationButton-01.png")));
 			} catch(NullPointerException e) {
 			}
 		JButton organizeButton = new JButton();
 		organizeButton.setToolTipText("Organize");
 		try {
-			organizeButton.setIcon(new ImageIcon(getClass().getResource("../organizeButton-01.png")));
+			organizeButton.setIcon(new ImageIcon(getClass().getResource("organizeButton-01.png")));
 			} catch(NullPointerException e) {
 			}
 
