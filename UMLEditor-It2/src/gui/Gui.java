@@ -219,10 +219,11 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 				}
 				
 				File imageFile;
+				imageFile = new File(exportFile.getSelectedFile() + ".jpg");
 				if(returnVal == JFileChooser.APPROVE_OPTION) 
 				{ 
 					  
-					 imageFile = new File(exportFile.getSelectedFile() + ".jpg");
+					 
 					 try
 					{
 						ImageIO.write(bi,"jpg",imageFile);
