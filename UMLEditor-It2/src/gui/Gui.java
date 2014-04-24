@@ -39,12 +39,15 @@ import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import models.ClassObject;
+
 public class Gui extends JFrame implements MouseListener, ActionListener {
 	private Manager manager;
 	private EditorView view;
 	private AddRelationship addRelationshipDialog;
 	private EditRelationship editRelationshipDialog;
 	private AddClass addClassDialog;
+	private EditClass editClassDialog;
 	private AddAttribute addAttributeDialog;
 	private AddOperation addOperationDialog;
 	private JPopupMenu popUpMenu;
@@ -55,6 +58,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	private JMenuItem Redo;
 	private JMenuItem copy;
 	private JMenuItem paste;
+	private JMenuItem edit;
 	private JMenuItem delete;
 	private JScrollPane scrollContainer;
 	JMenuItem export;
@@ -85,6 +89,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		copy = new JMenuItem("Copy", KeyEvent.VK_T);
 		paste = new JMenuItem("Paste", KeyEvent.VK_T);
 		JMenuItem clear = new JMenuItem("Clear", KeyEvent.VK_T);
+		edit = new JMenuItem("Edit", KeyEvent.VK_T);
 		delete = new JMenuItem("Delete", KeyEvent.VK_T);
 		JPanel leftSidePanel = new JPanel();
 		view = new EditorView(manager);
@@ -99,19 +104,20 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		view.setPreferredSize(scrollContainer.getSize());
 		popUpMenu = new JPopupMenu();
 		selectButton = new JToggleButton();
+		selectButton.setToolTipText("Select");
 		try {
-		selectButton.setIcon(new ImageIcon(getClass().getResource("../selectButton-01.png")));
+		selectButton.setIcon(new ImageIcon(getClass().getResource("selectButton-01.png")));
 		} catch(NullPointerException e) {
 		}
 		
 		JButton undoButton = new JButton();
 		try {
-		undoButton.setIcon(new ImageIcon(getClass().getResource("../old_edit_undo.png")));
+		undoButton.setIcon(new ImageIcon(getClass().getResource("old_edit_undo.png")));
 		} catch(NullPointerException e) {
 		}
 		JButton redoButton = new JButton();
 		try {
-		redoButton.setIcon(new ImageIcon(getClass().getResource("../old_edit_redo.png")));
+		redoButton.setIcon(new ImageIcon(getClass().getResource("old_edit_redo.png")));
 		} catch(NullPointerException e) {
 		}
 		JButton test = new JButton("Test");
@@ -119,9 +125,24 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new BorderLayout());
 
-		classButton = new JToggleButton("Create Class");
-		relationshipButton = new JToggleButton("Create Relationship");
-		JButton organizeButton = new JButton("Organize");
+		classButton = new JToggleButton();
+		classButton.setToolTipText("Add a Class");
+		try {
+			classButton.setIcon(new ImageIcon(getClass().getResource("addObjectButton-01.png")));
+			} catch(NullPointerException e) {
+			}
+		relationshipButton = new JToggleButton();
+		relationshipButton.setToolTipText("Create Relationship");
+		try {
+			relationshipButton.setIcon(new ImageIcon(getClass().getResource("addRelationButton-01.png")));
+			} catch(NullPointerException e) {
+			}
+		JButton organizeButton = new JButton();
+		organizeButton.setToolTipText("Organize");
+		try {
+			organizeButton.setIcon(new ImageIcon(getClass().getResource("organizeButton-01.png")));
+			} catch(NullPointerException e) {
+			}
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.getContentPane();
@@ -323,6 +344,70 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 				manager.deleteClass();
 			}
 		});
+		
+		//Edit menu item for editig class objects
+		edit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
+				ActionEvent.CTRL_MASK));
+		edit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				
+				ClassObject tempClass = manager.getClassObjectList().get(manager.getObjController().getSelectedClassObject()).copy();
+				editClassDialog.getClassNameTextField().setText(tempClass.getName());
+				
+				//This is to make the list in edit class to appear with the classes attributes
+				String[] tempAttributeList = new String[tempClass.getAttributes().size()];
+				for(int i = 0; i < tempAttributeList.length; i++) {
+					switch (tempClass.getAttributes().get(i).getVisibility()) {
+					case 0:
+						tempAttributeList[i] = "+ "
+								+ tempClass.getAttributes().get(i).getAttributeName();
+						break;
+					case 1:
+						tempAttributeList[i] = "- "
+								+ tempClass.getAttributes().get(i).getAttributeName();
+						break;
+					case 2:
+						tempAttributeList[i] = "# "
+								+ tempClass.getAttributes().get(i).getAttributeName();
+						break;
+					case 3:
+						tempAttributeList[i] = "~ "
+								+ tempClass.getAttributes().get(i).getAttributeName();
+						break;
+					}
+				}
+				editClassDialog.getAttributesList().setListData(tempAttributeList);
+				
+				//This is to make the list in edit class to appear with the classes operations
+				String[] tempOperationList = new String[tempClass.getOperations().size()];
+				for(int i = 0; i < tempOperationList.length; i++) {
+					switch (tempClass.getOperations().get(i).getVisibility()) {
+					case 0:
+						tempOperationList[i] = "+ "
+								+ tempClass.getOperations().get(i).getOperationName();
+						break;
+					case 1:
+						tempOperationList[i] = "- "
+								+ tempClass.getOperations().get(i).getOperationName();
+						break;
+					case 2:
+						tempOperationList[i] = "# "
+								+ tempClass.getOperations().get(i).getOperationName();
+						break;
+					case 3:
+						tempOperationList[i] = "~ "
+								+ tempClass.getOperations().get(i).getOperationName();
+						break;
+					}
+				}
+				editClassDialog.getOperationsList().setListData(tempOperationList);
+				manager.setEditingClass(true);
+				manager.setAddAttributeList(tempClass.getAttributes());
+				manager.setAddOperationList(tempClass.getOperations());
+				editClassDialog.setLocation(300, 200);
+				editClassDialog.setVisible(true);
+			}
+		});
 
 		// end adding MenuItems to
 		// Edit~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -330,15 +415,16 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		// Add menu items to popUpMenu
 		popUpMenu.add(copy);
 		popUpMenu.add(paste);
+		popUpMenu.add(edit);
 		popUpMenu.add(delete);
 
 		// Left Side Panel
 		// JPanel leftSidePanel = new JPanel();
 		this.add(leftSidePanel, BorderLayout.WEST);
 		leftSidePanel.setBackground(Color.gray);
-		leftSidePanel.setPreferredSize(new Dimension(200, 80));
+		leftSidePanel.setPreferredSize(new Dimension(50, 50));
 		//GridLayout grid = ()
-		leftSidePanel.setLayout(new GridLayout(30,1, 1,1));
+		leftSidePanel.setLayout(new FlowLayout());
 
 		// Create Select Toggle Button
 		leftSidePanel.add(selectButton);
@@ -377,13 +463,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		// JToggleButton RelationshipButton = new
 		// JToggleButton("Create Relationship");
 		leftSidePanel.add(relationshipButton);
-		relationshipButton.setPreferredSize(new Dimension(200, 25)); // tries
-																		// but
-																		// doesn't
-																		// set
-																		// correct
-																		// size
-																		// (over-ruled)
+		
 		relationshipButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				if (relationshipButton.isSelected()) {
@@ -397,14 +477,15 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 
 		// JButton organizeButton = new JButton("Organize");
 		leftSidePanel.add(organizeButton);
-		organizeButton.setPreferredSize(new Dimension(200, 25));
 
 		// Create new instance of dialogs
 		addRelationshipDialog = new AddRelationship(manager);
 		editRelationshipDialog = new EditRelationship(manager);
 		addClassDialog = new AddClass(manager);
+		editClassDialog = new EditClass(manager);
 		addAttributeDialog = new AddAttribute(manager);
 		addOperationDialog = new AddOperation(manager);
+		
 
 		// Set the frame visible at the end when everything is added
 		this.setVisible(true);
@@ -509,9 +590,13 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	public JMenuItem getDelete() {
 		return delete;
 	}
-	
-	
-	
-	
 
+	public EditClass getEditClassDialog() {
+		return editClassDialog;
+	}
+
+	public JMenuItem getEdit() {
+		return edit;
+	}
+	
 }

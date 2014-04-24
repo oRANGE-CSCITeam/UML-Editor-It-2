@@ -13,8 +13,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import save.Datamodel;
-
 import models.Attribute;
 import models.ClassObject;
 import models.ObjectController;
@@ -26,13 +24,14 @@ public class Manager {
 	private static Manager sharedManager;
 	private Gui gui;
 
-	private ArrayList<ClassObject> classObjectList;
-	private ArrayList<Relationship> relationList;
+	private static ArrayList<ClassObject> classObjectList;
+	private static ArrayList<Relationship> relationList;
 	private ArrayList<Integer> relationshipCandidates;
 	private ArrayList<Attribute> addAttributeList;
 	private ArrayList<Operation> addOperationList;
 	private ArrayList<Integer> deleteRelationIndex;
 	private Stack<ClassObject> copyObjectStack;
+	private static String savePath = "UML.ser";
 
 	// Declare the Undo/Redo manager
 	private UndoRedoManager undoRedoManager;
@@ -46,9 +45,11 @@ public class Manager {
 
 	private ClassObject tempClass;
 	private int classId;
+	
+	private boolean editingClass;
 
 	public Manager() {
-		
+
 		gui = new Gui(this);
 
 		classObjectList = new ArrayList<ClassObject>();
@@ -58,7 +59,7 @@ public class Manager {
 		addOperationList = new ArrayList<Operation>();
 		deleteRelationIndex = new ArrayList<Integer>();
 		copyObjectStack = new Stack<ClassObject>();
-		
+
 		canAddClass = false;
 		tryRelationship = false;
 
@@ -69,6 +70,7 @@ public class Manager {
 		selectedAttribute = -1;
 		selectedOperation = -1;
 		classId = 0;
+		editingClass = false;
 
 	}
 
@@ -96,25 +98,27 @@ public class Manager {
 				gui.getAddClassDialog().getY() + 25);
 		gui.getAddAttributeDialog().setVisible(true);
 	}
-	
+
 	/**
 	 * This method will add the selected class into the copy stack
 	 */
 	public void copyClass() {
-		if(!copyObjectStack.isEmpty()) {
+		if (!copyObjectStack.isEmpty()) {
 			copyObjectStack.pop();
 		}
-		ClassObject tempClass = classObjectList.get(objController.getSelectedClassObject()).copy();
+		ClassObject tempClass = classObjectList.get(
+				objController.getSelectedClassObject()).copy();
 		tempClass.setId(classId);
 		classId++;
 		copyObjectStack.push(tempClass);
 	}
-	
+
 	/**
-	 * This method will pop the copied class from the copy stack and add the class the to the class list
+	 * This method will pop the copied class from the copy stack and add the
+	 * class the to the class list
 	 */
 	public void pasteClass() {
-		if(undoRedoManager.isRedoing()) {
+		if (undoRedoManager.isRedoing()) {
 			classObjectList.add(undoRedoManager.getClassObjectStack().pop());
 			undoRedoManager.setRedoing(false);
 		} else {
@@ -122,7 +126,7 @@ public class Manager {
 			copyObjectStack.peek().setyPos(addClassY);
 			classObjectList.add(copyObjectStack.peek().copy());
 		}
-		
+
 		// Add to undo Manager
 		undoRedoManager.addUndo(new Runnable() {
 			@Override
@@ -143,7 +147,7 @@ public class Manager {
 				}
 			}
 		});
-		
+
 		gui.getView().repaint();
 	}
 
@@ -180,8 +184,11 @@ public class Manager {
 					break;
 				}
 			}
-			gui.getAddClassDialog().getAttributesList()
-					.setListData(tempAttributeList);
+			if(editingClass) {
+				gui.getEditClassDialog().getAttributesList().setListData(tempAttributeList);
+			} else {
+				gui.getAddClassDialog().getAttributesList().setListData(tempAttributeList);
+			}
 			gui.getAddAttributeDialog().getAttributeTypeComboBox()
 					.setSelectedIndex(0);
 			gui.getAddAttributeDialog().getAttributeNameTextField().setText("");
@@ -217,8 +224,11 @@ public class Manager {
 					break;
 				}
 			}
-			gui.getAddClassDialog().getAttributesList()
-					.setListData(tempAttributeList);
+			if(editingClass) {
+				gui.getEditClassDialog().getAttributesList().setListData(tempAttributeList);
+			} else {
+				gui.getAddClassDialog().getAttributesList().setListData(tempAttributeList);
+			}
 			gui.getAddAttributeDialog().getAttributeTypeComboBox()
 					.setSelectedIndex(0);
 			gui.getAddAttributeDialog().getAttributeNameTextField().setText("");
@@ -231,7 +241,40 @@ public class Manager {
 	 */
 	public void removeAttribute() {
 		String[] tempAttributeList;
-		if (gui.getAddClassDialog().getAttributesList().getSelectedIndices().length > 0
+		if(editingClass && gui.getEditClassDialog().getAttributesList().getSelectedIndices().length > 0
+				&& addAttributeList.size() > 0) {
+			if (gui.getEditClassDialog().getAttributesList().getSelectedIndices().length > 0
+					&& addAttributeList.size() > 0) {
+				for (int i = 0; i < gui.getEditClassDialog().getAttributesList()
+						.getSelectedIndices().length; i++) {
+					addAttributeList.remove(gui.getEditClassDialog()
+							.getAttributesList().getSelectedIndices()[0]);
+				}
+				tempAttributeList = new String[addAttributeList.size()];
+				for (int i = 0; i < addAttributeList.size(); i++) {
+					switch (addAttributeList.get(i).getVisibility()) {
+					case 0:
+						tempAttributeList[i] = "+ "
+								+ addAttributeList.get(i).getAttributeName();
+						break;
+					case 1:
+						tempAttributeList[i] = "- "
+								+ addAttributeList.get(i).getAttributeName();
+						break;
+					case 2:
+						tempAttributeList[i] = "# "
+								+ addAttributeList.get(i).getAttributeName();
+						break;
+					case 3:
+						tempAttributeList[i] = "~ "
+								+ addAttributeList.get(i).getAttributeName();
+						break;
+					}
+				}
+				gui.getEditClassDialog().getAttributesList()
+						.setListData(tempAttributeList);
+			}
+		} else if (gui.getAddClassDialog().getAttributesList().getSelectedIndices().length > 0
 				&& addAttributeList.size() > 0) {
 			for (int i = 0; i < gui.getAddClassDialog().getAttributesList()
 					.getSelectedIndices().length; i++) {
@@ -265,7 +308,26 @@ public class Manager {
 	}
 
 	public void showEditAttribute() {
-		if (gui.getAddClassDialog().getAttributesList().getSelectedIndex() >= 0) {
+		if(editingClass && gui.getEditClassDialog().getAttributesList().getSelectedIndex() >= 0) {
+			selectedAttribute = gui.getEditClassDialog().getAttributesList()
+					.getSelectedIndex();
+			gui.getAddAttributeDialog()
+					.getAttributeNameTextField()
+					.setText(
+							addAttributeList.get(selectedAttribute)
+									.getAttributeName());
+			gui.getAddAttributeDialog()
+					.getAttributeTypeComboBox()
+					.setSelectedIndex(
+							addAttributeList.get(
+									gui.getEditClassDialog().getAttributesList()
+											.getSelectedIndex())
+									.getVisibility());
+			gui.getAddAttributeDialog().setLocation(
+					gui.getEditClassDialog().getX() + 50,
+					gui.getEditClassDialog().getY() + 25);
+			gui.getAddAttributeDialog().setVisible(true);
+		} else if (gui.getAddClassDialog().getAttributesList().getSelectedIndex() >= 0) {
 			selectedAttribute = gui.getAddClassDialog().getAttributesList()
 					.getSelectedIndex();
 			gui.getAddAttributeDialog()
@@ -297,6 +359,7 @@ public class Manager {
 	/**
 	 * This method will an an operation to the potential operations list
 	 */
+	@SuppressWarnings("unchecked")
 	public void addOperation() {
 		if (selectedOperation >= 0 && addOperationList.size() > 0) {
 			addOperationList.get(selectedOperation).setOperationName(
@@ -327,8 +390,11 @@ public class Manager {
 					break;
 				}
 			}
-			gui.getAddClassDialog().getOperationsList()
-					.setListData(tempOperationList);
+			if(editingClass) {
+				gui.getEditClassDialog().getOperationsList().setListData(tempOperationList);
+			} else {
+				gui.getAddClassDialog().getOperationsList().setListData(tempOperationList);
+			}
 			gui.getAddOperationDialog().getOperationTypeComboBox()
 					.setSelectedIndex(0);
 			gui.getAddOperationDialog().getOperationNameTextField().setText("");
@@ -364,8 +430,12 @@ public class Manager {
 					break;
 				}
 			}
-			gui.getAddClassDialog().getOperationsList()
+			if(editingClass) {
+				gui.getEditClassDialog().getOperationsList().setListData(tempOperationList);
+			} else {
+				gui.getAddClassDialog().getOperationsList()
 					.setListData(tempOperationList);
+			}
 			gui.getAddOperationDialog().getOperationTypeComboBox()
 					.setSelectedIndex(0);
 			gui.getAddOperationDialog().getOperationNameTextField().setText("");
@@ -376,9 +446,40 @@ public class Manager {
 	/**
 	 * This method will remove an operaiton from the potential operations list
 	 */
+	@SuppressWarnings("unchecked")
 	public void removeOperation() {
 		String[] tempOperationList;
-		if (gui.getAddClassDialog().getOperationsList().getSelectedIndices().length > 0
+		if (editingClass && gui.getEditClassDialog().getOperationsList().getSelectedIndices().length > 0
+				&& addOperationList.size() > 0) {
+			for (int i = 0; i < gui.getEditClassDialog().getOperationsList()
+					.getSelectedIndices().length; i++) {
+				addOperationList.remove(gui.getEditClassDialog()
+						.getOperationsList().getSelectedIndices()[0]);
+			}
+			tempOperationList = new String[addOperationList.size()];
+			for (int i = 0; i < addOperationList.size(); i++) {
+				switch (addOperationList.get(i).getVisibility()) {
+				case 0:
+					tempOperationList[i] = "+ "
+							+ addOperationList.get(i).getOperationName();
+					break;
+				case 1:
+					tempOperationList[i] = "- "
+							+ addOperationList.get(i).getOperationName();
+					break;
+				case 2:
+					tempOperationList[i] = "# "
+							+ addOperationList.get(i).getOperationName();
+					break;
+				case 3:
+					tempOperationList[i] = "~ "
+							+ addOperationList.get(i).getOperationName();
+					break;
+				}
+			}
+			gui.getEditClassDialog().getOperationsList()
+					.setListData(tempOperationList);
+		} else if (gui.getAddClassDialog().getOperationsList().getSelectedIndices().length > 0
 				&& addOperationList.size() > 0) {
 			for (int i = 0; i < gui.getAddClassDialog().getOperationsList()
 					.getSelectedIndices().length; i++) {
@@ -406,13 +507,31 @@ public class Manager {
 					break;
 				}
 			}
-			gui.getAddClassDialog().getOperationsList()
-					.setListData(tempOperationList);
+			gui.getAddClassDialog().getOperationsList().setListData(tempOperationList);
 		}
 	}
 
 	public void showEditOperation() {
-		if (gui.getAddClassDialog().getOperationsList().getSelectedIndex() >= 0) {
+		if (editingClass && gui.getEditClassDialog().getOperationsList().getSelectedIndex() >= 0) {
+			selectedOperation = gui.getEditClassDialog().getOperationsList()
+					.getSelectedIndex();
+			gui.getAddOperationDialog()
+					.getOperationNameTextField()
+					.setText(
+							addOperationList.get(selectedOperation)
+									.getOperationName());
+			gui.getAddOperationDialog()
+					.getOperationTypeComboBox()
+					.setSelectedIndex(
+							addOperationList.get(
+									gui.getEditClassDialog().getOperationsList()
+											.getSelectedIndex())
+									.getVisibility());
+			gui.getAddOperationDialog().setLocation(
+					gui.getEditClassDialog().getX() + 50,
+					gui.getEditClassDialog().getY() + 25);
+			gui.getAddOperationDialog().setVisible(true);
+		} else if (gui.getAddClassDialog().getOperationsList().getSelectedIndex() >= 0) {
 			selectedOperation = gui.getAddClassDialog().getOperationsList()
 					.getSelectedIndex();
 			gui.getAddOperationDialog()
@@ -441,18 +560,18 @@ public class Manager {
 	}
 
 	public void createRelationship() {
-		if(undoRedoManager.isRedoing()) {
+		if (undoRedoManager.isRedoing()) {
 			relationList.add(undoRedoManager.getRelationshipStack().pop());
 			undoRedoManager.setRedoing(false);
 		} else {
-			Relationship tempRelation = new Relationship(classObjectList
-					.get(relationshipCandidates.get(0)), classObjectList
-					.get(relationshipCandidates.get(1)), gui
-					.getAddRelationshipDialog().getRelationshipsComboBox()
-					.getSelectedIndex());
+			Relationship tempRelation = new Relationship(
+					classObjectList.get(relationshipCandidates.get(0)),
+					classObjectList.get(relationshipCandidates.get(1)), gui
+							.getAddRelationshipDialog()
+							.getRelationshipsComboBox().getSelectedIndex());
 			relationList.add(tempRelation);
 		}
-			
+
 		// Add to undo stack
 		undoRedoManager.addUndo(new Runnable() {
 			@Override
@@ -473,8 +592,9 @@ public class Manager {
 				}
 			}
 		});
-		
-		gui.getAddRelationshipDialog().getRelationshipsComboBox().setSelectedIndex(0);
+
+		gui.getAddRelationshipDialog().getRelationshipsComboBox()
+				.setSelectedIndex(0);
 		relationshipCandidates.clear();
 		tryRelationship = false;
 		gui.getRelationshipButton().setSelected(false);
@@ -549,21 +669,97 @@ public class Manager {
 		gui.getAddClassDialog().dispose();
 		gui.getView().repaint();
 	}
+	
+	/**
+	 * This method will edit the selected class object
+	 */
+	public void editClass() {
+		if (undoRedoManager.isRedoing()) {
+			classObjectList.set(objController.getSelectedClassObject(), undoRedoManager.getClassObjectStack().pop());
+			undoRedoManager.setRedoing(false);
+		} else {
+			String tempClassName = "";
+			tempClassName = gui.getEditClassDialog().getClassNameTextField()
+					.getText();
+			gui.getEditClassDialog().getClassNameTextField().setText("");
+			tempClass = new ClassObject(tempClassName, addClassX, addClassY,
+					gui.getEditClassDialog().getClassTypeList()
+							.getSelectedIndex());
+			// Add all the attributes from the list
+			for (int i = 0; i < addAttributeList.size(); i++) {
+				tempClass.addAttribute(addAttributeList.get(i)
+						.getAttributeName(), addAttributeList.get(i)
+						.getVisibility());
+			}
+			addAttributeList.clear();
+
+			// Add all the operations from the list
+			for (int i = 0; i < addOperationList.size(); i++) {
+				tempClass.addOperation(addOperationList.get(i)
+						.getOperationName(), addOperationList.get(i)
+						.getVisibility());
+			}
+			addOperationList.clear();
+			
+			undoRedoManager.setEditedClassIndex(objController.getSelectedClassObject());
+			undoRedoManager.getClassObjectStack().push(classObjectList.get(objController.getSelectedClassObject()));
+			classObjectList.set(objController.getSelectedClassObject(), tempClass);
+
+			if (undoRedoManager.getRedo().size() > 0) {
+				undoRedoManager.getRedo().pop();
+			}
+		}
+		// Add to undo Manager
+		undoRedoManager.addUndo(new Runnable() {
+			@Override
+			public void run() {
+				if (classObjectList.size() > 0) {
+					ClassObject tempClass = classObjectList.get(undoRedoManager.getEditedClassIndex());
+					classObjectList.set(undoRedoManager.getEditedClassIndex(), undoRedoManager.getClassObjectStack().pop());
+					undoRedoManager.getClassObjectStack().push(tempClass);
+					undoRedoManager.addRedo(new Runnable() {
+						@Override
+						public void run() {
+							undoRedoManager.setRedoing(true);
+							editClass();
+							gui.getView().repaint();
+						}
+					});
+					gui.getView().repaint();
+				}
+			}
+		});
+		gui.setEnabled(true);
+		gui.getClassButton().setSelected(false);
+		gui.getEditClassDialog().getAttributesList().setListData(new String[0]);
+		gui.getEditClassDialog().getOperationsList().setListData(new String[0]);
+		gui.getEditClassDialog().dispose();
+		gui.getView().repaint();
+	}
 
 	/**
 	 * This method will delete a class from the list
 	 */
 	public void deleteClass() {
 		if (objController.getSelectedClassObject() >= 0) {
-			//push class in stack for potential redoing
-			undoRedoManager.getClassObjectStack().push(classObjectList.get(objController.getSelectedClassObject()));
-			//push relationships that maybe part of this class for potential redoing
-			for(int i = 0; i < relationList.size(); i++) {
-				if(relationList.get(i).getDestination().getId() == classObjectList.get(objController.getSelectedClassObject()).getId() || relationList.get(i).getOrigin().getId() == classObjectList.get(objController.getSelectedClassObject()).getId()) {
-					undoRedoManager.getRelationshipStack().push(relationList.get(i));
+			// push class in stack for potential redoing
+			undoRedoManager.getClassObjectStack()
+					.push(classObjectList.get(objController
+							.getSelectedClassObject()));
+			// push relationships that maybe part of this class for potential
+			// redoing
+			for (int i = 0; i < relationList.size(); i++) {
+				if (relationList.get(i).getDestination().getId() == classObjectList
+						.get(objController.getSelectedClassObject()).getId()
+						|| relationList.get(i).getOrigin().getId() == classObjectList
+								.get(objController.getSelectedClassObject())
+								.getId()) {
+					undoRedoManager.getRelationshipStack().push(
+							relationList.get(i));
 					relationList.remove(i);
 					i--;
-					undoRedoManager.setDeletedRelationships(undoRedoManager.getDeletedRelationships() + 1);
+					undoRedoManager.setDeletedRelationships(undoRedoManager
+							.getDeletedRelationships() + 1);
 				}
 			}
 			classObjectList.remove(objController.getSelectedClassObject());
@@ -582,12 +778,15 @@ public class Manager {
 					classObjectList.add(undoRedoManager
 							.getSelectedObjectStack().peek(), undoRedoManager
 							.getClassObjectStack().pop());
-					//Redo every relationship deleted by the deletion of this class
-					for(int i = undoRedoManager.getDeletedRelationships(); i > 0; i--) {
-						relationList.add(undoRedoManager.getRelationshipStack().pop());
-						undoRedoManager.setDeletedRelationships(undoRedoManager.getDeletedRelationships() - 1);
+					// Redo every relationship deleted by the deletion of this
+					// class
+					for (int i = undoRedoManager.getDeletedRelationships(); i > 0; i--) {
+						relationList.add(undoRedoManager.getRelationshipStack()
+								.pop());
+						undoRedoManager.setDeletedRelationships(undoRedoManager
+								.getDeletedRelationships() - 1);
 					}
-					
+
 					classObjectList.get(
 							undoRedoManager.getSelectedObjectStack().peek())
 							.setIsSelected(false);
@@ -606,18 +805,26 @@ public class Manager {
 		}
 		// If we enter the method due to a redo
 		if (undoRedoManager.isRedoing()) {
-			undoRedoManager.getClassObjectStack().push(classObjectList.get(undoRedoManager.getSelectedObjectStack().peek()));
-			for(int i = 0; i < relationList.size(); i++) {
-				if(relationList.get(i).getDestination().getId() == classObjectList.get(undoRedoManager
-						.getSelectedObjectStack().peek()).getId() || relationList.get(i).getOrigin().getId() == classObjectList.get(undoRedoManager
-								.getSelectedObjectStack().peek()).getId()) {
-					undoRedoManager.getRelationshipStack().push(relationList.get(i));
+			undoRedoManager.getClassObjectStack().push(
+					classObjectList.get(undoRedoManager
+							.getSelectedObjectStack().peek()));
+			for (int i = 0; i < relationList.size(); i++) {
+				if (relationList.get(i).getDestination().getId() == classObjectList
+						.get(undoRedoManager.getSelectedObjectStack().peek())
+						.getId()
+						|| relationList.get(i).getOrigin().getId() == classObjectList
+								.get(undoRedoManager.getSelectedObjectStack()
+										.peek()).getId()) {
+					undoRedoManager.getRelationshipStack().push(
+							relationList.get(i));
 					relationList.remove(i);
 					i--;
-					undoRedoManager.setDeletedRelationships(undoRedoManager.getDeletedRelationships() + 1);
+					undoRedoManager.setDeletedRelationships(undoRedoManager
+							.getDeletedRelationships() + 1);
 				}
 			}
-			classObjectList.remove(undoRedoManager.getClassObjectStack().peek());
+			classObjectList
+					.remove(undoRedoManager.getClassObjectStack().peek());
 			objController.setSelectedClassObject(-1);
 			undoRedoManager.setRedoing(false);
 
@@ -629,12 +836,15 @@ public class Manager {
 					classObjectList.add(undoRedoManager
 							.getSelectedObjectStack().peek(), undoRedoManager
 							.getClassObjectStack().pop());
-					//Redo every relationship deleted by the deletion of this class
-					for(int i = undoRedoManager.getDeletedRelationships(); i > 0; i--) {
-						relationList.add(undoRedoManager.getRelationshipStack().pop());
-						undoRedoManager.setDeletedRelationships(undoRedoManager.getDeletedRelationships() - 1);
+					// Redo every relationship deleted by the deletion of this
+					// class
+					for (int i = undoRedoManager.getDeletedRelationships(); i > 0; i--) {
+						relationList.add(undoRedoManager.getRelationshipStack()
+								.pop());
+						undoRedoManager.setDeletedRelationships(undoRedoManager
+								.getDeletedRelationships() - 1);
 					}
-					
+
 					classObjectList.get(
 							undoRedoManager.getSelectedObjectStack().peek())
 							.setIsSelected(false);
@@ -754,29 +964,104 @@ public class Manager {
 	public UndoRedoManager getUndoRedoManager() {
 		return undoRedoManager;
 	}
-	
+
 	public Stack<ClassObject> getCopyObjectStack() {
 		return copyObjectStack;
 	}
+	
 
-	/*
-	 * Operations related to Saving
+	public boolean isEditingClass() {
+		return editingClass;
+	}
+
+	public void setEditingClass(boolean editingClass) {
+		this.editingClass = editingClass;
+	}
+
+	public ArrayList<Attribute> getAddAttributeList() {
+		return addAttributeList;
+	}
+
+	public void setAddAttributeList(ArrayList<Attribute> addAttributeList) {
+		this.addAttributeList = addAttributeList;
+	}
+
+	public ArrayList<Operation> getAddOperationList() {
+		return addOperationList;
+	}
+
+	public void setAddOperationList(ArrayList<Operation> addOperationList) {
+		this.addOperationList = addOperationList;
+	}
+
+	/**
+	 * The Save and Load functions
+	 * 
+	 * @throws FileNotFoundException
+	 * @throws IOException
 	 */
-	public void SaveState () throws FileNotFoundException, IOException {
-		
-		Datamodel state = new Datamodel(classObjectList, relationList);
-		
-		ObjectOutputStream scribe = new ObjectOutputStream (new FileOutputStream("UML.ser"));
-		scribe.writeObject(state);
+	
+	public static void newPath(String newFilePath){
+		// changes the file path for saved files
+		savePath = newFilePath;
+	}
+
+	public static void SaveState() throws FileNotFoundException, IOException {
+		/**
+		 * Saves the state of the ClassObject and the Relationships ArrayLists
+		 * to a serialized file for re-reading at a future date.
+		 */
+		ObjectOutputStream scribe = new ObjectOutputStream(
+				new FileOutputStream(savePath));
+
+		// variables for reading list
+		ClassObject target1;
+		Relationship target2;
+
+		// Walks through the list of ClassObjects and writes them to the file
+		int sizeof = classObjectList.size();
+		scribe.writeInt(sizeof);
+		for (int i = 0; i < sizeof; i++) {
+			target1 = classObjectList.get(i);
+			scribe.writeObject(target1);
+		}
+
+		// Walks through the list of Relationships and writes them to the file.
+		sizeof = relationList.size();
+		scribe.writeInt(sizeof);
+		for (int i = 0; i < sizeof; i++) {
+			target2 = relationList.get(i);
+			scribe.writeObject(target2);
+		}
+
 		scribe.close();
 	}
-	
-	public void LoadState () throws FileNotFoundException, IOException, ClassNotFoundException {
+
+	public static void LoadState() throws FileNotFoundException, IOException,
+			ClassNotFoundException {
+		ObjectInputStream scribe = new ObjectInputStream(new FileInputStream(
+				savePath));
+
+		// variables for classObjects list
+		ClassObject target1;
+		Relationship target2;
+
+		//reads the ClassObjects from the target file
+		int sizeof = scribe.readInt();
+		for (int i = 0; i < sizeof; i++) {
+			target1 = (ClassObject) scribe.readObject();
+
+			classObjectList.add(target1);
+		}
 		
-		Datamodel state = new Datamodel(classObjectList, relationList);
-		state.cleardata();
-		ObjectInputStream scribe = new ObjectInputStream(new FileInputStream("UML.ser"));
-		state = (Datamodel) scribe.readObject();
+		//reads the Relationships from the target file
+		sizeof = scribe.readInt();
+		for (int i = 0; i < sizeof; i++) {
+			target2 = (Relationship) scribe.readObject();
+
+			relationList.add(target2);
+		}
+
 		scribe.close();
 	}
 }
