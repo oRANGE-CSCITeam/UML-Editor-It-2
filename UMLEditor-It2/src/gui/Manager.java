@@ -31,7 +31,7 @@ public class Manager {
 	private ArrayList<Operation> addOperationList;
 	private ArrayList<Integer> deleteRelationIndex;
 	private Stack<ClassObject> copyObjectStack;
-	private static String savepath = "UML.ser";
+	private static String savePath = "UML.ser";
 
 	// Declare the Undo/Redo manager
 	private UndoRedoManager undoRedoManager;
@@ -298,6 +298,7 @@ public class Manager {
 	/**
 	 * This method will an an operation to the potential operations list
 	 */
+	@SuppressWarnings("unchecked")
 	public void addOperation() {
 		if (selectedOperation >= 0 && addOperationList.size() > 0) {
 			addOperationList.get(selectedOperation).setOperationName(
@@ -377,6 +378,7 @@ public class Manager {
 	/**
 	 * This method will remove an operaiton from the potential operations list
 	 */
+	@SuppressWarnings("unchecked")
 	public void removeOperation() {
 		String[] tempOperationList;
 		if (gui.getAddClassDialog().getOperationsList().getSelectedIndices().length > 0
@@ -790,16 +792,25 @@ public class Manager {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
+	
+	public static void newPath(String newFilePath){
+		// changes the file path for saved files
+		savePath = newFilePath;
+	}
 
-	private static void SaveState() throws FileNotFoundException, IOException {
-
+	public static void SaveState() throws FileNotFoundException, IOException {
+		/**
+		 * Saves the state of the ClassObject and the Relationships ArrayLists
+		 * to a serialized file for re-reading at a future date.
+		 */
 		ObjectOutputStream scribe = new ObjectOutputStream(
-				new FileOutputStream(savepath));
+				new FileOutputStream(savePath));
 
 		// variables for reading list
 		ClassObject target1;
 		Relationship target2;
 
+		// Walks through the list of ClassObjects and writes them to the file
 		int sizeof = classObjectList.size();
 		scribe.writeInt(sizeof);
 		for (int i = 0; i < sizeof; i++) {
@@ -807,6 +818,7 @@ public class Manager {
 			scribe.writeObject(target1);
 		}
 
+		// Walks through the list of Relationships and writes them to the file.
 		sizeof = relationList.size();
 		scribe.writeInt(sizeof);
 		for (int i = 0; i < sizeof; i++) {
@@ -817,22 +829,24 @@ public class Manager {
 		scribe.close();
 	}
 
-	private static void LoadState() throws FileNotFoundException, IOException,
+	public static void LoadState() throws FileNotFoundException, IOException,
 			ClassNotFoundException {
 		ObjectInputStream scribe = new ObjectInputStream(new FileInputStream(
-				savepath));
+				savePath));
 
 		// variables for classObjects list
 		ClassObject target1;
 		Relationship target2;
 
+		//reads the ClassObjects from the target file
 		int sizeof = scribe.readInt();
 		for (int i = 0; i < sizeof; i++) {
 			target1 = (ClassObject) scribe.readObject();
 
 			classObjectList.add(target1);
 		}
-
+		
+		//reads the Relationships from the target file
 		sizeof = scribe.readInt();
 		for (int i = 0; i < sizeof; i++) {
 			target2 = (Relationship) scribe.readObject();
