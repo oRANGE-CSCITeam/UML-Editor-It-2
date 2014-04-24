@@ -45,6 +45,8 @@ public class Manager {
 
 	private ClassObject tempClass;
 	private int classId;
+	
+	private boolean editingClass;
 
 	public Manager() {
 
@@ -68,6 +70,7 @@ public class Manager {
 		selectedAttribute = -1;
 		selectedOperation = -1;
 		classId = 0;
+		editingClass = false;
 
 	}
 
@@ -181,8 +184,11 @@ public class Manager {
 					break;
 				}
 			}
-			gui.getAddClassDialog().getAttributesList()
-					.setListData(tempAttributeList);
+			if(editingClass) {
+				gui.getEditClassDialog().getAttributesList().setListData(tempAttributeList);
+			} else {
+				gui.getAddClassDialog().getAttributesList().setListData(tempAttributeList);
+			}
 			gui.getAddAttributeDialog().getAttributeTypeComboBox()
 					.setSelectedIndex(0);
 			gui.getAddAttributeDialog().getAttributeNameTextField().setText("");
@@ -218,8 +224,11 @@ public class Manager {
 					break;
 				}
 			}
-			gui.getAddClassDialog().getAttributesList()
-					.setListData(tempAttributeList);
+			if(editingClass) {
+				gui.getEditClassDialog().getAttributesList().setListData(tempAttributeList);
+			} else {
+				gui.getAddClassDialog().getAttributesList().setListData(tempAttributeList);
+			}
 			gui.getAddAttributeDialog().getAttributeTypeComboBox()
 					.setSelectedIndex(0);
 			gui.getAddAttributeDialog().getAttributeNameTextField().setText("");
@@ -232,7 +241,40 @@ public class Manager {
 	 */
 	public void removeAttribute() {
 		String[] tempAttributeList;
-		if (gui.getAddClassDialog().getAttributesList().getSelectedIndices().length > 0
+		if(editingClass && gui.getEditClassDialog().getAttributesList().getSelectedIndices().length > 0
+				&& addAttributeList.size() > 0) {
+			if (gui.getEditClassDialog().getAttributesList().getSelectedIndices().length > 0
+					&& addAttributeList.size() > 0) {
+				for (int i = 0; i < gui.getEditClassDialog().getAttributesList()
+						.getSelectedIndices().length; i++) {
+					addAttributeList.remove(gui.getEditClassDialog()
+							.getAttributesList().getSelectedIndices()[0]);
+				}
+				tempAttributeList = new String[addAttributeList.size()];
+				for (int i = 0; i < addAttributeList.size(); i++) {
+					switch (addAttributeList.get(i).getVisibility()) {
+					case 0:
+						tempAttributeList[i] = "+ "
+								+ addAttributeList.get(i).getAttributeName();
+						break;
+					case 1:
+						tempAttributeList[i] = "- "
+								+ addAttributeList.get(i).getAttributeName();
+						break;
+					case 2:
+						tempAttributeList[i] = "# "
+								+ addAttributeList.get(i).getAttributeName();
+						break;
+					case 3:
+						tempAttributeList[i] = "~ "
+								+ addAttributeList.get(i).getAttributeName();
+						break;
+					}
+				}
+				gui.getEditClassDialog().getAttributesList()
+						.setListData(tempAttributeList);
+			}
+		} else if (gui.getAddClassDialog().getAttributesList().getSelectedIndices().length > 0
 				&& addAttributeList.size() > 0) {
 			for (int i = 0; i < gui.getAddClassDialog().getAttributesList()
 					.getSelectedIndices().length; i++) {
@@ -266,7 +308,26 @@ public class Manager {
 	}
 
 	public void showEditAttribute() {
-		if (gui.getAddClassDialog().getAttributesList().getSelectedIndex() >= 0) {
+		if(editingClass && gui.getEditClassDialog().getAttributesList().getSelectedIndex() >= 0) {
+			selectedAttribute = gui.getEditClassDialog().getAttributesList()
+					.getSelectedIndex();
+			gui.getAddAttributeDialog()
+					.getAttributeNameTextField()
+					.setText(
+							addAttributeList.get(selectedAttribute)
+									.getAttributeName());
+			gui.getAddAttributeDialog()
+					.getAttributeTypeComboBox()
+					.setSelectedIndex(
+							addAttributeList.get(
+									gui.getEditClassDialog().getAttributesList()
+											.getSelectedIndex())
+									.getVisibility());
+			gui.getAddAttributeDialog().setLocation(
+					gui.getEditClassDialog().getX() + 50,
+					gui.getEditClassDialog().getY() + 25);
+			gui.getAddAttributeDialog().setVisible(true);
+		} else if (gui.getAddClassDialog().getAttributesList().getSelectedIndex() >= 0) {
 			selectedAttribute = gui.getAddClassDialog().getAttributesList()
 					.getSelectedIndex();
 			gui.getAddAttributeDialog()
@@ -329,8 +390,11 @@ public class Manager {
 					break;
 				}
 			}
-			gui.getAddClassDialog().getOperationsList()
-					.setListData(tempOperationList);
+			if(editingClass) {
+				gui.getEditClassDialog().getOperationsList().setListData(tempOperationList);
+			} else {
+				gui.getAddClassDialog().getOperationsList().setListData(tempOperationList);
+			}
 			gui.getAddOperationDialog().getOperationTypeComboBox()
 					.setSelectedIndex(0);
 			gui.getAddOperationDialog().getOperationNameTextField().setText("");
@@ -366,8 +430,12 @@ public class Manager {
 					break;
 				}
 			}
-			gui.getAddClassDialog().getOperationsList()
+			if(editingClass) {
+				gui.getEditClassDialog().getOperationsList().setListData(tempOperationList);
+			} else {
+				gui.getAddClassDialog().getOperationsList()
 					.setListData(tempOperationList);
+			}
 			gui.getAddOperationDialog().getOperationTypeComboBox()
 					.setSelectedIndex(0);
 			gui.getAddOperationDialog().getOperationNameTextField().setText("");
@@ -381,7 +449,37 @@ public class Manager {
 	@SuppressWarnings("unchecked")
 	public void removeOperation() {
 		String[] tempOperationList;
-		if (gui.getAddClassDialog().getOperationsList().getSelectedIndices().length > 0
+		if (editingClass && gui.getEditClassDialog().getOperationsList().getSelectedIndices().length > 0
+				&& addOperationList.size() > 0) {
+			for (int i = 0; i < gui.getEditClassDialog().getOperationsList()
+					.getSelectedIndices().length; i++) {
+				addOperationList.remove(gui.getEditClassDialog()
+						.getOperationsList().getSelectedIndices()[0]);
+			}
+			tempOperationList = new String[addOperationList.size()];
+			for (int i = 0; i < addOperationList.size(); i++) {
+				switch (addOperationList.get(i).getVisibility()) {
+				case 0:
+					tempOperationList[i] = "+ "
+							+ addOperationList.get(i).getOperationName();
+					break;
+				case 1:
+					tempOperationList[i] = "- "
+							+ addOperationList.get(i).getOperationName();
+					break;
+				case 2:
+					tempOperationList[i] = "# "
+							+ addOperationList.get(i).getOperationName();
+					break;
+				case 3:
+					tempOperationList[i] = "~ "
+							+ addOperationList.get(i).getOperationName();
+					break;
+				}
+			}
+			gui.getEditClassDialog().getOperationsList()
+					.setListData(tempOperationList);
+		} else if (gui.getAddClassDialog().getOperationsList().getSelectedIndices().length > 0
 				&& addOperationList.size() > 0) {
 			for (int i = 0; i < gui.getAddClassDialog().getOperationsList()
 					.getSelectedIndices().length; i++) {
@@ -409,13 +507,31 @@ public class Manager {
 					break;
 				}
 			}
-			gui.getAddClassDialog().getOperationsList()
-					.setListData(tempOperationList);
+			gui.getAddClassDialog().getOperationsList().setListData(tempOperationList);
 		}
 	}
 
 	public void showEditOperation() {
-		if (gui.getAddClassDialog().getOperationsList().getSelectedIndex() >= 0) {
+		if (editingClass && gui.getEditClassDialog().getOperationsList().getSelectedIndex() >= 0) {
+			selectedOperation = gui.getEditClassDialog().getOperationsList()
+					.getSelectedIndex();
+			gui.getAddOperationDialog()
+					.getOperationNameTextField()
+					.setText(
+							addOperationList.get(selectedOperation)
+									.getOperationName());
+			gui.getAddOperationDialog()
+					.getOperationTypeComboBox()
+					.setSelectedIndex(
+							addOperationList.get(
+									gui.getEditClassDialog().getOperationsList()
+											.getSelectedIndex())
+									.getVisibility());
+			gui.getAddOperationDialog().setLocation(
+					gui.getEditClassDialog().getX() + 50,
+					gui.getEditClassDialog().getY() + 25);
+			gui.getAddOperationDialog().setVisible(true);
+		} else if (gui.getAddClassDialog().getOperationsList().getSelectedIndex() >= 0) {
 			selectedOperation = gui.getAddClassDialog().getOperationsList()
 					.getSelectedIndex();
 			gui.getAddOperationDialog()
@@ -551,6 +667,73 @@ public class Manager {
 		gui.getAddClassDialog().getAttributesList().setListData(new String[0]);
 		gui.getAddClassDialog().getOperationsList().setListData(new String[0]);
 		gui.getAddClassDialog().dispose();
+		gui.getView().repaint();
+	}
+	
+	/**
+	 * This method will edit the selected class object
+	 */
+	public void editClass() {
+		if (undoRedoManager.isRedoing()) {
+			classObjectList.set(objController.getSelectedClassObject(), undoRedoManager.getClassObjectStack().pop());
+			undoRedoManager.setRedoing(false);
+		} else {
+			String tempClassName = "";
+			tempClassName = gui.getEditClassDialog().getClassNameTextField()
+					.getText();
+			gui.getEditClassDialog().getClassNameTextField().setText("");
+			tempClass = new ClassObject(tempClassName, addClassX, addClassY,
+					gui.getEditClassDialog().getClassTypeList()
+							.getSelectedIndex());
+			// Add all the attributes from the list
+			for (int i = 0; i < addAttributeList.size(); i++) {
+				tempClass.addAttribute(addAttributeList.get(i)
+						.getAttributeName(), addAttributeList.get(i)
+						.getVisibility());
+			}
+			addAttributeList.clear();
+
+			// Add all the operations from the list
+			for (int i = 0; i < addOperationList.size(); i++) {
+				tempClass.addOperation(addOperationList.get(i)
+						.getOperationName(), addOperationList.get(i)
+						.getVisibility());
+			}
+			addOperationList.clear();
+			
+			undoRedoManager.setEditedClassIndex(objController.getSelectedClassObject());
+			undoRedoManager.getClassObjectStack().push(classObjectList.get(objController.getSelectedClassObject()));
+			classObjectList.set(objController.getSelectedClassObject(), tempClass);
+
+			if (undoRedoManager.getRedo().size() > 0) {
+				undoRedoManager.getRedo().pop();
+			}
+		}
+		// Add to undo Manager
+		undoRedoManager.addUndo(new Runnable() {
+			@Override
+			public void run() {
+				if (classObjectList.size() > 0) {
+					ClassObject tempClass = classObjectList.get(undoRedoManager.getEditedClassIndex());
+					classObjectList.set(undoRedoManager.getEditedClassIndex(), undoRedoManager.getClassObjectStack().pop());
+					undoRedoManager.getClassObjectStack().push(tempClass);
+					undoRedoManager.addRedo(new Runnable() {
+						@Override
+						public void run() {
+							undoRedoManager.setRedoing(true);
+							editClass();
+							gui.getView().repaint();
+						}
+					});
+					gui.getView().repaint();
+				}
+			}
+		});
+		gui.setEnabled(true);
+		gui.getClassButton().setSelected(false);
+		gui.getEditClassDialog().getAttributesList().setListData(new String[0]);
+		gui.getEditClassDialog().getOperationsList().setListData(new String[0]);
+		gui.getEditClassDialog().dispose();
 		gui.getView().repaint();
 	}
 
@@ -784,6 +967,31 @@ public class Manager {
 
 	public Stack<ClassObject> getCopyObjectStack() {
 		return copyObjectStack;
+	}
+	
+
+	public boolean isEditingClass() {
+		return editingClass;
+	}
+
+	public void setEditingClass(boolean editingClass) {
+		this.editingClass = editingClass;
+	}
+
+	public ArrayList<Attribute> getAddAttributeList() {
+		return addAttributeList;
+	}
+
+	public void setAddAttributeList(ArrayList<Attribute> addAttributeList) {
+		this.addAttributeList = addAttributeList;
+	}
+
+	public ArrayList<Operation> getAddOperationList() {
+		return addOperationList;
+	}
+
+	public void setAddOperationList(ArrayList<Operation> addOperationList) {
+		this.addOperationList = addOperationList;
 	}
 
 	/**
