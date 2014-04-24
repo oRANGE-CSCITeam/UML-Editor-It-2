@@ -287,6 +287,7 @@ public class ClassObject implements Serializable {
 		int tempX = xPos;
 		int tempY = yPos;
 		int tempType = type;
+		int tempId = id;
 		ClassObject tempClass = new ClassObject(tempName, tempX, tempY, tempType);
 		
 		if(attributes.size() > 0) {
@@ -303,6 +304,8 @@ public class ClassObject implements Serializable {
 				tempClass.addOperation(tempOperationName, tempOperationVisibility);
 			}
 		}
+		
+		tempClass.setId(tempId);
 		
 		return tempClass;
 		

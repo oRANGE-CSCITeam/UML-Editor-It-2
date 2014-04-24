@@ -26,6 +26,7 @@ public class UndoRedoManager {
 	private Stack<Runnable> redo;
 	
 	private int deletedRelationships;
+	private int editedClassIndex;
 
 	private boolean redoing;
 
@@ -38,6 +39,8 @@ public class UndoRedoManager {
 		redo = new Stack<Runnable>();
 		redoing = false;
 		deletedRelationships = 0;
+		editedClassIndex = 0;
+		
 		
 	}
 
@@ -96,6 +99,16 @@ public class UndoRedoManager {
 	public void setDeletedRelationships(int deletedRelationships) {
 		this.deletedRelationships = deletedRelationships;
 	}
+
+	public int getEditedClassIndex() {
+		return editedClassIndex;
+	}
+
+	public void setEditedClassIndex(int editedClassIndex) {
+		this.editedClassIndex = editedClassIndex;
+	}
+	
+	
 }
 
 
