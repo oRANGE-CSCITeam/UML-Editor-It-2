@@ -232,14 +232,15 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		export.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
 			
-				int returnVal = exportFile.showSaveDialog(Gui.this);
 				BufferedImage bi = null;
 				try {
 					bi = new Robot().createScreenCapture(new Rectangle(view.getLocationOnScreen().x, view.getLocationOnScreen().y, view.getWidth(), view.getHeight()));
 				} catch (AWTException e1) {
-					// TODO Auto-generated catch block
+					
 					e1.printStackTrace();
 				}
+				int returnVal = exportFile.showSaveDialog(Gui.this);
+				
 				
 				File imageFile;
 				imageFile = new File(exportFile.getSelectedFile() + ".jpg");
@@ -250,7 +251,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 					exportFile.setVisible(false);
 					 try
 					{
-						exportFile.setVisible(false);
+						//exportFile.setVisible(false);
 						ImageIO.write(bi,"jpg",imageFile);
 						
 					}catch (Exception e) {}
