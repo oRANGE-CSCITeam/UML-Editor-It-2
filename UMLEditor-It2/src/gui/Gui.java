@@ -230,6 +230,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		fileMenu.add(export);
 		export.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt){
+			
 				int returnVal = exportFile.showSaveDialog(Gui.this);
 				BufferedImage bi = null;
 				try {
@@ -244,9 +245,11 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 				if(returnVal == JFileChooser.APPROVE_OPTION) 
 				{ 
 					  
-					 
+					
+					exportFile.setVisible(false);
 					 try
 					{
+						exportFile.setVisible(false);
 						ImageIO.write(bi,"jpg",imageFile);
 						
 					}catch (Exception e) {}
