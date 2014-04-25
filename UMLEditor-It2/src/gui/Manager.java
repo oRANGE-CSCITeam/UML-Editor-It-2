@@ -568,7 +568,7 @@ public class Manager {
 					classObjectList.get(relationshipCandidates.get(0)),
 					classObjectList.get(relationshipCandidates.get(1)), gui
 							.getAddRelationshipDialog()
-							.getRelationshipsComboBox().getSelectedIndex());
+							.getRelationshipsComboBox().getSelectedIndex(), this);
 			relationList.add(tempRelation);
 		}
 
@@ -675,16 +675,19 @@ public class Manager {
 	 */
 	public void editClass() {
 		if (undoRedoManager.isRedoing()) {
-			classObjectList.set(objController.getSelectedClassObject(), undoRedoManager.getClassObjectStack().pop());
+			ClassObject tempClass = classObjectList.get(undoRedoManager.getEditedClassIndex());
+			classObjectList.set(undoRedoManager.getEditedClassIndex(), undoRedoManager.getClassObjectStack().pop());
+			undoRedoManager.getClassObjectStack().push(tempClass);
 			undoRedoManager.setRedoing(false);
 		} else {
 			String tempClassName = "";
 			tempClassName = gui.getEditClassDialog().getClassNameTextField()
 					.getText();
 			gui.getEditClassDialog().getClassNameTextField().setText("");
-			tempClass = new ClassObject(tempClassName, addClassX, addClassY,
+			tempClass = new ClassObject(tempClassName, classObjectList.get(objController.getSelectedClassObject()).getxPos(), classObjectList.get(objController.getSelectedClassObject()).getyPos(),
 					gui.getEditClassDialog().getClassTypeList()
 							.getSelectedIndex());
+			tempClass.setId(classObjectList.get(objController.getSelectedClassObject()).getId());
 			// Add all the attributes from the list
 			for (int i = 0; i < addAttributeList.size(); i++) {
 				tempClass.addAttribute(addAttributeList.get(i)
@@ -729,6 +732,7 @@ public class Manager {
 				}
 			}
 		});
+		editingClass = false;
 		gui.setEnabled(true);
 		gui.getClassButton().setSelected(false);
 		gui.getEditClassDialog().getAttributesList().setListData(new String[0]);
@@ -993,6 +997,7 @@ public class Manager {
 	public void setAddOperationList(ArrayList<Operation> addOperationList) {
 		this.addOperationList = addOperationList;
 	}
+	
 
 	/**
 	 * The Save and Load functions

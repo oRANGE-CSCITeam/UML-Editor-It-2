@@ -1,5 +1,7 @@
 package models;
 
+import gui.Manager;
+
 import java.io.Serializable;
 
 /**
@@ -14,12 +16,15 @@ public class Relationship implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private ClassObject origin;
+	private int originId;
 	private int originX;
 	private int originY;
 
 	private ClassObject destination;
+	private int destinationId;
 	private int destinationX;
 	private int destinationY;
+	private Manager manager;
 
 	private int rType;
 
@@ -43,7 +48,8 @@ public class Relationship implements Serializable {
 	 */
 
 	public Relationship(ClassObject originClass, ClassObject destinationClass,
-			int relaType) {
+			int relaType, Manager manager) {
+		this.manager = manager;
 		origin = originClass;
 		originX = (origin.getWidth() / 2) + origin.getxPos();
 		originY = (origin.getHeight() / 2) + origin.getyPos();
@@ -51,6 +57,9 @@ public class Relationship implements Serializable {
 		destination = destinationClass;
 		destinationX = (destination.getWidth() / 2) + destination.getxPos();
 		destinationY = (destination.getHeight() / 2) + destination.getyPos();
+		
+		originId = origin.getId();
+		destinationId = destination.getId();
 
 		rType = relaType;
 
@@ -60,6 +69,17 @@ public class Relationship implements Serializable {
      *
      */
 	public void update() {
+		for(int i = 0; i < manager.getClassObjectList().size(); i++) {
+			if(originId == manager.getClassObjectList().get(i).getId()) {
+				origin = manager.getClassObjectList().get(i);
+			}
+		}
+		for(int i = 0; i < manager.getClassObjectList().size(); i++) {
+			if(destinationId == manager.getClassObjectList().get(i).getId()) {
+				destination = manager.getClassObjectList().get(i);
+			}
+		}
+		
 		originX = (origin.getWidth() / 2) + origin.getxPos();
 		originY = (origin.getHeight() / 2) + origin.getyPos();
 

@@ -174,8 +174,7 @@ class EditClass extends javax.swing.JFrame {
 		jLabel4.setText("Class Type");
 
 		classTypeList.setModel(new javax.swing.AbstractListModel() {
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4",
-					"Item 5" };
+			String[] strings = { "Object", "Interface", "Abstract"};
 
 			public int getSize() {
 				return strings.length;

@@ -1,8 +1,8 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
-
 import java.util.ArrayList;
 
 import models.ClassObject;
@@ -77,8 +77,26 @@ public class ClassObjectView {
 
 			// Draw the name of the class
 			g.setColor(Color.black);
+			Font font;
+			switch(theList.get(i).getType()) {
+			case 0:
+				font = new Font("", Font.PLAIN, 12);
+				g.setFont(font);
+				break;
+			case 1:
+				font = new Font("", Font.ITALIC, 12);
+				g.setFont(font);
+				break;
+			case 2:
+				font = new Font("", Font.PLAIN, 12);
+				g.setFont(font);
+				break;
+				
+			}
+			
 			g.drawString(theList.get(i).getName(),
 					theList.get(i).getxPos() + 5, theList.get(i).getyPos() + 15);
+			font = new Font("", Font.PLAIN, 12);
 
 			// Draw the attributes
 			for (int j = 0; j < theList.get(i).getAttributes().size(); j++) {
