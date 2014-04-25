@@ -18,6 +18,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -230,31 +231,46 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		//Adds Export to the fileMenu
 		fileMenu.add(export);
 		export.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent evt){
 			
-				BufferedImage bi = null;
+			public void actionPerformed(ActionEvent evt) {
+			
+				BufferedImage bi= new BufferedImage(view.getWidth(), view.getHeight(), BufferedImage.TYPE_INT_RGB);;
+				view.printAll(bi.getGraphics());
+				
+				/**
 				try {
 					bi = new Robot().createScreenCapture(new Rectangle(view.getLocationOnScreen().x, view.getLocationOnScreen().y, view.getWidth(), view.getHeight()));
 				} catch (AWTException e1) {
 					
 					e1.printStackTrace();
 				}
+				*/
 				int returnVal = exportFile.showSaveDialog(Gui.this);
 				
 				
 				File imageFile;
 				imageFile = new File(exportFile.getSelectedFile() + ".jpg");
+				try {
+					ImageIO.write(bi,"jpg",imageFile);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(returnVal == JFileChooser.APPROVE_OPTION) 
 				{ 
 					  
 					
 					exportFile.setVisible(false);
-					 try
-					{
-						//exportFile.setVisible(false);
-						ImageIO.write(bi,"jpg",imageFile);
-						
-					}catch (Exception e) {}
+					
+						/**
+						try {
+							ImageIO.write(bi,"jpg",imageFile);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						*/
+					
 				}
 				
 			}
