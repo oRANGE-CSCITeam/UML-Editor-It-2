@@ -64,6 +64,8 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	private JMenuItem delete;
 	private JScrollPane scrollContainer;
 	private JMenuItem export;
+	private ProjectDialog projectDialog;
+	private JTabbedPane viewTab;
 	
 	JFileChooser exportFile;
 
@@ -95,15 +97,22 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		delete = new JMenuItem("Delete", KeyEvent.VK_T);
 		JPanel leftSidePanel = new JPanel();
 		view = new EditorView(manager);
-		scrollContainer = new JScrollPane(view);
-		view.setAutoscrolls(true);
-		JTabbedPane viewTab = new JTabbedPane();
-		viewTab.addTab("Untitled", scrollContainer);
+		
+		view.setBackground(Color.white);
+		view.setPreferredSize(new Dimension(manager.getCanvasWidth(), manager.getCanvasHeight()));
+		
+		
+		JPanel outerPanel = new JPanel();
+		outerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		outerPanel.add(view);
+		scrollContainer = new JScrollPane(outerPanel);
+		
+		viewTab = new JTabbedPane();
+		viewTab.addTab(manager.getProjectName(), scrollContainer);
 		
 		exportFile = new JFileChooser();
 		exportFile.setFileFilter(new FileNameExtensionFilter("JPEG File", "jpg"));
 
-		view.setPreferredSize(scrollContainer.getSize());
 		popUpMenu = new JPopupMenu();
 		selectButton = new JToggleButton();
 		selectButton.setToolTipText("Select");
@@ -513,6 +522,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		leftSidePanel.add(organizeButton);
 
 		// Create new instance of dialogs
+		projectDialog = new ProjectDialog(manager);
 		addRelationshipDialog = new AddRelationship(manager);
 		editRelationshipDialog = new EditRelationship(manager);
 		addClassDialog = new AddClass(manager);
@@ -524,6 +534,8 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 
 		// Set the frame visible at the end when everything is added
 		this.setVisible(true);
+		projectDialog.setVisible(true);
+		
 	}
 
 	@Override
@@ -633,5 +645,18 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	public JMenuItem getEdit() {
 		return edit;
 	}
+
+	public JTabbedPane getViewTab() {
+		return viewTab;
+	}
+
+	public void setViewTab(JTabbedPane viewTab) {
+		this.viewTab = viewTab;
+	}
+
+	public void setView(EditorView view) {
+		this.view = view;
+	}
+	
 	
 }
