@@ -48,9 +48,16 @@ public class Manager {
 	
 	private boolean editingClass;
 	private boolean organize;
+	
+	private String projectName;
+	private int canvasWidth;
+	private int canvasHeight;
 
 	public Manager() {
-
+		projectName ="Untitled";
+		canvasWidth = 0;
+		canvasHeight = 0;
+		
 		gui = new Gui(this);
 
 		classObjectList = new ArrayList<ClassObject>();
@@ -1007,6 +1014,31 @@ public class Manager {
 
 	public void setOrganize(boolean organize) {
 		this.organize = organize;
+	}
+	
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public int getCanvasWidth() {
+		return canvasWidth;
+	}
+
+	public void setCanvasWidth(int canvasWidth) {
+		this.canvasWidth = canvasWidth;
+	}
+
+	public int getCanvasHeight() {
+		return canvasHeight;
+	}
+
+	public void setCanvasHeight(int canvasHeight) {
+		this.canvasHeight = canvasHeight;
 	}
 
 	/**

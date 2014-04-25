@@ -67,15 +67,6 @@ public class EditorView extends JPanel implements MouseListener,
 					classObject.getWidth() + OFFSET, classObject.getHeight()
 							+ OFFSET);
 		}
-
-		// Work in progress for autoscrolling
-		if (x > this.getWidth() || y > this.getHeight()) {
-			this.setPreferredSize(new Dimension(this.getWidth()
-					+ (x - this.getWidth()) + 20, this.getHeight()
-					+ (y - this.getHeight()) + 20));
-			manager.getGui().getScrollContainer().updateUI();
-			manager.getGui().getScrollContainer().repaint();
-		}
 	}
 
 	/**
