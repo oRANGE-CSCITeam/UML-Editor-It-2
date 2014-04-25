@@ -97,6 +97,7 @@ public class ClassObjectView {
 			g.drawString(theList.get(i).getName(),
 					theList.get(i).getxPos() + 5, theList.get(i).getyPos() + 15);
 			font = new Font("", Font.PLAIN, 12);
+			g.setFont(font);
 
 			// Draw the attributes
 			for (int j = 0; j < theList.get(i).getAttributes().size(); j++) {

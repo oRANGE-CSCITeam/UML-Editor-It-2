@@ -152,7 +152,6 @@ public class RelationshipView {
 					g.drawLine(x1, y1, x2, y2);
 					g.drawLine(x2, y2, x3, y3);
 					g.drawLine(x3, y3, x4, y4);
-					
 					g.fillPolygon(poly);
 					break;
 				case 2:
@@ -209,6 +208,9 @@ public class RelationshipView {
 					g.drawLine(x1, y1, x2, y2);
 					g.drawLine(x2, y2, x3, y3);
 					g.drawLine(x3, y3, x4, y4);
+					g.setColor(Color.white);
+					g.fillPolygon(poly);
+					g.setColor(Color.black);
 					g.drawPolygon(poly);
 					break;
 				case 3:
@@ -321,6 +323,9 @@ public class RelationshipView {
 					g.drawLine(x1, y1, x2, y2);
 					g.drawLine(x2, y2, x3, y3);
 					g.drawLine(x3, y3, x4, y4);
+					g.setColor(Color.white);
+					g.fillPolygon(poly);
+					g.setColor(Color.black);
 					g.drawPolygon(poly);
 					break;
 				}
@@ -351,6 +356,9 @@ public class RelationshipView {
 					poly = makeDiamondPolygon();
 					g.drawLine(poly.xpoints[2], poly.ypoints[2], destinationX,
 							destinationY);
+					g.setColor(Color.white);
+					g.fillPolygon(poly);
+					g.setColor(Color.black);
 					g.drawPolygon(poly);
 					break;
 				case 3:
@@ -363,6 +371,9 @@ public class RelationshipView {
 					poly = makeTrianglePolygon();
 					g.drawLine(poly.xpoints[2], poly.ypoints[2], destinationX,
 							destinationY);
+					g.setColor(Color.white);
+					g.fillPolygon(poly);
+					g.setColor(Color.black);
 					g.drawPolygon(poly);
 					break;
 				}
