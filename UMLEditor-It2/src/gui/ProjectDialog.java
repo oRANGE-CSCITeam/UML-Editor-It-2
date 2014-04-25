@@ -59,4 +59,38 @@ public class ProjectDialog extends JFrame {
 			}
 		});
 	}
+
+	public JButton getDoneButton() {
+		return doneButton;
+	}
+
+	public void setDoneButton(JButton doneButton) {
+		this.doneButton = doneButton;
+	}
+
+	public JTextField getNameTextField() {
+		return nameTextField;
+	}
+
+	public void setNameTextField(JTextField nameTextField) {
+		this.nameTextField = nameTextField;
+	}
+
+	public JTextField getWidthTextField() {
+		return widthTextField;
+	}
+
+	public void setWidthTextField(JTextField widthTextField) {
+		this.widthTextField = widthTextField;
+	}
+
+	public JTextField getHeightTextField() {
+		return heightTextField;
+	}
+
+	public void setHeightTextField(JTextField heightTextField) {
+		this.heightTextField = heightTextField;
+	}
+	
+	
 }

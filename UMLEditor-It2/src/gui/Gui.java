@@ -41,6 +41,8 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import models.ClassObject;
+import models.ObjectController;
+import models.UndoRedoManager;
 
 public class Gui extends JFrame implements MouseListener, ActionListener {
 	private Manager manager;
@@ -56,12 +58,14 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	private JToggleButton selectButton;
 	private JToggleButton relationshipButton;
 	private JButton organizeButton;
+	private JMenuItem newMI;
 	private JMenuItem Undo;
 	private JMenuItem Redo;
 	private JMenuItem copy;
 	private JMenuItem paste;
 	private JMenuItem edit;
 	private JMenuItem delete;
+	private JMenuItem properties;
 	private JScrollPane scrollContainer;
 	private JMenuItem export;
 	private ProjectDialog projectDialog;
@@ -82,7 +86,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		toolPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		toolPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JMenu fileMenu = new JMenu("File");
-		JMenuItem newMI = new JMenuItem("New", KeyEvent.VK_T);
+		newMI = new JMenuItem("New", KeyEvent.VK_T);
 		JMenuItem open = new JMenuItem("Open", KeyEvent.VK_T);
 		JMenuItem save = new JMenuItem("Save", KeyEvent.VK_T);
 		JMenuItem quit = new JMenuItem("Quit", KeyEvent.VK_T);
@@ -95,6 +99,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		JMenuItem clear = new JMenuItem("Clear", KeyEvent.VK_T);
 		edit = new JMenuItem("Edit", KeyEvent.VK_T);
 		delete = new JMenuItem("Delete", KeyEvent.VK_T);
+		properties = new JMenuItem("Properties", KeyEvent.VK_T);
 		JPanel leftSidePanel = new JPanel();
 		view = new EditorView(manager);
 		
@@ -224,6 +229,26 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		newMI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
 				ActionEvent.ALT_MASK));
 		fileMenu.add(newMI);
+		
+		newMI.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				manager.getClassObjectList().clear();
+				manager.getRelationList().clear();
+				manager.getRelationshipCandidates().clear();
+				manager.getAddAttributeList().clear();
+				manager.getAddOperationList().clear();
+				manager.setClassId(0);
+				manager.getCopyObjectStack().clear();
+				manager.setUndoRedoManager(new UndoRedoManager());
+				manager.setObjController(new ObjectController(manager));
+				projectDialog.getNameTextField().setText("");
+				projectDialog.getWidthTextField().setText("");
+				projectDialog.getHeightTextField().setText("");
+				projectDialog.setVisible(true);
+			}
+		});
+		
+		
 
 		// open
 		// JMenuItem Open = new JMenuItem("Open", KeyEvent.VK_T);
@@ -363,6 +388,22 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		clear.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
 				ActionEvent.CTRL_MASK));
 		editMenu.add(clear);
+		
+		
+		//Project Properties
+		
+		properties.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
+				ActionEvent.CTRL_MASK));
+		editMenu.addSeparator();
+		editMenu.add(properties);
+		properties.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				projectDialog.getNameTextField().setText(manager.getProjectName());
+				projectDialog.getWidthTextField().setText(Integer.toString(manager.getCanvasWidth()));
+				projectDialog.getHeightTextField().setText(Integer.toString(manager.getCanvasHeight()));
+				projectDialog.setVisible(true);
+			}
+		});
 
 		// delete (grays out when nothing selected)
 		// JMenuItem Delete = new JMenuItem("Delete", KeyEvent.VK_T);
@@ -534,7 +575,6 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 
 		// Set the frame visible at the end when everything is added
 		this.setVisible(true);
-		projectDialog.setVisible(true);
 		
 	}
 

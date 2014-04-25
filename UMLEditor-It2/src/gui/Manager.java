@@ -54,7 +54,7 @@ public class Manager {
 	private int canvasHeight;
 
 	public Manager() {
-		projectName ="Untitled";
+		projectName ="";
 		canvasWidth = 0;
 		canvasHeight = 0;
 		
@@ -1039,6 +1039,22 @@ public class Manager {
 
 	public void setCanvasHeight(int canvasHeight) {
 		this.canvasHeight = canvasHeight;
+	}
+
+	public void setUndoRedoManager(UndoRedoManager undoRedoManager) {
+		this.undoRedoManager = undoRedoManager;
+	}
+
+	public int getClassId() {
+		return classId;
+	}
+
+	public void setClassId(int classId) {
+		this.classId = classId;
+	}
+
+	public void setCopyObjectStack(Stack<ClassObject> copyObjectStack) {
+		this.copyObjectStack = copyObjectStack;
 	}
 
 	/**
