@@ -618,7 +618,7 @@ public class Manager {
 			gui.getAddClassDialog().getClassNameTextField().setText("");
 			tempClass = new ClassObject(tempClassName, addClassX, addClassY,
 					gui.getAddClassDialog().getClassTypeList()
-							.getSelectedIndex());
+							.getSelectedIndex(), this);
 			tempClass.setId(classId);
 			classId++;
 			// Add all the attributes from the list
@@ -689,7 +689,7 @@ public class Manager {
 			gui.getEditClassDialog().getClassNameTextField().setText("");
 			tempClass = new ClassObject(tempClassName, classObjectList.get(objController.getSelectedClassObject()).getxPos(), classObjectList.get(objController.getSelectedClassObject()).getyPos(),
 					gui.getEditClassDialog().getClassTypeList()
-							.getSelectedIndex());
+							.getSelectedIndex(), this);
 			tempClass.setId(classObjectList.get(objController.getSelectedClassObject()).getId());
 			// Add all the attributes from the list
 			for (int i = 0; i < addAttributeList.size(); i++) {
