@@ -72,7 +72,7 @@ public class Manager {
 		selectedOperation = -1;
 		classId = 0;
 		editingClass = false;
-		organize = true;
+		organize = false;
 
 	}
 
@@ -668,6 +668,7 @@ public class Manager {
 		canAddClass = false;
 		gui.getAddClassDialog().getAttributesList().setListData(new String[0]);
 		gui.getAddClassDialog().getOperationsList().setListData(new String[0]);
+		gui.getAddClassDialog().getClassTypeList().setSelectedIndex(0);
 		gui.getAddClassDialog().dispose();
 		gui.getView().repaint();
 	}
@@ -999,8 +1000,6 @@ public class Manager {
 	public void setAddOperationList(ArrayList<Operation> addOperationList) {
 		this.addOperationList = addOperationList;
 	}
-	
-	
 
 	public boolean isOrganize() {
 		return organize;

@@ -53,7 +53,8 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	private JPopupMenu popUpMenu;
 	private JToggleButton classButton;
 	private JToggleButton selectButton;
-	JToggleButton relationshipButton;
+	private JToggleButton relationshipButton;
+	private JButton organizeButton;
 	private JMenuItem Undo;
 	private JMenuItem Redo;
 	private JMenuItem copy;
@@ -61,7 +62,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	private JMenuItem edit;
 	private JMenuItem delete;
 	private JScrollPane scrollContainer;
-	JMenuItem export;
+	private JMenuItem export;
 	
 	JFileChooser exportFile;
 
@@ -137,7 +138,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 			relationshipButton.setIcon(new ImageIcon(getClass().getResource("addRelationButton-01.png")));
 			} catch(NullPointerException e) {
 			}
-		JButton organizeButton = new JButton();
+		organizeButton = new JButton();
 		organizeButton.setToolTipText("Organize");
 		try {
 			organizeButton.setIcon(new ImageIcon(getClass().getResource("organizeButton-01.png")));
@@ -356,6 +357,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 				
 				ClassObject tempClass = manager.getClassObjectList().get(manager.getObjController().getSelectedClassObject()).copy();
 				editClassDialog.getClassNameTextField().setText(tempClass.getName());
+				editClassDialog.getClassTypeList().setSelectedIndex(tempClass.getType());
 				
 				//This is to make the list in edit class to appear with the classes attributes
 				String[] tempAttributeList = new String[tempClass.getAttributes().size()];
@@ -477,6 +479,18 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 				}
 			}
 		});
+		
+		organizeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if(manager.isOrganize()) {
+					manager.setOrganize(false);
+					view.repaint();
+				} else {
+					manager.setOrganize(true);
+					view.repaint();
+				}
+			}
+		});
 
 		// JButton organizeButton = new JButton("Organize");
 		leftSidePanel.add(organizeButton);
@@ -485,6 +499,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		addRelationshipDialog = new AddRelationship(manager);
 		editRelationshipDialog = new EditRelationship(manager);
 		addClassDialog = new AddClass(manager);
+		addClassDialog.getClassTypeList().setSelectedIndex(0);
 		editClassDialog = new EditClass(manager);
 		addAttributeDialog = new AddAttribute(manager);
 		addOperationDialog = new AddOperation(manager);
