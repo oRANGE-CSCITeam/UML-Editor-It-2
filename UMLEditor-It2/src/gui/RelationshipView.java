@@ -31,47 +31,343 @@ public class RelationshipView {
 	 * @param g
 	 */
 	public void display(Graphics g) {
-		for (int i = 0; i < manager.getRelationList().size(); i++) {
+		if(manager.isOrganize()) {
+			for(int i = 0; i < manager.getRelationList().size(); i++) {
+				
+				manager.getRelationList().get(i).update();
+				g.setColor(Color.black);
+				originX = manager.getRelationList().get(i).getOriginX();
+				originY = manager.getRelationList().get(i).getOriginY();
+				destinationX = manager.getRelationList().get(i).getDestinationX();
+				destinationY = manager.getRelationList().get(i).getDestinationY();
+				origin = manager.getRelationList().get(i).getOrigin();
+				destination = manager.getRelationList().get(i).getDestination();
+				
+				int x1, y1, x2, y2, x3, y3, x4, y4;
+				boolean invert = false;
+				
+				switch (manager.getRelationList().get(i).getRelationshipType()) {
+				case 0:
+					//set up initial extremes of rectangular line with respect to X
+					x1 = Math.min(originX, destinationX);
+					if(x1 == originX) {
+						y1 = originY;
+					} else {
+						y1 = destinationY;
+					}
+					x4 = Math.max(originX, destinationX);
+					if(x4 == originX) {
+						y4 = originY;
+					} else {
+							y4 = destinationY;
+					}
+					x2 = x1 + (x4 - x1) / 2;
+					y2 = y1;
+					x3 = x2;
+					y3 = y4;
+					
+					//Invert rectangular line
+					if(x1 == originX && y1 == originY) {
+						if(y4 < origin.getyPos() - 20 || y4 > origin.getyPos() + origin.getHeight() + 20){
+							invert = true;
+						}
+					} else if(x1 == destinationX && y1 == destinationY) {
+						if(y4 < destination.getyPos() - 20 || y4 > destination.getyPos() + destination.getHeight() + 20) {
+							invert = true;
+						}
+					}
+					if(invert) {
+						y1 = Math.min(originY, destinationY);
+						if(y1 == originY) {
+							x1 = originX;
+						} else {
+							x1 = destinationX;
+						}
+						y4 = Math.max(originY, destinationY);
+						if(y4 == originY) {
+							x4 = originX;
+						} else {
+								x4 = destinationX;
+						}
+						y2 = y1 + (y4 - y1) / 2;
+						x2 = x1;
+						y3 = y2;
+						x3 = x4;
+					}
+					g.drawLine(x1, y1, x2, y2);
+					g.drawLine(x2, y2, x3, y3);
+					g.drawLine(x3, y3, x4, y4);
+					break;
+				case 1:
+					poly = makeTrianglePolygon();
+					
+					originX = poly.xpoints[2];
+					originY = poly.ypoints[2];
+					//set up initial extremes of rectangular line with respect to X
+					x1 = Math.min(originX, destinationX);
+					if(x1 == originX) {
+						y1 = originY;
+					} else {
+						y1 = destinationY;
+					}
+					x4 = Math.max(originX, destinationX);
+					if(x4 == originX) {
+						y4 = originY;
+					} else {
+							y4 = destinationY;
+					}
+					x2 = x1 + (x4 - x1) / 2;
+					y2 = y1;
+					x3 = x2;
+					y3 = y4;
+					
+					//Invert rectangular line
+					if(x1 == originX && y1 == originY) {
+						if(y4 < origin.getyPos() - 20 || y4 > origin.getyPos() + origin.getHeight() + 20){
+							invert = true;
+						}
+					} else if(x1 == destinationX && y1 == destinationY) {
+						if(y4 < destination.getyPos() - 20 || y4 > destination.getyPos() + destination.getHeight() + 20) {
+							invert = true;
+						}
+					}
+					if(invert) {
+						y1 = Math.min(originY, destinationY);
+						if(y1 == originY) {
+							x1 = originX;
+						} else {
+							x1 = destinationX;
+						}
+						y4 = Math.max(originY, destinationY);
+						if(y4 == originY) {
+							x4 = originX;
+						} else {
+								x4 = destinationX;
+						}
+						y2 = y1 + (y4 - y1) / 2;
+						x2 = x1;
+						y3 = y2;
+						x3 = x4;
+					}
+					g.drawLine(x1, y1, x2, y2);
+					g.drawLine(x2, y2, x3, y3);
+					g.drawLine(x3, y3, x4, y4);
+					
+					g.fillPolygon(poly);
+					break;
+				case 2:
+					poly = makeDiamondPolygon();
 
-			manager.getRelationList().get(i).update();
-			g.setColor(Color.black);
-			originX = manager.getRelationList().get(i).getOriginX();
-			originY = manager.getRelationList().get(i).getOriginY();
-			destinationX = manager.getRelationList().get(i).getDestinationX();
-			destinationY = manager.getRelationList().get(i).getDestinationY();
-			origin = manager.getRelationList().get(i).getOrigin();
-			destination = manager.getRelationList().get(i).getDestination();
+					originX = poly.xpoints[2];
+					originY = poly.ypoints[2];
+					//set up initial extremes of rectangular line with respect to X
+					x1 = Math.min(originX, destinationX);
+					if(x1 == originX) {
+						y1 = originY;
+					} else {
+						y1 = destinationY;
+					}
+					x4 = Math.max(originX, destinationX);
+					if(x4 == originX) {
+						y4 = originY;
+					} else {
+							y4 = destinationY;
+					}
+					x2 = x1 + (x4 - x1) / 2;
+					y2 = y1;
+					x3 = x2;
+					y3 = y4;
+					
+					//Invert rectangular line
+					if(x1 == originX && y1 == originY) {
+						if(y4 < origin.getyPos() - 20 || y4 > origin.getyPos() + origin.getHeight() + 20){
+							invert = true;
+						}
+					} else if(x1 == destinationX && y1 == destinationY) {
+						if(y4 < destination.getyPos() - 20 || y4 > destination.getyPos() + destination.getHeight() + 20) {
+							invert = true;
+						}
+					}
+					if(invert) {
+						y1 = Math.min(originY, destinationY);
+						if(y1 == originY) {
+							x1 = originX;
+						} else {
+							x1 = destinationX;
+						}
+						y4 = Math.max(originY, destinationY);
+						if(y4 == originY) {
+							x4 = originX;
+						} else {
+								x4 = destinationX;
+						}
+						y2 = y1 + (y4 - y1) / 2;
+						x2 = x1;
+						y3 = y2;
+						x3 = x4;
+					}
+					g.drawLine(x1, y1, x2, y2);
+					g.drawLine(x2, y2, x3, y3);
+					g.drawLine(x3, y3, x4, y4);
+					g.drawPolygon(poly);
+					break;
+				case 3:
+					poly = makeDiamondPolygon();
 
-			switch (manager.getRelationList().get(i).getRelationshipType()) {
-			case 0:
-				g.drawLine(originX, originY, destinationX, destinationY);
-				break;
-			case 1:
-				poly = makeTrianglePolygon();
-				g.drawLine(poly.xpoints[2], poly.ypoints[2], destinationX,
-						destinationY);
-				g.fillPolygon(poly);
-				break;
-			case 2:
-				poly = makeDiamondPolygon();
-				g.drawLine(poly.xpoints[2], poly.ypoints[2], destinationX,
-						destinationY);
-				g.drawPolygon(poly);
-				break;
-			case 3:
-				poly = makeDiamondPolygon();
-				g.drawLine(poly.xpoints[2], poly.ypoints[2], destinationX,
-						destinationY);
-				g.fillPolygon(poly);
-				break;
-			case 4:
-				poly = makeTrianglePolygon();
-				g.drawLine(poly.xpoints[2], poly.ypoints[2], destinationX,
-						destinationY);
-				g.drawPolygon(poly);
-				break;
+					originX = poly.xpoints[2];
+					originY = poly.ypoints[2];
+					//set up initial extremes of rectangular line with respect to X
+					x1 = Math.min(originX, destinationX);
+					if(x1 == originX) {
+						y1 = originY;
+					} else {
+						y1 = destinationY;
+					}
+					x4 = Math.max(originX, destinationX);
+					if(x4 == originX) {
+						y4 = originY;
+					} else {
+							y4 = destinationY;
+					}
+					x2 = x1 + (x4 - x1) / 2;
+					y2 = y1;
+					x3 = x2;
+					y3 = y4;
+					
+					//Invert rectangular line
+					if(x1 == originX && y1 == originY) {
+						if(y4 < origin.getyPos() - 20 || y4 > origin.getyPos() + origin.getHeight() + 20){
+							invert = true;
+						}
+					} else if(x1 == destinationX && y1 == destinationY) {
+						if(y4 < destination.getyPos() - 20 || y4 > destination.getyPos() + destination.getHeight() + 20) {
+							invert = true;
+						}
+					}
+					if(invert) {
+						y1 = Math.min(originY, destinationY);
+						if(y1 == originY) {
+							x1 = originX;
+						} else {
+							x1 = destinationX;
+						}
+						y4 = Math.max(originY, destinationY);
+						if(y4 == originY) {
+							x4 = originX;
+						} else {
+								x4 = destinationX;
+						}
+						y2 = y1 + (y4 - y1) / 2;
+						x2 = x1;
+						y3 = y2;
+						x3 = x4;
+					}
+					g.drawLine(x1, y1, x2, y2);
+					g.drawLine(x2, y2, x3, y3);
+					g.drawLine(x3, y3, x4, y4);
+					g.fillPolygon(poly);
+					break;
+				case 4:
+					poly = makeTrianglePolygon();
+
+					originX = poly.xpoints[2];
+					originY = poly.ypoints[2];
+					//set up initial extremes of rectangular line with respect to X
+					x1 = Math.min(originX, destinationX);
+					if(x1 == originX) {
+						y1 = originY;
+					} else {
+						y1 = destinationY;
+					}
+					x4 = Math.max(originX, destinationX);
+					if(x4 == originX) {
+						y4 = originY;
+					} else {
+							y4 = destinationY;
+					}
+					x2 = x1 + (x4 - x1) / 2;
+					y2 = y1;
+					x3 = x2;
+					y3 = y4;
+					
+					//Invert rectangular line
+					if(x1 == originX && y1 == originY) {
+						if(y4 < origin.getyPos() - 20 || y4 > origin.getyPos() + origin.getHeight() + 20){
+							invert = true;
+						}
+					} else if(x1 == destinationX && y1 == destinationY) {
+						if(y4 < destination.getyPos() - 20 || y4 > destination.getyPos() + destination.getHeight() + 20) {
+							invert = true;
+						}
+					}
+					if(invert) {
+						y1 = Math.min(originY, destinationY);
+						if(y1 == originY) {
+							x1 = originX;
+						} else {
+							x1 = destinationX;
+						}
+						y4 = Math.max(originY, destinationY);
+						if(y4 == originY) {
+							x4 = originX;
+						} else {
+								x4 = destinationX;
+						}
+						y2 = y1 + (y4 - y1) / 2;
+						x2 = x1;
+						y3 = y2;
+						x3 = x4;
+					}
+					g.drawLine(x1, y1, x2, y2);
+					g.drawLine(x2, y2, x3, y3);
+					g.drawLine(x3, y3, x4, y4);
+					g.drawPolygon(poly);
+					break;
+				}
 			}
-
+		} else {
+			for (int i = 0; i < manager.getRelationList().size(); i++) {
+	
+				manager.getRelationList().get(i).update();
+				g.setColor(Color.black);
+				originX = manager.getRelationList().get(i).getOriginX();
+				originY = manager.getRelationList().get(i).getOriginY();
+				destinationX = manager.getRelationList().get(i).getDestinationX();
+				destinationY = manager.getRelationList().get(i).getDestinationY();
+				origin = manager.getRelationList().get(i).getOrigin();
+				destination = manager.getRelationList().get(i).getDestination();
+	
+				switch (manager.getRelationList().get(i).getRelationshipType()) {
+				case 0:
+					g.drawLine(originX, originY, destinationX, destinationY);
+					break;
+				case 1:
+					poly = makeTrianglePolygon();
+					g.drawLine(poly.xpoints[2], poly.ypoints[2], destinationX,
+							destinationY);
+					g.fillPolygon(poly);
+					break;
+				case 2:
+					poly = makeDiamondPolygon();
+					g.drawLine(poly.xpoints[2], poly.ypoints[2], destinationX,
+							destinationY);
+					g.drawPolygon(poly);
+					break;
+				case 3:
+					poly = makeDiamondPolygon();
+					g.drawLine(poly.xpoints[2], poly.ypoints[2], destinationX,
+							destinationY);
+					g.fillPolygon(poly);
+					break;
+				case 4:
+					poly = makeTrianglePolygon();
+					g.drawLine(poly.xpoints[2], poly.ypoints[2], destinationX,
+							destinationY);
+					g.drawPolygon(poly);
+					break;
+				}
+	
+			}
 		}
 
 	}

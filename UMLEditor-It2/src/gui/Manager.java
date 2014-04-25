@@ -47,6 +47,7 @@ public class Manager {
 	private int classId;
 	
 	private boolean editingClass;
+	private boolean organize;
 
 	public Manager() {
 
@@ -71,6 +72,7 @@ public class Manager {
 		selectedOperation = -1;
 		classId = 0;
 		editingClass = false;
+		organize = true;
 
 	}
 
@@ -998,6 +1000,15 @@ public class Manager {
 		this.addOperationList = addOperationList;
 	}
 	
+	
+
+	public boolean isOrganize() {
+		return organize;
+	}
+
+	public void setOrganize(boolean organize) {
+		this.organize = organize;
+	}
 
 	/**
 	 * The Save and Load functions
