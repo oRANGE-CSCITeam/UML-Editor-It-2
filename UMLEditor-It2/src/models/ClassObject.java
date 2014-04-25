@@ -1,6 +1,11 @@
 package models;
 
+import gui.Manager;
+
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -26,9 +31,12 @@ public class ClassObject implements Serializable {
 	private int yPos;
 	private int width;
 	private int height;
-	private final int widthScale = 8;
 	private Color color;
 	private boolean isSelected;
+	private FontMetrics metrics;
+	private Font font;
+	private Graphics g;
+	private Manager manager;
 
 	/**
 	 * Constructor for the class object
@@ -40,8 +48,8 @@ public class ClassObject implements Serializable {
 	 * @param yPos
 	 *            - the class y-coordinate
 	 */
-	public ClassObject(String newName, int xPos, int yPos, int type) {
-
+	public ClassObject(String newName, int xPos, int yPos, int type, Manager manager) {
+		this.manager = manager;
 		attributes = new ArrayList<Attribute>();
 		operations = new ArrayList<Operation>();
 
@@ -49,8 +57,10 @@ public class ClassObject implements Serializable {
 		this.name = newName;
 		this.xPos = xPos;
 		this.yPos = yPos;
-
-		this.width = setWidth() * widthScale + 10;
+		g = manager.getGui().getView().getGraphics();
+		font = new Font("", Font.PLAIN, 12);
+		metrics = g.getFontMetrics(font);
+		this.width = setWidth() + 10;
 		this.height = 20;
 
 		color = Color.orange;
@@ -69,7 +79,7 @@ public class ClassObject implements Serializable {
 	public void addAttribute(String attributeName, int visibility) {
 		if (!attributeName.equals("")) {
 			attributes.add(new Attribute(attributeName, visibility));
-			this.width = setWidth() * widthScale + 10;
+			this.width = setWidth() + 10;
 			this.height += 20;
 		}
 	}
@@ -82,7 +92,7 @@ public class ClassObject implements Serializable {
 	 */
 	public void removeAttribute(int index) {
 		attributes.remove(index);
-		this.width = setWidth() * widthScale + 10;
+		this.width = setWidth() + 10;
 	}
 
 	/**
@@ -90,7 +100,7 @@ public class ClassObject implements Serializable {
 	 */
 	public void removeAllAtributes() {
 		attributes.clear();
-		this.width = setWidth() * widthScale + 10;
+		this.width = setWidth() + 10;
 	}
 
 	/**
@@ -101,7 +111,7 @@ public class ClassObject implements Serializable {
 	public void addOperation(String operationName, int visibility) {
 		if (!operationName.equals("")) {
 			operations.add(new Operation(operationName, visibility));
-			this.width = setWidth() * widthScale + 10;
+			this.width = setWidth() + 10;
 			this.height += 20;
 		}
 	}
@@ -113,7 +123,7 @@ public class ClassObject implements Serializable {
 	 */
 	public void removeOperation(int index) {
 		operations.remove(index);
-		this.width = setWidth() * widthScale + 10;
+		this.width = setWidth() + 10;
 	}
 
 	/**
@@ -121,7 +131,7 @@ public class ClassObject implements Serializable {
 	 */
 	public void removeAllOperations() {
 		operations.clear();
-		this.width = setWidth() * widthScale + 10;
+		this.width = setWidth() + 10;
 	}
 
 	/**
@@ -236,13 +246,13 @@ public class ClassObject implements Serializable {
 		int max = 0;
 		int setMax = 0;
 		if (attributes.size() > 0) {
-			setMax = attributes.get(max).getAttributeName().length();
+			setMax = metrics.stringWidth("+ " + attributes.get(max).getAttributeName());
 		}
 		for (int i = 0; i < attributes.size(); i++)
-			if (attributes.get(i).getAttributeName().length() >= attributes
-					.get(max).getAttributeName().length()) {
+			if (metrics.stringWidth("+ " + attributes.get(i).getAttributeName()) >= metrics.stringWidth("+ " + attributes
+					.get(max).getAttributeName())) {
 				max = i;
-				setMax = attributes.get(max).getAttributeName().length();
+				setMax = metrics.stringWidth("+ " + attributes.get(max).getAttributeName());
 			}
 		return setMax;
 	}
@@ -256,13 +266,13 @@ public class ClassObject implements Serializable {
 		int max = 0;
 		int setMax = 0;
 		if (operations.size() > 0) {
-			setMax = operations.get(max).getOperationName().length();
+			setMax = metrics.stringWidth("+ " + operations.get(max).getOperationName());
 		}
 		for (int i = 0; i < operations.size(); i++)
-			if (operations.get(i).getOperationName().length() >= operations
-					.get(max).getOperationName().length()) {
+			if (metrics.stringWidth("+ " + operations.get(i).getOperationName()) >= metrics.stringWidth("+ " + operations
+					.get(max).getOperationName())) {
 				max = i;
-				setMax = operations.get(max).getOperationName().length();
+				setMax = metrics.stringWidth("+ " + operations.get(max).getOperationName());
 			}
 		return setMax;
 	}
@@ -273,7 +283,7 @@ public class ClassObject implements Serializable {
 	 * @return
 	 */
 	public int setWidth() {
-		int max = Math.max(name.length(), getLongestAttribute());
+		int max = Math.max(metrics.stringWidth(name), getLongestAttribute());
 		return Math.max(max, getLongestOperation());
 	}
 	
@@ -288,7 +298,7 @@ public class ClassObject implements Serializable {
 		int tempY = yPos;
 		int tempType = type;
 		int tempId = id;
-		ClassObject tempClass = new ClassObject(tempName, tempX, tempY, tempType);
+		ClassObject tempClass = new ClassObject(tempName, tempX, tempY, tempType, manager);
 		
 		if(attributes.size() > 0) {
 			for(int i = 0; i < attributes.size(); i++) {

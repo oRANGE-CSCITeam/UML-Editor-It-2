@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -90,6 +91,11 @@ public class ClassObjectView {
 			case 2:
 				font = new Font("", Font.PLAIN, 12);
 				g.setFont(font);
+				FontMetrics metrics = g.getFontMetrics(font);
+				int underlineWidth = metrics.stringWidth(theList.get(i).getName());
+				int underlineX = theList.get(i).getxPos() + 5;
+				int underlineY = theList.get(i).getyPos() + 15;
+				g.drawLine(underlineX, underlineY, underlineX + underlineWidth, underlineY);
 				break;
 				
 			}
