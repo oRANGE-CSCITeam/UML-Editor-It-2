@@ -130,6 +130,7 @@ public class EditorView extends JPanel implements MouseListener,
 			}
 			manager.getGui().getDelete().setEnabled(false);
 			manager.getGui().getCopy().setEnabled(false);
+			manager.getGui().getEdit().setEnabled(false);
 			
 			manager.getGui().getPopUpMenu().show(me.getComponent(), me.getX(), me.getY());
 			manager.setAddClassX(me.getX());
@@ -161,6 +162,7 @@ public class EditorView extends JPanel implements MouseListener,
 				if (me.isPopupTrigger()) {
 					manager.getGui().getCopy().setEnabled(true);
 					manager.getGui().getDelete().setEnabled(true);
+					manager.getGui().getEdit().setEnabled(true);
 					manager.getGui().getPopUpMenu()
 							.show(me.getComponent(), me.getX(), me.getY());
 					manager.getObjController().setIsDraggingWho(i);
@@ -222,6 +224,23 @@ public class EditorView extends JPanel implements MouseListener,
 			manager.getObjController().setIsDraggingWho(-1);
 			manager.getObjController().setDragging(false);
 		}
+		
+		//For bring the popUpmenu if right clicked on white space
+				if(me.isPopupTrigger()) {
+					if(manager.getCopyObjectStack().isEmpty()) {
+						manager.getGui().getPaste().setEnabled(false);
+					} else {
+						manager.getGui().getPaste().setEnabled(true);
+					}
+					manager.getGui().getDelete().setEnabled(false);
+					manager.getGui().getCopy().setEnabled(false);
+					manager.getGui().getEdit().setEnabled(false);
+					
+					manager.getGui().getPopUpMenu().show(me.getComponent(), me.getX(), me.getY());
+					manager.setAddClassX(me.getX());
+					manager.setAddClassY(me.getY());
+				}
+				repaint();
 
 		// For popUpMenu in other platforms
 		for (int i = 0; i < manager.getClassObjectList().size(); i++) {
