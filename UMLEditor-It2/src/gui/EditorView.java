@@ -256,6 +256,9 @@ public class EditorView extends JPanel implements MouseListener,
 							+ manager.getClassObjectList().get(i).getyPos())) {
 				// Show the pop up menu and select
 				if (me.isPopupTrigger()) {
+					manager.getGui().getDelete().setEnabled(true);
+					manager.getGui().getCopy().setEnabled(true);
+					manager.getGui().getEdit().setEnabled(true);
 					manager.getGui().getPopUpMenu()
 							.show(me.getComponent(), me.getX(), me.getY());
 					manager.getObjController().setIsDraggingWho(i);
@@ -264,6 +267,7 @@ public class EditorView extends JPanel implements MouseListener,
 							.get(manager.getObjController()
 									.getSelectedClassObject())
 							.setIsSelected(true);
+					
 					repaint();
 				}
 			}

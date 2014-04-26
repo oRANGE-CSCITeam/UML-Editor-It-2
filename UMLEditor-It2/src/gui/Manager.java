@@ -142,7 +142,9 @@ public class Manager {
 		} else {
 			copyObjectStack.peek().setxPos(addClassX);
 			copyObjectStack.peek().setyPos(addClassY);
-			classObjectList.add(copyObjectStack.peek().copy());
+			ClassObject tempClass = copyObjectStack.peek().copy();
+			tempClass.setColor(copyObjectStack.peek().getColor());
+			classObjectList.add(tempClass);
 		}
 
 		// Add to undo Manager
