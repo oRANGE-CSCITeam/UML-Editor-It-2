@@ -1,9 +1,12 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+
+import javax.swing.JColorChooser;
 
 class EditClass extends javax.swing.JFrame {
 	private Manager manager;
@@ -111,7 +114,12 @@ class EditClass extends javax.swing.JFrame {
 		colorButton.setText("Color");
 		colorButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				// Add color function
+				
+				Color selectedColor = JColorChooser.showDialog(manager.getGui().getEditClassDialog(), "Pick a Color", Color.orange);
+				if(selectedColor != null) {
+					manager.setClassColor(selectedColor);
+					manager.setEditedColor(true);
+				}
 			}
 		});
 

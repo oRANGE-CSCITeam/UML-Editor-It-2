@@ -4,6 +4,7 @@
 
 package gui;
 
+import java.awt.Color;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -52,11 +53,14 @@ public class Manager {
 	private String projectName;
 	private int canvasWidth;
 	private int canvasHeight;
+	private Color classColor;
+	private boolean editedColor;
 
 	public Manager() {
 		projectName ="";
 		canvasWidth = 0;
 		canvasHeight = 0;
+		editedColor = false;
 		
 		gui = new Gui(this);
 
@@ -80,6 +84,9 @@ public class Manager {
 		classId = 0;
 		editingClass = false;
 		organize = false;
+		classColor = Color.orange;
+		
+		
 
 	}
 
@@ -118,6 +125,8 @@ public class Manager {
 		ClassObject tempClass = classObjectList.get(
 				objController.getSelectedClassObject()).copy();
 		tempClass.setId(classId);
+		tempClass.setColor(classObjectList.get(
+				objController.getSelectedClassObject()).getColor());
 		classId++;
 		copyObjectStack.push(tempClass);
 	}
@@ -643,7 +652,10 @@ public class Manager {
 						.getVisibility());
 			}
 			addOperationList.clear();
-
+				
+			tempClass.setColor(classColor);
+			classColor = Color.orange;
+			
 			classObjectList.add(tempClass);
 
 			if (undoRedoManager.getRedo().size() > 0) {
@@ -698,6 +710,7 @@ public class Manager {
 					gui.getEditClassDialog().getClassTypeList()
 							.getSelectedIndex(), this);
 			tempClass.setId(classObjectList.get(objController.getSelectedClassObject()).getId());
+			tempClass.setColor(classObjectList.get(objController.getSelectedClassObject()).getColor());
 			// Add all the attributes from the list
 			for (int i = 0; i < addAttributeList.size(); i++) {
 				tempClass.addAttribute(addAttributeList.get(i)
@@ -713,7 +726,11 @@ public class Manager {
 						.getVisibility());
 			}
 			addOperationList.clear();
-			
+			if(editedColor) {
+				tempClass.setColor(classColor);
+				classColor = Color.orange;
+				editedColor = false;
+			}
 			undoRedoManager.setEditedClassIndex(objController.getSelectedClassObject());
 			undoRedoManager.getClassObjectStack().push(classObjectList.get(objController.getSelectedClassObject()));
 			classObjectList.set(objController.getSelectedClassObject(), tempClass);
@@ -1055,6 +1072,25 @@ public class Manager {
 
 	public void setCopyObjectStack(Stack<ClassObject> copyObjectStack) {
 		this.copyObjectStack = copyObjectStack;
+	}
+	
+	
+	public Color getClassColor() {
+		return classColor;
+	}
+
+	public void setClassColor(Color classColor) {
+		this.classColor = classColor;
+	}
+	
+	
+
+	public boolean isEditedColor() {
+		return editedColor;
+	}
+
+	public void setEditedColor(boolean editedColor) {
+		this.editedColor = editedColor;
 	}
 
 	/**

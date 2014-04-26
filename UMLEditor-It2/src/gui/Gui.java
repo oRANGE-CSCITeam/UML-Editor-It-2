@@ -26,6 +26,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -71,7 +72,8 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	private ProjectDialog projectDialog;
 	private JTabbedPane viewTab;
 	
-	JFileChooser exportFile;
+	private JFileChooser exportFile;
+	private JColorChooser colorDialog;
 
 	public Gui(Manager manager1) {
 
@@ -563,7 +565,9 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		leftSidePanel.add(organizeButton);
 
 		// Create new instance of dialogs
+		colorDialog = new JColorChooser();
 		projectDialog = new ProjectDialog(manager);
+		projectDialog.setLocation(getX() + 300, getY() + 200);
 		addRelationshipDialog = new AddRelationship(manager);
 		editRelationshipDialog = new EditRelationship(manager);
 		addClassDialog = new AddClass(manager);
@@ -696,6 +700,14 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 
 	public void setView(EditorView view) {
 		this.view = view;
+	}
+
+	public JColorChooser getColorDialog() {
+		return colorDialog;
+	}
+
+	public void setColorDialog(JColorChooser colorDialog) {
+		this.colorDialog = colorDialog;
 	}
 	
 	

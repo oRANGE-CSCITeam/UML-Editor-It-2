@@ -23,7 +23,6 @@ public class ClassObjectView {
 
 	public ClassObjectView(Manager manager) {
 		// this.manager = manager;
-		theColor = Color.orange;
 		theList = manager.getClassObjectList();
 
 	}
@@ -41,7 +40,7 @@ public class ClassObjectView {
 					theList.get(i).getyPos() + 3, theList.get(i).getWidth(),
 					theList.get(i).getHeight());
 
-			g.setColor(theColor);
+			g.setColor(theList.get(i).getColor());
 			g.fillRect(theList.get(i).getxPos(), theList.get(i).getyPos(),
 					theList.get(i).getWidth(), theList.get(i).getHeight());
 

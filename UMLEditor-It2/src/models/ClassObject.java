@@ -63,7 +63,7 @@ public class ClassObject implements Serializable {
 		this.width = setWidth() + 10;
 		this.height = 20;
 
-		color = Color.orange;
+		color = manager.getClassColor();
 		isSelected = false;
 	}
 
