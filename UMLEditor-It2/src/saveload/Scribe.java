@@ -46,9 +46,7 @@ public class Scribe {
 		ArrayList<Attribute> attributes;
 		ArrayList<Operation> operations;
 		int xPos;
-		int yPos;
-		int width;
-		int height;
+		int yPos;		
 		Color color;
 
 		/*
@@ -64,9 +62,7 @@ public class Scribe {
 			attributes = sourceCO.getAttributes();
 			operations = sourceCO.getOperations();
 			xPos = sourceCO.getxPos();
-			yPos = sourceCO.getyPos();
-			width = sourceCO.getWidth();
-			height = sourceCO.getHeight();
+			yPos = sourceCO.getyPos();			
 			color = sourceCO.getColor();
 
 			COmodel targetCLM = new COmodel(name, id, type, attributes,
