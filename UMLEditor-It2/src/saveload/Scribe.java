@@ -167,7 +167,18 @@ public class Scribe {
 	}
 
 	private ClassObject CLSeeker(int oID) {
-		// TODO Auto-generated method stub
+		/**
+		 *  Walks the list of ClassObjects and returns the one
+		 *  with the matching ID number
+		 */
+		ClassObject target;
+		for (int i = 0; i <managerListC.size(); i++)
+		{
+			target = managerListC.get(i);
+			if (oID == target.getId()){
+				return target;
+			}
+		}
 		return null;
 	}
 

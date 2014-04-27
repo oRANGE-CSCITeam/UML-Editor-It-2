@@ -10,11 +10,11 @@ public class COmodel implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static String name;
-	private static int id;
-	private static int type;
-	private static ArrayList<Attribute> attributes;
-	private static ArrayList<Operation> operations;
+	private String name;
+	private int id;
+	private int type;
+	private ArrayList<Attribute> attributes;
+	private ArrayList<Operation> operations;
 
 	private static int xPos;
 	private static int yPos;
@@ -34,36 +34,36 @@ public class COmodel implements Serializable {
 
 	}
 	
-	public static String getName(){
+	public String getName(){
 		return name;
 	}
 	
-	public static int getId(){
+	public int getId(){
 		return id;
 	}
 	
-	public static int getType(){
+	public int getType(){
 		return type;
 	}
 	
-	public static ArrayList<Attribute> getAttributes(){
+	public ArrayList<Attribute> getAttributes(){
 		return attributes;
 	}
 	
-	public static ArrayList<Operation> getOperations(){
+	public ArrayList<Operation> getOperations(){
 		return operations;
 	}
 	
-	public static int getX(){
+	public int getX(){
 		return xPos;
 	}
 	
-	public static int getY(){
+	public int getY(){
 		return yPos;
 	}	
 	
 		
-	public static Color getColor(){
+	public Color getColor(){
 		return color;
 	}
 
