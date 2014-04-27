@@ -273,14 +273,6 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 				BufferedImage bi= new BufferedImage(view.getWidth(), view.getHeight(), BufferedImage.TYPE_INT_RGB);;
 				view.printAll(bi.getGraphics());
 				
-				/**
-				try {
-					bi = new Robot().createScreenCapture(new Rectangle(view.getLocationOnScreen().x, view.getLocationOnScreen().y, view.getWidth(), view.getHeight()));
-				} catch (AWTException e1) {
-					
-					e1.printStackTrace();
-				}
-				*/
 				int returnVal = exportFile.showSaveDialog(Gui.this);
 				
 				
@@ -296,21 +288,10 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 				{ 
 					  
 					
-					exportFile.setVisible(false);
-					
-						/**
-						try {
-							ImageIO.write(bi,"jpg",imageFile);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						*/
-					
 				}
 				
 			}
-				//exportFile.showSaveDialog(Gui.this);
+			
 			
 		});
 		
