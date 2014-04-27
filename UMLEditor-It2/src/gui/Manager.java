@@ -33,7 +33,7 @@ public class Manager {
 	private ArrayList<Operation> addOperationList;
 	private ArrayList<Integer> deleteRelationIndex;
 	private Stack<ClassObject> copyObjectStack;
-	private static String savePath = "UML.ser";
+	public static String savePath = "UML.ser";
 
 	// Declare the Undo/Redo manager
 	private UndoRedoManager undoRedoManager;
@@ -1110,5 +1110,9 @@ public class Manager {
 	}
 	public void load(){
 		scribe.load();
+	}
+	public void saveAs(String newSavePath){
+		savePath = newSavePath;
+		scribe.save();
 	}
 }

@@ -3,6 +3,12 @@ package saveload;
 import gui.Manager;
 
 import java.awt.Color;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import models.Attribute;
@@ -26,6 +32,26 @@ public class Scribe {
 
 	}
 
+	private void read() throws FileNotFoundException, IOException,
+			ClassNotFoundException {
+		ObjectInputStream reader = new ObjectInputStream(new FileInputStream(
+				manager.savePath));
+		scribeListC = (ArrayList<COmodel>) reader.readObject();
+		scribeListR = (ArrayList<RLmodel>) reader.readObject();
+		reader.close();
+
+	}
+
+	private void write() throws FileNotFoundException, IOException {
+
+		ObjectOutputStream writer = new ObjectOutputStream(
+				new FileOutputStream(manager.savePath));
+
+		writer.writeObject(scribeListC);
+		writer.writeObject(scribeListR);
+		writer.close();
+	}
+
 	private void serialConverter() {
 		/**
 		 * Creates a COmodel that holds all the key data in ClassObject for
@@ -46,7 +72,7 @@ public class Scribe {
 		ArrayList<Attribute> attributes;
 		ArrayList<Operation> operations;
 		int xPos;
-		int yPos;		
+		int yPos;
 		Color color;
 
 		/*
@@ -62,7 +88,7 @@ public class Scribe {
 			attributes = sourceCO.getAttributes();
 			operations = sourceCO.getOperations();
 			xPos = sourceCO.getxPos();
-			yPos = sourceCO.getyPos();			
+			yPos = sourceCO.getyPos();
 			color = sourceCO.getColor();
 
 			COmodel targetCLM = new COmodel(name, id, type, attributes,
@@ -102,7 +128,7 @@ public class Scribe {
 		ArrayList<Attribute> attributes;
 		ArrayList<Operation> operations;
 		int xPos;
-		int yPos;		
+		int yPos;
 		Color color;
 
 		/*
@@ -150,11 +176,12 @@ public class Scribe {
 			oID = RLmodel.getOriginId();
 			dID = RLmodel.getDestinationId();
 			typeR = RLmodel.getType();
-			
+
 			ClassObject origin = CLSeeker(oID);
 			ClassObject destination = CLSeeker(dID);
 
-			Relationship newRL = new Relationship(origin, destination, typeR, manager);
+			Relationship newRL = new Relationship(origin, destination, typeR,
+					manager);
 			managerListR.add(newRL);
 		}
 
@@ -162,14 +189,13 @@ public class Scribe {
 
 	private ClassObject CLSeeker(int oID) {
 		/**
-		 *  Walks the list of ClassObjects and returns the one
-		 *  with the matching ID number
+		 * Walks the list of ClassObjects and returns the one with the matching
+		 * ID number
 		 */
 		ClassObject target;
-		for (int i = 0; i <managerListC.size(); i++)
-		{
+		for (int i = 0; i < managerListC.size(); i++) {
 			target = managerListC.get(i);
-			if (oID == target.getId()){
+			if (oID == target.getId()) {
 				return target;
 			}
 		}
@@ -178,9 +204,31 @@ public class Scribe {
 
 	public void save() {
 		serialConverter();
-		
+		try {
+			write();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
+
 	public void load() {
+		try {
+			read();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		deserialConverter();
 	}
 
