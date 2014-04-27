@@ -12,5 +12,6 @@ public class CitruxUMLEditor {
 		SplashScreen splash = new SplashScreen(2500);
 		splash.showSplash();
 		Manager.main(args);
+		
 	}
 }
