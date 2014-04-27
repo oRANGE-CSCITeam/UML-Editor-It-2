@@ -13,20 +13,20 @@ import models.RLmodel;
 import models.Relationship;
 
 public class Scribe {
-	private ArrayList<COmodel> targetListC = new ArrayList<COmodel>();
-	private ArrayList<RLmodel> targetListR = new ArrayList<RLmodel>();
-	private ArrayList<ClassObject> sourceListC = new ArrayList<ClassObject>();
-	private ArrayList<Relationship> sourceListR = new ArrayList<Relationship>();
+	private ArrayList<COmodel> scribeListC = new ArrayList<COmodel>();
+	private ArrayList<RLmodel> scribeListR = new ArrayList<RLmodel>();
+	private ArrayList<ClassObject> managerListC = new ArrayList<ClassObject>();
+	private ArrayList<Relationship> managerListR = new ArrayList<Relationship>();
 	private Manager manager;
 
 	public Scribe(Manager m) {
 		this.manager = m;
-		sourceListC = manager.getClassObjectList();
-		sourceListR = manager.getRelationList();
+		managerListC = manager.getClassObjectList();
+		managerListR = manager.getRelationList();
 
 	}
 
-	public void serialConverter() {
+	private void serialConverter() {
 		/**
 		 * Creates a COmodel that holds all the key data in ClassObject for
 		 * serialization Very simple method, just sets all the constructor
@@ -36,8 +36,8 @@ public class Scribe {
 		 * Then repeats for Relationship to RLmodel.
 		 */
 
-		targetListC.clear();
-		targetListR.clear();
+		scribeListC.clear();
+		scribeListR.clear();
 
 		// ClassObject Variables to be stored
 		String name;
@@ -51,8 +51,13 @@ public class Scribe {
 		int height;
 		Color color;
 
-		for (int i = 0; i < sourceListC.size(); i++) {
-			ClassObject sourceCO = sourceListC.get(i);
+		/*
+		 * Walks the list of Classobjects and extracts the information for
+		 * storage in a serializable CLmodel
+		 */
+
+		for (int i = 0; i < managerListC.size(); i++) {
+			ClassObject sourceCO = managerListC.get(i);
 			name = sourceCO.getName();
 			id = sourceCO.getId();
 			type = sourceCO.getType();
@@ -65,24 +70,109 @@ public class Scribe {
 			color = sourceCO.getColor();
 
 			COmodel targetCLM = new COmodel(name, id, type, attributes,
-					operations, xPos, yPos, width, height, color);
-			targetListC.add(targetCLM);
+					operations, xPos, yPos, color);
+			scribeListC.add(targetCLM);
 		}
-		
-		
-		//Relationship Variables to be stored
+
+		// Relationship Variables to be stored, works as the above loop.
 		int oID;
 		int dID;
 		int typeR;
-		for (int i = 0; i < sourceListR.size(); i++){
-			Relationship sourceRL = sourceListR.get(i);
+		for (int i = 0; i < managerListR.size(); i++) {
+			Relationship sourceRL = managerListR.get(i);
 			oID = sourceRL.getOriginId();
 			dID = sourceRL.getDestinationId();
 			typeR = sourceRL.getRelationshipType();
 			RLmodel targetRLM = new RLmodel(oID, dID, typeR);
-			targetListR.add(targetRLM);
+			scribeListR.add(targetRLM);
 		}
 
+	}
+
+	private void deserialConverter() {
+		/**
+		 * Creates a ClassObject that holds all the key data in each COmodel
+		 * 
+		 * Then repeats for RLmodel to Relationship.
+		 */
+
+		managerListC.clear();
+		managerListR.clear();
+
+		// ClassObject Variables to be stored
+		String name;
+		int id;
+		int type;
+		ArrayList<Attribute> attributes;
+		ArrayList<Operation> operations;
+		int xPos;
+		int yPos;
+		int width;
+		int height;
+		Color color;
+
+		/*
+		 * Walks the list of Classobjects and extracts the information for
+		 * storage in a serializable CLmodel
+		 */
+
+		for (int i = 0; i < scribeListC.size(); i++) {
+
+			COmodel sourceCO = scribeListC.get(i);
+			// Constructor Variables
+			name = sourceCO.getName();
+			xPos = sourceCO.getX();
+			yPos = sourceCO.getY();
+			type = sourceCO.getType();
+			// Non-Constructor information
+			id = sourceCO.getId();
+			color = sourceCO.getColor();
+			attributes = sourceCO.getAttributes();
+			operations = sourceCO.getOperations();
+
+			ClassObject newCL = new ClassObject(name, xPos, yPos, type, manager);
+			// Setting Non-Constructor information
+			newCL.setId(id);
+			newCL.setColor(color);
+			for (int j = 0; j < attributes.size(); j++) {
+				newCL.addAttribute(attributes.get(j).getAttributeName(),
+						attributes.get(j).getVisibility());
+			}
+			for (int j = 0; j < operations.size(); j++) {
+				newCL.addOperation(operations.get(j).getOperationName(),
+						operations.get(j).getVisibility());
+			}
+
+			managerListC.add(newCL);
+		}
+
+		// Relationship Variables to be stored, works as the above loop.
+		int oID;
+		int dID;
+		int typeR;
+		for (int i = 0; i < scribeListR.size(); i++) {
+
+			RLmodel sourceRL = scribeListR.get(i);
+			oID = RLmodel.getOriginId();
+			dID = RLmodel.getDestinationId();
+			typeR = RLmodel.getType();
+			
+			ClassObject origin = CLSeeker(oID);
+			ClassObject destination = CLSeeker(dID);
+
+//			Relationship sourceRL = sourceListR.get(i);
+//			oID = sourceRL.getOriginId();
+//			dID = sourceRL.getDestinationId();
+//			typeR = sourceRL.getRelationshipType();
+//			RLmodel targetRLM = new RLmodel(oID, dID, typeR);
+//			targetListR.add(targetRLM);
+		}
+
+	}
+
+	private ClassObject CLSeeker(int oID) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

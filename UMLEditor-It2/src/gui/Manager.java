@@ -55,8 +55,7 @@ public class Manager {
 	private int canvasWidth;
 	private int canvasHeight;
 	private Color classColor;
-	private boolean editedColor;
-	
+	private boolean editedColor;	
 	private Scribe scribe;
 
 	public Manager() {

@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class RLmodel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private int originId;
-	private int destinationId;
-	private int rType;
+	private static int originId;
+	private static int destinationId;
+	private static int rType;
 
 	public RLmodel(int oId, int dId, int rT) {
 		originId = oId;
@@ -16,17 +16,17 @@ public class RLmodel implements Serializable {
 
 	}
 
-	public int getoriginId() {
+	public static int getOriginId() {
 
 		return originId;
 	}
 
-	public int getDestinationId() {
+	public static int getDestinationId() {
 
 		return destinationId;
 	}
 
-	public int getType() {
+	public static int getType() {
 
 		return rType;
 	}
