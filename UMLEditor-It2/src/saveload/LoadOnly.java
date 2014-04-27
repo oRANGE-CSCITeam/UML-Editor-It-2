@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import models.Attribute;
 import models.ClassObject;
-import models.Datamodel;
 import models.Operation;
 import models.Relationship;
 
