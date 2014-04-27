@@ -176,4 +176,12 @@ public class Scribe {
 		return null;
 	}
 
+	public void save() {
+		serialConverter();
+		
+	}
+	public void load() {
+		deserialConverter();
+	}
+
 }

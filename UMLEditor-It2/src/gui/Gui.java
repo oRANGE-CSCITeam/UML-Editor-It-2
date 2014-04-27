@@ -71,7 +71,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	private JMenuItem export;
 	private ProjectDialog projectDialog;
 	private JTabbedPane viewTab;
-	
+
 	private JFileChooser exportFile;
 	private JColorChooser colorDialog;
 
@@ -104,78 +104,87 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		properties = new JMenuItem("Properties", KeyEvent.VK_T);
 		JPanel leftSidePanel = new JPanel();
 		view = new EditorView(manager);
-		
+
 		view.setBackground(Color.white);
-		view.setPreferredSize(new Dimension(manager.getCanvasWidth(), manager.getCanvasHeight()));
-		
-		
+		view.setPreferredSize(new Dimension(manager.getCanvasWidth(), manager
+				.getCanvasHeight()));
+
 		JPanel outerPanel = new JPanel();
 		outerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		outerPanel.add(view);
 		scrollContainer = new JScrollPane(outerPanel);
-		
+
 		viewTab = new JTabbedPane();
 		viewTab.addTab(manager.getProjectName(), scrollContainer);
-		
+
 		exportFile = new JFileChooser();
-		exportFile.setFileFilter(new FileNameExtensionFilter("JPEG File", "jpg"));
+		exportFile
+				.setFileFilter(new FileNameExtensionFilter("JPEG File", "jpg"));
 
 		popUpMenu = new JPopupMenu();
 		selectButton = new JToggleButton();
 		selectButton.setToolTipText("Select");
 		try {
-		selectButton.setIcon(new ImageIcon(getClass().getResource("selectButton-01.png")));
-		} catch(NullPointerException e) {
+			selectButton.setIcon(new ImageIcon(getClass().getResource(
+					"selectButton-01.png")));
+		} catch (NullPointerException e) {
 		}
-		
+
 		JButton undoButton = new JButton();
 		try {
-		undoButton.setIcon(new ImageIcon(getClass().getResource("old_edit_undo.png")));
-		} catch(NullPointerException e) {
+			undoButton.setIcon(new ImageIcon(getClass().getResource(
+					"old_edit_undo.png")));
+		} catch (NullPointerException e) {
 		}
 		JButton redoButton = new JButton();
 		try {
-		redoButton.setIcon(new ImageIcon(getClass().getResource("old_edit_redo.png")));
-		} catch(NullPointerException e) {
+			redoButton.setIcon(new ImageIcon(getClass().getResource(
+					"old_edit_redo.png")));
+		} catch (NullPointerException e) {
 		}
 		JButton test = new JButton("Test");
-		
+
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new BorderLayout());
 
 		classButton = new JToggleButton();
 		classButton.setToolTipText("Add a Class");
 		try {
-			classButton.setIcon(new ImageIcon(getClass().getResource("addObjectButton-01.png")));
-			} catch(NullPointerException e) {
-			}
+			classButton.setIcon(new ImageIcon(getClass().getResource(
+					"addObjectButton-01.png")));
+		} catch (NullPointerException e) {
+		}
 		relationshipButton = new JToggleButton();
 		relationshipButton.setToolTipText("Create Relationship");
 		try {
-			relationshipButton.setIcon(new ImageIcon(getClass().getResource("addRelationButton-01.png")));
-			} catch(NullPointerException e) {
-			}
+			relationshipButton.setIcon(new ImageIcon(getClass().getResource(
+					"addRelationButton-01.png")));
+		} catch (NullPointerException e) {
+		}
 		organizeButton = new JButton();
 		organizeButton.setToolTipText("Organize");
 		try {
-			organizeButton.setIcon(new ImageIcon(getClass().getResource("organizeButton-01.png")));
-			} catch(NullPointerException e) {
-			}
+			organizeButton.setIcon(new ImageIcon(getClass().getResource(
+					"organizeButton-01.png")));
+		} catch (NullPointerException e) {
+		}
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.getContentPane();
 		// frame.setSize(1000, 500);
-		//this.setExtendedState(this.getExtendedState() | Frame.MAXIMIZED_BOTH);
+		// this.setExtendedState(this.getExtendedState() |
+		// Frame.MAXIMIZED_BOTH);
 		this.add(viewTab, BorderLayout.CENTER);
 		this.setLocation(300, 200);
-		this.setSize(800,600);
-		
+		this.setSize(800, 600);
+
 		// --set initial window positions-------------
 		// Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		// frame.setLocation((dim.width-frame.getWidth()),
 		// (dim.height-frame.getHeight()));
 		// frame.setSize(dim.width, dim.height);
-		//this.setExtendedState(this.getExtendedState() | Frame.MAXIMIZED_BOTH);
+		// this.setExtendedState(this.getExtendedState() |
+		// Frame.MAXIMIZED_BOTH);
 
 		// creates the Menu Bar
 		// JMenuBar darkGrayMenuBar = new JMenuBar();
@@ -231,7 +240,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		newMI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
 				ActionEvent.ALT_MASK));
 		fileMenu.add(newMI);
-		
+
 		newMI.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				manager.getClassObjectList().clear();
@@ -249,53 +258,64 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 				projectDialog.setVisible(true);
 			}
 		});
-		
-		
 
 		// open
 		// JMenuItem Open = new JMenuItem("Open", KeyEvent.VK_T);
 		open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
 				ActionEvent.ALT_MASK));
 		fileMenu.add(open);
+		open.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				manager.load();
+				view.repaint();
+
+			}
+		});
 
 		// save
 		// JMenuItem Save = new JMenuItem("Save", KeyEvent.VK_T);
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				ActionEvent.ALT_MASK));
 		fileMenu.add(save);
-		
-		//Adds Export to the fileMenu
+		save.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				manager.save();
+
+			}
+		});
+
+		// Adds Export to the fileMenu
 		fileMenu.add(export);
-		export.addActionListener(new ActionListener(){
-			
+		export.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent evt) {
-			
-				BufferedImage bi= new BufferedImage(view.getWidth(), view.getHeight(), BufferedImage.TYPE_INT_RGB);;
+
+				BufferedImage bi = new BufferedImage(view.getWidth(), view
+						.getHeight(), BufferedImage.TYPE_INT_RGB);
+				;
 				view.printAll(bi.getGraphics());
-				
+
 				int returnVal = exportFile.showSaveDialog(Gui.this);
-				
-				
+
 				File imageFile;
 				imageFile = new File(exportFile.getSelectedFile() + ".jpg");
 				try {
-					ImageIO.write(bi,"jpg",imageFile);
+					ImageIO.write(bi, "jpg", imageFile);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if(returnVal == JFileChooser.APPROVE_OPTION) 
-				{ 
-					  
-					
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+
 				}
-				
+
 			}
-			
-			
+
 		});
-		
-		
 
 		// quit
 		// JMenuItem Quit = new JMenuItem("Quit", KeyEvent.VK_T);
@@ -371,19 +391,21 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		clear.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
 				ActionEvent.CTRL_MASK));
 		editMenu.add(clear);
-		
-		
-		//Project Properties
-		
+
+		// Project Properties
+
 		properties.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
 				ActionEvent.CTRL_MASK));
 		editMenu.addSeparator();
 		editMenu.add(properties);
 		properties.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				projectDialog.getNameTextField().setText(manager.getProjectName());
-				projectDialog.getWidthTextField().setText(Integer.toString(manager.getCanvasWidth()));
-				projectDialog.getHeightTextField().setText(Integer.toString(manager.getCanvasHeight()));
+				projectDialog.getNameTextField().setText(
+						manager.getProjectName());
+				projectDialog.getWidthTextField().setText(
+						Integer.toString(manager.getCanvasWidth()));
+				projectDialog.getHeightTextField().setText(
+						Integer.toString(manager.getCanvasHeight()));
 				projectDialog.setVisible(true);
 			}
 		});
@@ -398,64 +420,83 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 				manager.deleteClass();
 			}
 		});
-		
-		//Edit menu item for editig class objects
+
+		// Edit menu item for editig class objects
 		edit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
 				ActionEvent.CTRL_MASK));
 		edit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				
-				ClassObject tempClass = manager.getClassObjectList().get(manager.getObjController().getSelectedClassObject()).copy();
-				editClassDialog.getClassNameTextField().setText(tempClass.getName());
-				editClassDialog.getClassTypeList().setSelectedIndex(tempClass.getType());
-				
-				//This is to make the list in edit class to appear with the classes attributes
-				String[] tempAttributeList = new String[tempClass.getAttributes().size()];
-				for(int i = 0; i < tempAttributeList.length; i++) {
+
+				ClassObject tempClass = manager
+						.getClassObjectList()
+						.get(manager.getObjController()
+								.getSelectedClassObject()).copy();
+				editClassDialog.getClassNameTextField().setText(
+						tempClass.getName());
+				editClassDialog.getClassTypeList().setSelectedIndex(
+						tempClass.getType());
+
+				// This is to make the list in edit class to appear with the
+				// classes attributes
+				String[] tempAttributeList = new String[tempClass
+						.getAttributes().size()];
+				for (int i = 0; i < tempAttributeList.length; i++) {
 					switch (tempClass.getAttributes().get(i).getVisibility()) {
 					case 0:
 						tempAttributeList[i] = "+ "
-								+ tempClass.getAttributes().get(i).getAttributeName();
+								+ tempClass.getAttributes().get(i)
+										.getAttributeName();
 						break;
 					case 1:
 						tempAttributeList[i] = "- "
-								+ tempClass.getAttributes().get(i).getAttributeName();
+								+ tempClass.getAttributes().get(i)
+										.getAttributeName();
 						break;
 					case 2:
 						tempAttributeList[i] = "# "
-								+ tempClass.getAttributes().get(i).getAttributeName();
+								+ tempClass.getAttributes().get(i)
+										.getAttributeName();
 						break;
 					case 3:
 						tempAttributeList[i] = "~ "
-								+ tempClass.getAttributes().get(i).getAttributeName();
+								+ tempClass.getAttributes().get(i)
+										.getAttributeName();
 						break;
 					}
 				}
-				editClassDialog.getAttributesList().setListData(tempAttributeList);
-				
-				//This is to make the list in edit class to appear with the classes operations
-				String[] tempOperationList = new String[tempClass.getOperations().size()];
-				for(int i = 0; i < tempOperationList.length; i++) {
+				editClassDialog.getAttributesList().setListData(
+						tempAttributeList);
+
+				// This is to make the list in edit class to appear with the
+				// classes operations
+				String[] tempOperationList = new String[tempClass
+						.getOperations().size()];
+				for (int i = 0; i < tempOperationList.length; i++) {
 					switch (tempClass.getOperations().get(i).getVisibility()) {
 					case 0:
 						tempOperationList[i] = "+ "
-								+ tempClass.getOperations().get(i).getOperationName();
+								+ tempClass.getOperations().get(i)
+										.getOperationName();
 						break;
 					case 1:
 						tempOperationList[i] = "- "
-								+ tempClass.getOperations().get(i).getOperationName();
+								+ tempClass.getOperations().get(i)
+										.getOperationName();
 						break;
 					case 2:
 						tempOperationList[i] = "# "
-								+ tempClass.getOperations().get(i).getOperationName();
+								+ tempClass.getOperations().get(i)
+										.getOperationName();
 						break;
 					case 3:
 						tempOperationList[i] = "~ "
-								+ tempClass.getOperations().get(i).getOperationName();
+								+ tempClass.getOperations().get(i)
+										.getOperationName();
 						break;
 					}
 				}
-				editClassDialog.getOperationsList().setListData(tempOperationList);
+				editClassDialog.getOperationsList().setListData(
+						tempOperationList);
 				manager.setEditingClass(true);
 				manager.setAddAttributeList(tempClass.getAttributes());
 				manager.setAddOperationList(tempClass.getOperations());
@@ -478,12 +519,12 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		this.add(leftSidePanel, BorderLayout.WEST);
 		leftSidePanel.setBackground(Color.gray);
 		leftSidePanel.setPreferredSize(new Dimension(50, 50));
-		//GridLayout grid = ()
+		// GridLayout grid = ()
 		leftSidePanel.setLayout(new FlowLayout());
 
 		// Create Select Toggle Button
 		leftSidePanel.add(selectButton);
-		
+
 		selectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				if (selectButton.isSelected()) {
@@ -498,7 +539,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		// Create Class Toggle Button
 		// JToggleButton classButton = new JToggleButton("Create Class");
 		leftSidePanel.add(classButton);
-		
+
 		classButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				if (classButton.isSelected()) {
@@ -518,7 +559,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		// JToggleButton RelationshipButton = new
 		// JToggleButton("Create Relationship");
 		leftSidePanel.add(relationshipButton);
-		
+
 		relationshipButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				if (relationshipButton.isSelected()) {
@@ -529,10 +570,10 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 				}
 			}
 		});
-		
+
 		organizeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				if(manager.isOrganize()) {
+				if (manager.isOrganize()) {
 					manager.setOrganize(false);
 					view.repaint();
 				} else {
@@ -556,11 +597,10 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		editClassDialog = new EditClass(manager);
 		addAttributeDialog = new AddAttribute(manager);
 		addOperationDialog = new AddOperation(manager);
-		
 
 		// Set the frame visible at the end when everything is added
 		this.setVisible(true);
-		
+
 	}
 
 	@Override
@@ -690,6 +730,5 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	public void setColorDialog(JColorChooser colorDialog) {
 		this.colorDialog = colorDialog;
 	}
-	
-	
+
 }

@@ -1105,67 +1105,10 @@ public class Manager {
 	 * @throws IOException
 	 */
 	
-	/*public static void newPath(String newFilePath){
-		// changes the file path for saved files
-		savePath = newFilePath;
+	public void save(){
+		scribe.save();
 	}
-
-	public static void SaveState() throws FileNotFoundException, IOException {
-		*//**
-		 * Saves the state of the ClassObject and the Relationships ArrayLists
-		 * to a serialized file for re-reading at a future date.
-		 *//*
-		ObjectOutputStream scribe = new ObjectOutputStream(
-				new FileOutputStream(savePath));
-
-		// variables for reading list
-		ClassObject target1;
-		Relationship target2;
-
-		// Walks through the list of ClassObjects and writes them to the file
-		int sizeof = classObjectList.size();
-		scribe.writeInt(sizeof);
-		for (int i = 0; i < sizeof; i++) {
-			target1 = classObjectList.get(i);
-			scribe.writeObject(target1);
-		}
-
-		// Walks through the list of Relationships and writes them to the file.
-		sizeof = relationList.size();
-		scribe.writeInt(sizeof);
-		for (int i = 0; i < sizeof; i++) {
-			target2 = relationList.get(i);
-			scribe.writeObject(target2);
-		}
-
-		scribe.close();
+	public void load(){
+		scribe.load();
 	}
-
-	public static void LoadState() throws FileNotFoundException, IOException,
-			ClassNotFoundException {
-		ObjectInputStream scribe = new ObjectInputStream(new FileInputStream(
-				savePath));
-
-		// variables for classObjects list
-		ClassObject target1;
-		Relationship target2;
-
-		//reads the ClassObjects from the target file
-		int sizeof = scribe.readInt();
-		for (int i = 0; i < sizeof; i++) {
-			target1 = (ClassObject) scribe.readObject();
-
-			classObjectList.add(target1);
-		}
-		
-		//reads the Relationships from the target file
-		sizeof = scribe.readInt();
-		for (int i = 0; i < sizeof; i++) {
-			target2 = (Relationship) scribe.readObject();
-
-			relationList.add(target2);
-		}
-
-		scribe.close();
-	}*/
 }
