@@ -1102,16 +1102,16 @@ public class Manager {
 	 * @throws IOException
 	 */
 	
-	public static void newPath(String newFilePath){
+	/*public static void newPath(String newFilePath){
 		// changes the file path for saved files
 		savePath = newFilePath;
 	}
 
 	public static void SaveState() throws FileNotFoundException, IOException {
-		/**
+		*//**
 		 * Saves the state of the ClassObject and the Relationships ArrayLists
 		 * to a serialized file for re-reading at a future date.
-		 */
+		 *//*
 		ObjectOutputStream scribe = new ObjectOutputStream(
 				new FileOutputStream(savePath));
 
@@ -1164,5 +1164,5 @@ public class Manager {
 		}
 
 		scribe.close();
-	}
+	}*/
 }
