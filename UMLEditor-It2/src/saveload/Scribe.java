@@ -102,9 +102,7 @@ public class Scribe {
 		ArrayList<Attribute> attributes;
 		ArrayList<Operation> operations;
 		int xPos;
-		int yPos;
-		int width;
-		int height;
+		int yPos;		
 		Color color;
 
 		/*
@@ -156,12 +154,8 @@ public class Scribe {
 			ClassObject origin = CLSeeker(oID);
 			ClassObject destination = CLSeeker(dID);
 
-//			Relationship sourceRL = sourceListR.get(i);
-//			oID = sourceRL.getOriginId();
-//			dID = sourceRL.getDestinationId();
-//			typeR = sourceRL.getRelationshipType();
-//			RLmodel targetRLM = new RLmodel(oID, dID, typeR);
-//			targetListR.add(targetRLM);
+			Relationship newRL = new Relationship(origin, destination, typeR, manager);
+			managerListR.add(newRL);
 		}
 
 	}
