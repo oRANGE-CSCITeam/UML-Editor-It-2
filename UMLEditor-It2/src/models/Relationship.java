@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 /**
  * Class that will hold information such as what type of relationship as well as
- * the ????
+ * the origin and destination classes and their coordinates
  * 
  * @author oRANGE
  */
@@ -218,6 +218,14 @@ public class Relationship implements Serializable {
 	 */
 	public void setRelationshipType(int rType) {
 		this.rType = rType;
+	}
+	
+	public int getOriginId(){
+		return originId;
+	}
+	
+	public int getDestinationId(){
+		return destinationId;
 	}
 
 }

@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import saveload.Scribe;
 import models.Attribute;
 import models.ClassObject;
 import models.ObjectController;
@@ -55,6 +56,8 @@ public class Manager {
 	private int canvasHeight;
 	private Color classColor;
 	private boolean editedColor;
+	
+	private Scribe scribe;
 
 	public Manager() {
 		projectName ="";
@@ -85,6 +88,7 @@ public class Manager {
 		editingClass = false;
 		organize = false;
 		classColor = Color.orange;
+		scribe = new Scribe(this);
 		
 		
 
