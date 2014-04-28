@@ -111,6 +111,7 @@ public class Scribe {
 
 	}
 
+	@SuppressWarnings("static-access")
 	private void deserialConverter() {
 		/**
 		 * Creates a ClassObject that holds all the key data in each COmodel
@@ -173,9 +174,9 @@ public class Scribe {
 		for (int i = 0; i < scribeListR.size(); i++) {
 
 			RLmodel sourceRL = scribeListR.get(i);
-			oID = RLmodel.getOriginId();
-			dID = RLmodel.getDestinationId();
-			typeR = RLmodel.getType();
+			oID = sourceRL.getOriginId();
+			dID = sourceRL.getDestinationId();
+			typeR = sourceRL.getType();
 
 			ClassObject origin = CLSeeker(oID);
 			ClassObject destination = CLSeeker(dID);
