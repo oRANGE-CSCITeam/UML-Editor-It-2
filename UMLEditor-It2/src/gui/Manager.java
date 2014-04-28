@@ -34,7 +34,7 @@ public class Manager {
 	private ArrayList<Operation> addOperationList;
 	private ArrayList<Integer> deleteRelationIndex;
 	private Stack<ClassObject> copyObjectStack;
-	public static String savePath = "UML.ser";
+	public String savePath = "UML.ser";
 
 	// Declare the Undo/Redo manager
 	private UndoRedoManager undoRedoManager;

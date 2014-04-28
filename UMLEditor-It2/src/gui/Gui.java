@@ -286,7 +286,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				manager.save();
-
+				
 			}
 		});
 
