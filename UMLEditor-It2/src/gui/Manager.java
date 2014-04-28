@@ -1109,6 +1109,7 @@ public class Manager {
 		scribe.save();
 	}
 	public void load(){
+		
 		scribe.load();
 	}
 	public void saveAs(String newSavePath){

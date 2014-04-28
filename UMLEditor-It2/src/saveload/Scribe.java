@@ -3,6 +3,7 @@ package saveload;
 import gui.Manager;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -36,9 +37,14 @@ public class Scribe {
 			ClassNotFoundException {
 		ObjectInputStream reader = new ObjectInputStream(new FileInputStream(
 				manager.savePath));
+		manager.setProjectName((String)reader.toString());
+		int high = reader.readInt();
+		int wide = reader.readInt();
+		manager.setClassId(reader.readInt());		
 		scribeListC = (ArrayList<COmodel>) reader.readObject();
 		scribeListR = (ArrayList<RLmodel>) reader.readObject();
 		reader.close();
+		manager.getGui().getView().setPreferredSize(new Dimension(wide, high));
 
 	}
 
@@ -46,7 +52,11 @@ public class Scribe {
 
 		ObjectOutputStream writer = new ObjectOutputStream(
 				new FileOutputStream(manager.savePath));
-
+		
+		writer.writeBytes(manager.getProjectName());
+		writer.writeInt(manager.getCanvasHeight());
+		writer.writeInt(manager.getCanvasWidth());
+		writer.writeInt(manager.getClassId());
 		writer.writeObject(scribeListC);
 		writer.writeObject(scribeListR);
 		writer.close();
