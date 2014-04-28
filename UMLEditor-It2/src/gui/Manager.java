@@ -148,6 +148,8 @@ public class Manager {
 			copyObjectStack.peek().setyPos(addClassY);
 			ClassObject tempClass = copyObjectStack.peek().copy();
 			tempClass.setColor(copyObjectStack.peek().getColor());
+			tempClass.setId(classId);
+			classId++;
 			classObjectList.add(tempClass);
 		}
 
