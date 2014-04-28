@@ -33,16 +33,28 @@ public class Scribe {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private void read() throws FileNotFoundException, IOException,
 			ClassNotFoundException {
 		ObjectInputStream reader = new ObjectInputStream(new FileInputStream(
 				manager.savePath));
-//		manager.setProjectName((String)reader.toString());
+		
 //		int high = reader.readInt();
 //		int wide = reader.readInt();
-		manager.setClassId(reader.readInt());		
+		
 		scribeListC = (ArrayList<COmodel>) reader.readObject();
 		scribeListR = (ArrayList<RLmodel>) reader.readObject();
+		int check = (reader.readInt());
+		manager.setClassId(check);
+		check = (reader.readInt());
+		manager.setCanvasHeight(check);
+		System.out.println(check);
+		check = (reader.readInt());
+		manager.setCanvasWidth(check);
+		System.out.println(check);
+//		String newName = (String)reader.toString();
+		
+//		manager.setProjectName(newName);
 		reader.close();
 //		manager.getGui().getView().setPreferredSize(new Dimension(wide, high));
 
@@ -53,12 +65,19 @@ public class Scribe {
 		ObjectOutputStream writer = new ObjectOutputStream(
 				new FileOutputStream(manager.savePath));
 		
-//		writer.writeBytes(manager.getProjectName());
+		
 //		writer.writeInt(manager.getCanvasHeight());
 //		writer.writeInt(manager.getCanvasWidth());
-		writer.writeInt(manager.getClassId());
+		
 		writer.writeObject(scribeListC);
 		writer.writeObject(scribeListR);
+		
+		writer.writeInt(manager.getClassId());
+		writer.writeInt(manager.getCanvasHeight());
+		System.out.println(manager.getCanvasHeight());
+		writer.writeInt(manager.getCanvasWidth());
+		System.out.println(manager.getCanvasWidth());
+//		writer.writeBytes(manager.getProjectName());
 		writer.close();
 	}
 

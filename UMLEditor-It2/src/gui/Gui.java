@@ -71,7 +71,9 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	private JMenuItem export;
 	private ProjectDialog projectDialog;
 	private JTabbedPane viewTab;
-
+	//newadd
+	private JPanel outerPanel;
+	
 	private JFileChooser exportFile;
 	private JColorChooser colorDialog;
 
@@ -109,7 +111,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 		view.setPreferredSize(new Dimension(manager.getCanvasWidth(), manager
 				.getCanvasHeight()));
 
-		JPanel outerPanel = new JPanel();
+		outerPanel = new JPanel();
 		outerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		outerPanel.add(view);
 		scrollContainer = new JScrollPane(outerPanel);
@@ -269,7 +271,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				manager.load();
-				view.repaint();
+				repaint();
 
 			}
 		});
@@ -731,5 +733,15 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 	public void setColorDialog(JColorChooser colorDialog) {
 		this.colorDialog = colorDialog;
 	}
+
+	public JPanel getOuterPanel() {
+		return outerPanel;
+	}
+
+	public void setOuterPanel(JPanel outerPanel) {
+		this.outerPanel = outerPanel;
+	}
+	
+	
 
 }

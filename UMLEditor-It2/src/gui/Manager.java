@@ -5,6 +5,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -1111,6 +1112,12 @@ public class Manager {
 	public void load(){
 		
 		scribe.load();
+		gui.getView().setPreferredSize(new Dimension(canvasWidth, canvasHeight));
+		gui.getView().repaint();
+		gui.getOuterPanel().repaint();
+		gui.getScrollContainer().repaint();
+		gui.getViewTab().repaint();
+		gui.repaint();
 	}
 	public void saveAs(String newSavePath){
 		savePath = newSavePath;
