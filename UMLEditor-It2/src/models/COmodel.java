@@ -16,9 +16,9 @@ public class COmodel implements Serializable {
 	private ArrayList<Attribute> attributes;
 	private ArrayList<Operation> operations;
 
-	private static int xPos;
-	private static int yPos;
-	private static Color color;
+	private int xPos;
+	private int yPos;
+	private Color color;
 
 	public COmodel(String n, int i, int t, ArrayList<Attribute> a,
 			ArrayList<Operation> o, int x, int y, Color c) {
