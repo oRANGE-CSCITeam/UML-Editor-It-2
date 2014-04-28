@@ -1,16 +1,17 @@
 package gui;
 
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class ProjectDialog extends JFrame {
+public class ProjectDialog extends JDialog {
 	private Manager manager;
 	private JButton  doneButton;
 	private JTextField nameTextField;
@@ -26,6 +27,8 @@ public class ProjectDialog extends JFrame {
 	}
 	
 	public void initComponents() {
+		
+		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		this.setResizable(false);
 		this.setSize(new Dimension(200, 250));
 		this.setLayout(new FlowLayout());

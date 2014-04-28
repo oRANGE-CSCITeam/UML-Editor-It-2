@@ -1,9 +1,12 @@
 package gui;
 
+import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class AddRelationship extends javax.swing.JFrame {
+import javax.swing.JDialog;
+
+class AddRelationship extends JDialog {
 
 	/**
 	 * Creates new form AddRelationship
@@ -31,7 +34,8 @@ class AddRelationship extends javax.swing.JFrame {
 		jLabel4 = new javax.swing.JLabel();
 		targetTextField = new javax.swing.JTextField();
 		okButton = new javax.swing.JButton();
-
+		
+		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Add Relationship");
 

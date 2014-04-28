@@ -1,9 +1,12 @@
 package gui;
 
+import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class AddOperation extends javax.swing.JFrame {
+import javax.swing.JDialog;
+
+class AddOperation extends JDialog {
 
 	/**
 	 * Creates new form AddOperation
@@ -27,8 +30,8 @@ class AddOperation extends javax.swing.JFrame {
 		addButton = new javax.swing.JButton();
 		jLabel2 = new javax.swing.JLabel();
 		operationNameTextField = new javax.swing.JTextField();
-
-		setAlwaysOnTop(true);
+		
+		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Add Operation");
 

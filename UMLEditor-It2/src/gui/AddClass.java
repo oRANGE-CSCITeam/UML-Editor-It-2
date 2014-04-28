@@ -1,14 +1,16 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.JColorChooser;
+import javax.swing.JDialog;
 
-class AddClass extends javax.swing.JFrame {
+class AddClass extends JDialog {
 	private Manager manager;
 
 	/**
@@ -28,7 +30,10 @@ class AddClass extends javax.swing.JFrame {
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents() {
 
-		jFrame1 = new javax.swing.JFrame();
+		jFrame1 = new JDialog();
+		jFrame1.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+		
 		classNameTextField = new javax.swing.JTextField();
 		jLabel1 = new javax.swing.JLabel();
 		colorButton = new javax.swing.JButton();
@@ -52,7 +57,7 @@ class AddClass extends javax.swing.JFrame {
 		classTypeList = new javax.swing.JList();
 		doneButton = new javax.swing.JButton();
 
-		this.setAlwaysOnTop(true);
+		
 		this.setResizable(false);
 		// Control what to do depending on the state of the frame
 		this.addWindowListener(new WindowListener() {
@@ -92,7 +97,7 @@ class AddClass extends javax.swing.JFrame {
 
 			@Override
 			public void windowOpened(WindowEvent arg0) {
-				manager.getGui().setEnabled(false);
+				
 			}
 		});
 
@@ -458,7 +463,6 @@ class AddClass extends javax.swing.JFrame {
 	}
 
 	public void close() {
-		manager.getGui().setEnabled(true);
 		manager.setCanAddClass(false);
 		manager.getGui().getClassButton().setSelected(false);
 		manager.getGui().getSelectButton().setSelected(true);
@@ -470,44 +474,6 @@ class AddClass extends javax.swing.JFrame {
 		manager.getGui().getView().repaint();
 	}
 
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
-	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		// <editor-fold defaultstate="collapsed"
-		// desc=" Look and feel setting code (optional) ">
-		/*
-		 * If Nimbus (introduced in Java SE 6) is not available, stay with the
-		 * default look and feel. For details see
-		 * http://download.oracle.com/javase
-		 * /tutorial/uiswing/lookandfeel/plaf.html
-		 */
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager
-					.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(AddClass.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(AddClass.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(AddClass.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(AddClass.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-		}
-		// </editor-fold>
-
-	}
 
 	// Variables declaration - do not modify
 	private javax.swing.JButton colorButton;
@@ -518,7 +484,7 @@ class AddClass extends javax.swing.JFrame {
 	private javax.swing.JButton removeOperationButton;
 	private javax.swing.JButton editOperationButton;
 	private javax.swing.JButton doneButton;
-	private javax.swing.JFrame jFrame1;
+	private JDialog jFrame1;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;

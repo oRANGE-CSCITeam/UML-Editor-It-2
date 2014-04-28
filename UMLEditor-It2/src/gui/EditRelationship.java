@@ -1,6 +1,8 @@
 package gui;
 
-class EditRelationship extends javax.swing.JFrame {
+import javax.swing.JFrame;
+
+class EditRelationship extends JFrame {
 
 	/**
 	 * Creates new form EditRelationship

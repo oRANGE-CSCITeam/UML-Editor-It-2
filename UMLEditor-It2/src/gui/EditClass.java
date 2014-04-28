@@ -1,14 +1,16 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.JColorChooser;
+import javax.swing.JDialog;
 
-class EditClass extends javax.swing.JFrame {
+class EditClass extends JDialog {
 	private Manager manager;
 
 	/**
@@ -28,7 +30,10 @@ class EditClass extends javax.swing.JFrame {
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents() {
 
-		jFrame1 = new javax.swing.JFrame();
+		jFrame1 = new JDialog();
+		jFrame1.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+		
 		classNameTextField = new javax.swing.JTextField();
 		jLabel1 = new javax.swing.JLabel();
 		colorButton = new javax.swing.JButton();
@@ -92,7 +97,6 @@ class EditClass extends javax.swing.JFrame {
 
 			@Override
 			public void windowOpened(WindowEvent arg0) {
-				manager.getGui().setEnabled(false);
 			}
 		});
 
@@ -460,7 +464,6 @@ class EditClass extends javax.swing.JFrame {
 	}
 
 	public void close() {
-		manager.getGui().setEnabled(true);
 		manager.setCanAddClass(false);
 		manager.getGui().getClassButton().setSelected(false);
 		manager.getGui().getSelectButton().setSelected(true);
@@ -520,7 +523,7 @@ class EditClass extends javax.swing.JFrame {
 	private javax.swing.JButton removeOperationButton;
 	private javax.swing.JButton editOperationButton;
 	private javax.swing.JButton doneButton;
-	private javax.swing.JFrame jFrame1;
+	private JDialog jFrame1;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;

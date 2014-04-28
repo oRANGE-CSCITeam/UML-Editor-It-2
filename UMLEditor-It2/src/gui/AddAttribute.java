@@ -1,9 +1,12 @@
 package gui;
 
+import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class AddAttribute extends javax.swing.JFrame {
+import javax.swing.JDialog;
+
+class AddAttribute extends JDialog {
 
 	/**
 	 * Creates new form AddAttribute
@@ -21,14 +24,14 @@ class AddAttribute extends javax.swing.JFrame {
 	@SuppressWarnings("unchecked")
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents() {
-
+		
+		this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		jLabel1 = new javax.swing.JLabel();
 		attributeTypeComboBox = new javax.swing.JComboBox();
 		addButton = new javax.swing.JButton();
 		attributeNameTextField = new javax.swing.JTextField();
 		jLabel2 = new javax.swing.JLabel();
 
-		setAlwaysOnTop(true);
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Add Attribute");
 
@@ -131,43 +134,6 @@ class AddAttribute extends javax.swing.JFrame {
 	private void attributeNameTextFieldActionPerformed(
 			java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
-	}
-
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
-	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		// <editor-fold defaultstate="collapsed"
-		// desc=" Look and feel setting code (optional) ">
-		/*
-		 * If Nimbus (introduced in Java SE 6) is not available, stay with the
-		 * default look and feel. For details see
-		 * http://download.oracle.com/javase
-		 * /tutorial/uiswing/lookandfeel/plaf.html
-		 */
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager
-					.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(AddAttribute.class.getName())
-					.log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(AddAttribute.class.getName())
-					.log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(AddAttribute.class.getName())
-					.log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(AddAttribute.class.getName())
-					.log(java.util.logging.Level.SEVERE, null, ex);
-		}
 	}
 
 	// Variables declaration - do not modify
