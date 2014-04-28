@@ -25,13 +25,11 @@ public class EditorView extends JPanel implements MouseListener,
 
 	private int xOffSet, yOffSet;
 	private Manager manager;
-	String stringTest;
 
 	public EditorView(Manager manager) {
 		this.manager = manager;
 		addMouseListener(this);
 		addMouseMotionListener(this);
-		stringTest = "Click to insert Class Objects";
 	}
 
 	/**
@@ -78,9 +76,6 @@ public class EditorView extends JPanel implements MouseListener,
 		// Draw All Relationship Lines
 		manager.getRelationshipView().display(g);
 
-		// Draw Text
-		g.drawString(stringTest, 10, 20);
-
 		// Draw All Class Objects
 		manager.getClassView().display(g);
 
@@ -94,13 +89,12 @@ public class EditorView extends JPanel implements MouseListener,
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		stringTest = "Mouse Entered";
+		
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		stringTest = "Mouse exited";
 
 	}
 
@@ -290,13 +284,11 @@ public class EditorView extends JPanel implements MouseListener,
 					evt.getX() - xOffSet, evt.getY() - yOffSet);
 			repaint();
 		}
-		stringTest = "Dragged";
 
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		stringTest = "Moved";
 	}
 }

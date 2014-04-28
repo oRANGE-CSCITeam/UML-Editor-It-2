@@ -149,7 +149,6 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 					"old_edit_redo.png")));
 		} catch (NullPointerException e) {
 		}
-		JButton test = new JButton("Test");
 
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new BorderLayout());
@@ -217,7 +216,6 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 
 		toolPanel.add(undoButton);
 		toolPanel.add(redoButton);
-		toolPanel.add(test);
 
 		undoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
