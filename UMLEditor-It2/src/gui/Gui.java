@@ -296,7 +296,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 
 				BufferedImage bi = new BufferedImage(view.getWidth(), view
 						.getHeight(), BufferedImage.TYPE_INT_RGB);
-				;
+				
 				view.printAll(bi.getGraphics());
 
 				int returnVal = exportFile.showSaveDialog(Gui.this);
@@ -600,6 +600,7 @@ public class Gui extends JFrame implements MouseListener, ActionListener {
 
 		// Set the frame visible at the end when everything is added
 		this.setVisible(true);
+		
 
 	}
 
