@@ -198,11 +198,17 @@ class EditClass extends JDialog {
 		});
 		classTypeScrollPane.setViewportView(classTypeList);
 
+		final GiveClassNameNotification notify = new GiveClassNameNotification(this, true);
+		
 		doneButton.setText("Done");
 		// Call the addClass method in Manager
 		doneButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				manager.editClass();
+				if(classNameTextField.getText() != null) {
+					manager.editClass();
+				} else {
+					notify.setVisible(true);
+				}
 			}
 		});
 

@@ -48,13 +48,11 @@ public class Scribe {
 		manager.setClassId(check);
 		check = (reader.readInt());
 		manager.setCanvasHeight(check);
-		System.out.println(check);
 		check = (reader.readInt());
 		manager.setCanvasWidth(check);
-		System.out.println(check);
-//		String newName = (String)reader.toString();
+		String newName = (String) reader.toString();
 		
-//		manager.setProjectName(newName);
+		manager.setProjectName(newName);
 		reader.close();
 //		manager.getGui().getView().setPreferredSize(new Dimension(wide, high));
 
@@ -74,10 +72,8 @@ public class Scribe {
 		
 		writer.writeInt(manager.getClassId());
 		writer.writeInt(manager.getCanvasHeight());
-		System.out.println(manager.getCanvasHeight());
 		writer.writeInt(manager.getCanvasWidth());
-		System.out.println(manager.getCanvasWidth());
-//		writer.writeBytes(manager.getProjectName());
+		writer.writeBytes(manager.getProjectName());
 		writer.close();
 	}
 

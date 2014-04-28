@@ -48,21 +48,36 @@ public class ProjectDialog extends JDialog {
 		this.add(heightLabel);
 		this.add(heightTextField);
 		this.add(doneButton);
+		final CanvasNotification notify = new CanvasNotification(this, true);
 		
 		doneButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				manager.setProjectName(nameTextField.getText());
-				manager.getGui().getViewTab().removeAll();
-				manager.getGui().getViewTab().add(manager.getProjectName(), manager.getGui().getScrollContainer());
-				manager.setCanvasWidth(Integer.parseInt(widthTextField.getText()));
-				manager.setCanvasHeight(Integer.parseInt(heightTextField.getText()));
-				manager.getGui().getView().setPreferredSize(new Dimension(manager.getCanvasWidth(), manager.getCanvasHeight()));
-				dispose();
-				manager.getGui().repaint();
+				if(isInteger(widthTextField.getText()) && isInteger(heightTextField.getText())) {
+					manager.setProjectName(nameTextField.getText());
+					manager.getGui().getViewTab().removeAll();
+					manager.getGui().getViewTab().add(manager.getProjectName(), manager.getGui().getScrollContainer());
+					manager.setCanvasWidth(Integer.parseInt(widthTextField.getText()));
+					manager.setCanvasHeight(Integer.parseInt(heightTextField.getText()));
+					manager.getGui().getView().setPreferredSize(new Dimension(manager.getCanvasWidth(), manager.getCanvasHeight()));
+					dispose();
+					manager.getGui().repaint();
+				} else {
+					notify.setVisible(true);
+				}
 			}
 		});
 	}
-
+	
+	public static boolean isInteger(String s) {
+	    try { 
+	        Integer.parseInt(s); 
+	    } catch(NumberFormatException e) { 
+	        return false; 
+	    }
+	    // only got here if we didn't return false
+	    return true;
+	}
+	
 	public JButton getDoneButton() {
 		return doneButton;
 	}

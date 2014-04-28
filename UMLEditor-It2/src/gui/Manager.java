@@ -1112,7 +1112,15 @@ public class Manager {
 	public void load(){
 		
 		scribe.load();
+		relationshipCandidates.clear();
+		addAttributeList.clear();
+		addOperationList.clear();
+		copyObjectStack.clear();
+		undoRedoManager = new UndoRedoManager();
+		objController = new ObjectController(this);
 		gui.getView().setPreferredSize(new Dimension(canvasWidth, canvasHeight));
+		gui.getViewTab().removeAll();
+		gui.getViewTab().add(projectName, gui.getScrollContainer());
 		gui.getView().repaint();
 		gui.getOuterPanel().repaint();
 		gui.getScrollContainer().repaint();
@@ -1123,4 +1131,13 @@ public class Manager {
 		savePath = newSavePath;
 		scribe.save();
 	}
+
+	public String getSavePath() {
+		return savePath;
+	}
+
+	public void setSavePath(String savePath) {
+		this.savePath = savePath;
+	}
+	
 }
