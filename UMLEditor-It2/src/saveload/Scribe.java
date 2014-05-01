@@ -3,7 +3,6 @@ package saveload;
 import gui.Manager;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -135,7 +134,6 @@ public class Scribe {
 
 	}
 
-	@SuppressWarnings("static-access")
 	private void deserialConverter() {
 		/**
 		 * Creates a ClassObject that holds all the key data in each COmodel
